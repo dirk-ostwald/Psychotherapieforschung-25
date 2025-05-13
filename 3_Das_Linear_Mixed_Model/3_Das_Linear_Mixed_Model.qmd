@@ -1,0 +1,1643 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: "3_Header.tex"
+bibliography: 3_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("3_Abbildungen/ptf_3_otto.png")
+```
+
+\huge
+Psychotherapieforschung
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2025
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(3) Das Linear Mixed Model}
+\vfill
+
+# 
+\vspace{2mm}
+\small
+Überblick
+
+\footnotesize
+
+* Das Linear Mixed Model (LMM) ist eine Weiterentwicklung des Allgemeinen Linearen Modells (ALM)
+* Durch iterative Schätzverfahren sind LMMs in den letzten 50 Jahren sehr populär geworden
+* In **R** sind LMMs durch die Verfügbarkeit der Pakete `nlme` und `lme4` sehr verbreitet
+* Klassische Anwendungen von LMMs sind Mehrebenen- und Longitudinalanalysen
+* Fixed- und Random-Effects Modelle der Metaanalyse sind spezielle LMMs
+* Viele weitere Modelle sind Spezialfälle von LMMs, z.B. die Bayesianische ALM Schätzung 
+* LMMs sind die State-of-the-Art Inferenzmodelle der Psychotherapiewirksamkeitsforschung 
+
+Wir formulieren zunächst das Linear Mixed Model
+
+Zur Schätzung eines Linear Mixed Models betrachten wir dann 
+
+* die Generalisierte Kleinste-Quadrate Schätzung der Fixed Effects und ihre Konfidenzintervalle,
+* den bedingten Erwartungswert der Random-Effects, sowie 
+* die Varianzkomponentenschätzung mit Restricted Maximum-Likelihood.
+
+Zur Evaluation eines LMMs betrachten wir dann 
+
+* Wald-Konfidenzintervalle
+
+#
+\vspace{2mm}
+\small
+Anwendungsbeispiel
+\setstretch{2.7}
+
+\footnotesize
+
+* Multizentren-Parallelgruppendesign mit Treatmentgruppe und Kontrollgruppe
+* Je zwei Gruppen randomisierter Proband:innen an fünf verschiedenen HSA-Standorten
+* Treatmentfaktor (`TRM`) mit zwei Leveln (`1`: Waitlist Control, `2`: Treatment)
+* Hochschulambulanzfaktor (`HSA`) mit vier Leveln (`1`: Magdeburg, `2`: Halle, `3`: Dresden, `4`: Marburg) 
+* 5 Proband:innen pro Treatmentlevel an jedem HSA-Standort
+* Primäres Ergebnismaß: BDI-II Differenz
+* Random-Intercept-Modell Analyse
+
+
+# 
+```{r, echo = F}
+library(MASS)                                                       # multivariate Normalverteilung
+set.seed(0)                                                         # Zufallszahlengeneratorzustand
+k       = 4                                                         # Anzahl Zentren 
+p       = 2                                                         # Anzahl Bedingungen 
+n_i     = 10                                                        # Proband:innen pro Zentrum 
+n_ip    = n_i/p                                                     # Proband:innen pro Zentrum und Bedingung                               
+n       = k*n_i                                                     # Gesamtanzahl an Proband:innen
+X_i     = kronecker(matrix(c(1,1,0,1), ncol = 2), rep(1,n_ip))      # Treatment-Control Designmatrix
+X       = kronecker(rep(1,k), X_i)                                  # Fixed-Effects-Designmatrix
+Z       = kronecker(diag(k), rep(1,n_i))                            # Random-Effects-Designmatrix    
+beta    = matrix(c(5,2), nrow = p)                                  # Fixed-Effects-Parameter
+b       = matrix(c(0,2,-2,0), nrow = k)                             # Random-Effects-Parameter (E(b) = 0!)
+s_eps   = 1                                                         # Varianzkomponente
+eps     = mvrnorm(1, rep(0,n), s_eps*diag(n))                       # Fehlervektor
+y       = X %*% beta + Z %*% b + eps                                # Datengeneration   
+TRM     = kronecker(rep(1,k), kronecker(c(1:p), rep(1,n_ip)))       # Treatmentfaktor    
+HSA     = kronecker(c(1:k), rep(1,n_i))                          # Hochschulambulanzfaktor
+D       = data.frame(TRM = TRM, HSA = HSA, BDI =  y)                # Dataframe
+write.csv(D, "./3_Daten/mz-anova.csv", row.names = FALSE)           # Speichern
+```
+\vspace{1mm}
+Beispieldatensatz
+```{r}
+fname = "./3_Daten/mz-anova.csv"
+D     = read.table(fname, sep = ",", header = T)
+```
+\tiny
+\setstretch{.8}
+```{r, echo = F}
+knitr::kable(D, "pipe", align = "rr", digits = 1)
+```
+
+#  
+Deskriptivstatistik
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(dplyr)                                                              # dplyr für einfache Datengruppierug     
+D   = read.csv("./3_Daten/mz-anova.csv")                                    # Dateneinlesen
+DS  = D %>% group_by(TRM, HSA) %>%  summarise(av = mean(BDI, na.rm = TRUE), # Group mean
+                                              sd = sd(BDI, na.rm = TRUE),   # Group standard deviation
+                                             .groups = "drop")              # Gruppierungsaufhebung
+print(DS)
+```
+
+#
+Visualisierung
+\vspace{2mm}
+
+```{r, eval = F}
+pdf(
+file        = "./3_Abbildungen/ptf_3_mz_anova.pdf",
+width       = 7,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Datenreformatierung für barplot
+av_m        = with(DS, tapply(av, list(TRM, HSA), identity))
+sd_m        = with(DS, tapply(sd, list(TRM, HSA), identity))
+
+# Barplot mit Fehlerbalken
+x           = barplot(
+av_m, 
+beside      = TRUE, 
+col         = c("lightgray", "darkgray"),
+ylim        = c(0, 12),
+xlim        = c(0, 13),
+xlab        = "Hochschulambulanz",
+ylab        = "BDI-II Abnhame")
+arrows(
+x0          = x, 
+y0          = av_m,
+x1          = x, 
+y1          = av_m + sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+arrows(
+x0          = x,
+y0          = av_m,
+x1          = x, 
+y1          = av_m - sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+abline(h    = 0)
+legend(
+"topright", 
+legend      = c("Waitlist Control", "Treatment"),
+fill        = c("lightgray", "darkgray"),
+bty         = "n")
+dev.off()
+```
+
+```{r, echo = FALSE, out.width="80%", fig.align = "center"}
+knitr::include_graphics("3_Abbildungen/ptf_3_mz_anova.pdf")
+```
+
+# 
+\vfill
+\setstretch{3}
+\large
+Modellformulierung
+
+Modellschätzung
+
+Modellevaluation
+
+Selbstkontrollfragen
+\vfill
+
+
+# 
+\vfill
+\setstretch{3}
+\large
+**Modellformulierung** 
+
+Modellschätzung
+
+Modellevaluation
+
+Selbstkontrollfragen
+\vfill
+
+
+# Modellformulierung
+\setstretch{1.1}
+
+\footnotesize
+\begin{definition}[Linear Mixed Model in Clusterdarstellung]
+Für $i = 1,...,k$ sei 
+\begin{equation}\label{eq:lemi}
+y_i = X_i\beta + Z_ib_i + \eps_i,
+\end{equation}
+wobei
+\begin{itemize}
+\item $y_i$ ein $n_i$-dimensionaler beobachtbarer Zufallsvektor ist, der \textit{Daten des $i$ten Clusters} genannt wird,
+\item $X_i \in \mathbb{R}^{n_i \times p}$ eine vorgegeben Matrix ist, die \textit{Fixed-Effects-Designmatrix des $i$ten Clusters} genannt wird,
+\item $\beta \in \mathbb{R}^{p}$ ein unbekannter fester Vektor ist, der \textit{Fixed Effects} oder \textit{Populationsparameter} genannt wird,
+\item $Z_i \in \mathbb{R}^{n_i \times q_i}$ eine vorgegeben Matrix ist, die \textit{Random-Effects-Designmatrix des $i$ten Clusters} genannt wird,
+\item $b_i$ ein $q_i$-dimensionaler latenter Zufallsvektor ist, der \textit{Random Effects des $i$ten Clusters} genannt wird, mit
+\begin{equation}
+b_i \sim N(0_{q_i}, \Sigma_{b_i}) \mbox{ mit } \Sigma_{b_i} \in \mathbb{R}^{q_i \times q_i} \mbox{ p.d.},
+\end{equation} 
+\item $\eps_i$ ein $n$-dimensionaler latenter Zufallsvektor ist, der \textit{Zufallsfehler des $i$ten Clusters} genannt wird, mit
+\begin{equation}
+\eps_i \sim N(0_{n_i}, \Sigma_\eps) \mbox{ mit }  \Sigma_\eps \in \mathbb{R}^{n_i \times n_i} \mbox{ p.d.  und unabhängig von } b_j \mbox{ für } j = 1,...,k.
+\end{equation} 
+\end{itemize}
+Dann werden die $k$ Gleichungen \eqref{eq:lemi} \textit{Linear Mixed Model in Clusterdarstellung} genannt.
+\end{definition}
+Bemerkungen
+
+* Häufig gelten $\Sigma_{b_i} := \sigma_{b}^2I_{q_i}$ mit $\sigma_{b}^2>0$ und $\Sigma_{\eps_i} := \sigma^2_\eps I_{n_i}$ mit $\sigma^2_\eps > 0$.
+* Die LME Clusterdarstellung herrscht in der methodischen Literatur und Anwendungssoftware vor.
+
+# Modellformulierung
+\vspace{2mm}
+\footnotesize
+\begin{definition}[Linear Mixed Model in Kompaktdarstellung]
+\justifying
+Gegeben sei die Clusterdarstellung eines Linear Mixed Models und mit 
+$n := \sum_{i=1}^k n_i$, $q := \sum_{i=1}^k q_i$ seien
+\begin{equation}
+y := 
+\begin{pmatrix}
+y_1 \\ \vdots \\ y_k
+\end{pmatrix},\,
+X := 
+\begin{pmatrix}
+X_1 \\ \vdots \\ X_k
+\end{pmatrix},\,
+Z := 
+\begin{pmatrix}
+Z_1 &  \cdots & 0_{n_ik} \\ \vdots & \ddots & \vdots \\ 0_{n_iq_1} &  \cdots &  Z_k
+\end{pmatrix},\,
+b := 
+\begin{pmatrix}
+b_1 \\ \vdots \\ b_k
+\end{pmatrix},\,
+\eps := 
+\begin{pmatrix}
+\eps_1 \\ \vdots \\ \eps_k
+\end{pmatrix}
+\end{equation}
+ein $n$-dimensionaler beobachtbarer Zufallsvektor, eine $n \times p$
+vorgebene Fixed-Effects-Designmatrix, eine $n \times q$ vorgegebene Random-Effects-Designmatrix, 
+ein $q$-dimensionaler latenter Zufallsvektor bzw. ein $n$-dimensionaler latenter Zufallsvektor.
+Dann wird
+\begin{equation}
+y = X\beta + Zb + \eps
+\end{equation}
+\textit{Kompaktdarstellung des Linear Mixed Models} genannt und es gelten entsprechend
+\begin{equation}
+b \sim N(0_q, \Sigma_{b}) \mbox{ mit } \Sigma_{b} \in \mathbb{R}^{q \times q} \mbox{ p.d.} 
+\mbox{ und }
+\eps \sim N(0_n, \Sigma_\eps) \mbox{ mit }  \Sigma_{\eps} \in \mathbb{R}^{n \times n} \mbox{ p.d.  und unabhängig von } b 
+\end{equation}
+und mit
+\begin{equation}
+\Sigma_b := 
+\begin{pmatrix}
+\Sigma_{b_1} &  \cdots & 0_{q_kq_k} \\ \vdots & \ddots & \vdots \\ 0_{q_1q_1} &  \cdots &  \Sigma_{b_k}
+\end{pmatrix} 
+\mbox{ und }
+\Sigma_{\eps} := 
+\begin{pmatrix}
+\Sigma_{\eps_1} &  \cdots & 0_{n_1n_1} \\ \vdots & \ddots & \vdots \\ 0_{n_kn_k} &  \cdots &  \Sigma_{\eps_k}
+\end{pmatrix}. 
+\end{equation}
+\end{definition}
+Bemerkungen
+
+* Der Betaparametervektor der Kompaktdarstellung entspricht dem Betaparametervektor der Clusterdarstellung.
+* In einem LME-Modell hat die Random-Effects-Designmatrix $Z$ immer eine Blockdiagonalmatrixstruktur.
+
+# Modellformulierung
+\small
+Anwendungsbeispiel
+
+\footnotesize
+* Grundidee: Modellierung der Daten durch ein Zweistichproben-T-Test-Modell mit zufälligen HSA-Effekt
+* Entsprechend des Zweistichproben-T-Test Modells in Effektdarstellung ergibt sich für HSA $i = 1,2,3,4$
+\begin{align}
+\begin{split}
+y_{i1j} & = \mu_0 + \mu_i + \eps_{i1j} \quad\quad\,\,\, \mbox{ mit } \eps_{i1j} \sim N(0,\sigma^2_{\eps}) \mbox{ für } j = 1,...,n_{i_1} \\
+y_{i2j} & = \mu_0 + \alpha_2 + \mu_i + \eps_{i1j}       \mbox{ mit } \eps_{i2j} \sim N(0,\sigma^2_{\eps}) \mbox{ für } j = 1,...,n_{i_2} 
+\end{split}
+\end{align}
+und die entsprechende Datenverteilungsform
+\begin{align} 
+\begin{split}
+y_{i1j} & \sim N(\mu_0 + \mu_i,\sigma^2_\eps) \quad\quad\,\,\, \mbox{ u.i.v. für } j = 1,...,n_{i_1} \mbox{ mit } \mu_0 \in \mathbb{R}, \sigma^2_\eps > 0           \\
+y_{i2j} & \sim N(\mu_0 + \alpha_2  + \mu_i,\sigma^2_\eps)    \mbox{ u.i.v  für } j = 1,...,n_{i_2} \mbox{ mit } \mu_0, \alpha_2 \in \mathbb{R}, \sigma^2_\eps > 0  
+\end{split}
+\end{align}
+* Insbesondere sollen die Interceptparameter $\mu_i$ hier normalverteilte Zufallsvariablen sein, es soll gelten
+\begin{equation}
+\mu_i \sim N(0,\sigma_b^2) \mbox{ u.i.v.  für }  i = 1,2,3,4.
+\end{equation}
+* $\mu_0$ und $\alpha_2$ sind hier also Fixed Effects, $\mu_i$ für $i = 1,2,3,4$ dagegen Random Effects
+
+
+# Modellformulierung
+\small
+Anwendungsbeispiel
+
+\footnotesize
+* Gemäß der Designmatrixform des Zweistichproben-T-Test-Modells in 
+Effektdarstellung ergibt sich für das Linear Mixed Model in Clusterdarstellung
+für $i = 1,2,3,4$ damit die Form 
+\begin{equation}\label{eq:lemi}
+y_i = X_i\beta + Z_ib_i + \eps_i \mbox{ mit } \varepsilon_i \sim N(0_{n_i}, \sigma_{eps}^2I_{n_i}, \sigma_\eps^2 I_{n_i})
+\end{equation}
+mit 
+\begin{equation}
+y_i = 
+\begin{pmatrix}
+y_{i11} \\
+\vdots  \\
+y_{i1n_{i_1}} \\
+y_{i21} \\
+\vdots  \\
+y_{i2n_{i_2}}
+\end{pmatrix} \in \mathbb{R}^{n_i},
+X_i :=
+\begin{pmatrix}
+1 		    & 	0		    \\
+\vdots      &  	\vdots      \\
+1 		    & 	0		    \\
+1 		    & 	1		    \\
+\vdots      & 	\vdots      \\
+1 		    & 	1 		    \\
+\end{pmatrix}
+\in \mathbb{R}^{n_i \times 2},\,
+\beta :=
+\begin{pmatrix}
+\mu_0 		\\
+\alpha_2	\\
+\end{pmatrix} \in \mathbb{R}^2,
+\end{equation}
+sowie
+\begin{equation}
+Z_i :=
+\begin{pmatrix}
+1 		     		    \\
+\vdots                  \\
+1 		     		    \\
+1 		    		    \\
+\vdots                  \\
+1 		     		    \\
+\end{pmatrix}
+\in \mathbb{R}^{n_i \times 1} \mbox{ und }
+b_i := \left(\mu_i\right)  
+\mbox{ mit }
+b_i \sim N(0,\sigma_b^2) 
+\end{equation}
+
+
+# Modellformulierung
+\small
+\vspace{3mm}
+Anwendungsbeispiel
+
+\footnotesize
+* Weiterhin ergibt sich für das Linear Mixed Model in Kompaktdarstellung 
+\begin{equation}
+y = X\beta + Zb + \eps  \mbox{ mit } \eps \sim N(0_n,\sigma_\eps^2) \mbox{ und } b \sim N(0_4, \sigma^2_bI_4)
+\end{equation}
+sowie
+\tiny
+\setstretch{1.0}
+\begin{equation}
+y = 
+\begin{pmatrix}
+y_{111}             \\
+\vdots              \\
+y_{11n_{1_1}}       \\
+y_{121}             \\
+\vdots              \\
+y_{12n_{1_2}}       \\
+y_{211}             \\
+\vdots              \\
+y_{21n_{2_1}}       \\
+y_{221}             \\
+\vdots              \\
+y_{22n_{2_2}}       \\
+y_{311}             \\
+\vdots              \\
+y_{31n_{3_1}}       \\
+y_{321}             \\
+\vdots              \\
+y_{32n_{3_2}}       \\
+y_{411}             \\
+\vdots              \\
+y_{41n_{4_1}}       \\
+y_{421}             \\
+\vdots              \\
+y_{42n_{4_2}}
+\end{pmatrix} \in \mathbb{R}^n, \,
+X =
+\begin{pmatrix}
+1 		    & 	0		    \\
+\vdots      &  	\vdots      \\
+1 		    & 	0		    \\
+1 		    & 	1		    \\
+\vdots      & 	\vdots      \\
+1 		    & 	1 		    \\
+1 		    & 	0		    \\
+\vdots      &  	\vdots      \\
+1 		    & 	0		    \\
+1 		    & 	1		    \\
+\vdots      & 	\vdots      \\
+1 		    & 	1 		    \\
+1 		    & 	0		    \\
+\vdots      &  	\vdots      \\
+1 		    & 	0		    \\
+1 		    & 	1		    \\
+\vdots      & 	\vdots      \\
+1 		    & 	1 		    \\
+1 		    & 	0		    \\
+\vdots      &  	\vdots      \\
+1 		    & 	0		    \\
+1 		    & 	1		    \\
+\vdots      & 	\vdots      \\
+1 		    & 	1 		    \\
+\end{pmatrix}
+\in \mathbb{R}^{n \times 2}, \,
+\beta := \begin{pmatrix} \mu_0 \\ \alpha_2 \end{pmatrix} \in \mathbb{R}^2, \,
+Z := 
+\begin{pmatrix}
+1 & 0 & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots \\
+1 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots \\
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 0 \\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 0 & 0 & 1 \\
+0 & 0 & 0 & 1 \\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 0 & 0 & 1 \\
+\end{pmatrix} 
+\in \mathbb{R}^{n \times 4}, \,
+b := 
+\begin{pmatrix}
+\mu_1 \\
+\mu_2 \\
+\mu_3 \\
+\mu_4 \\
+\end{pmatrix}
+\in \mathbb{R}^4.
+\end{equation}
+
+# Modellformulierung
+\footnotesize
+\begin{definition}[Verteilungsdarstellung des Linear Mixed Models]
+Gegeben sei ein Linear Mixed Model in Kompaktdarstellung, 
+\begin{equation}
+y = X\beta + Zb + \eps \mbox{ mit } b \sim N(0_q, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n, \Sigma_\eps).
+\end{equation}
+Dann nennt man die äquivalente Darstellung dieses Modells mit der marginalen Verteilung
+\begin{equation}
+b \sim N(0_q, \Sigma_{b})
+\end{equation}
+und der bedingten Verteilung
+\begin{equation}
+y\, |\, b \sim N(X\beta + Zb, \Sigma_\eps)
+\end{equation}
+die \textit{Verteilungsdarstellung des Linear Mixed Models}.
+\end{definition}
+Bemerkungen
+
+* Die Äquivalenz folgt mit dem Theorem zur linear-affinen Transformation multivariater Normalverteilungen.
+* Intuitiv beschreibt der Ausdruck $y = X\beta + Zb + \eps$ eine bedingte Verteilung.
+* Die Fehlerkovarianzmatrix $\Sigma_\eps$ ist die Kovarianzmatrix dieser bedingten Verteilung. 
+
+
+
+# Modellformulierung
+\footnotesize
+\begin{theorem}[Gemeinsame Verteilung des Linear Mixed Models]
+\justifying
+\normalfont
+Gegeben sei ein Linear Mixed Model in Kompaktdarstellung, 
+\begin{equation}
+y = X\beta + Zb + \eps \mbox{ mit } b \sim N(0_q, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n, \Sigma_\eps).
+\end{equation}
+Dann gilt für die gemeinsame Verteilung von Daten und Random Effects, dass
+\begin{equation}
+\begin{pmatrix}
+b \\
+y
+\end{pmatrix}
+\sim 
+N\left(\mu_{b,y},\Sigma_{b,y}\right)
+\end{equation}
+mit
+\begin{equation}
+\mu_{b,y} := 
+\begin{pmatrix}
+0_q                 \\
+X\beta 
+\end{pmatrix}
+\in \mathbb{R}^{q+n}
+\mbox{ und }
+\Sigma_{b,y} 
+:= 
+\begin{pmatrix}
+\Sigma_{b}      & \Sigma_{b}Z^T                         \\
+Z\Sigma_{b}   & Z\Sigma_{b}Z^T + \Sigma_\eps 
+\end{pmatrix}
+\in \mathbb{R}^{(q+n)\times (q+n)}
+\end{equation}
+\end{theorem}
+
+\underline{Beweis}
+
+Die gemeinsame Verteilung des Linear Mixed Models ergibt sich direkt durch Anwendung
+des Theorems zu Gemeinsamen Normalverteilungen auf die Verteilungsdarstellung des Linear Mixed Models. 
+
+$\hfill\Box$
+
+# Modellformulierung
+\footnotesize
+\begin{theorem}[Marginale Datenverteilung des Linear Mixed Models]
+\justifying
+\normalfont
+Gegeben sei ein Linear Mixed Model in Kompaktdarstellung, 
+\begin{equation}
+y = X\beta + Zb + \eps \mbox{ mit } b \sim N(0_q, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n, \Sigma_\eps).
+\end{equation}
+Dann gilt für die marginale Verteilung der Daten, dass
+\begin{equation}
+y \sim  N\left(\mu_{y},\Sigma_{y}\right)
+\end{equation}
+mit
+\begin{equation}
+\mu_{y} := 
+X\beta  
+\in \mathbb{R}^{n}
+\mbox{ und }
+\Sigma_{y} 
+:= 
+Z\Sigma_{b}Z^T + \Sigma_\eps   
+\in \mathbb{R}^{n\times n}
+\end{equation}
+\end{theorem}
+\underline{Beweis}
+
+Die Aussage ergibt sich direkt aus dem Theorem zur Gemeinsamen Verteilung des 
+LMMs und dem Theorem zu Marginalen Normalverteilungen. $\hfill\Box$
+
+Bemerkungen
+
+* LMMs erlauben es, nicht-sphärische Kovarianzmatrixstrukturen zu modellieren.  
+* Gilt speziell $\Sigma_{b} := \sigma_{b}^2I_q, \sigma_{b}^2>0$ und $\Sigma_\eps := \sigma^2_\eps I_n,\sigma^2_\eps > 0$, so folgt
+\begin{equation}
+y \sim N\left(X\beta, \sigma_{b}^2 ZZ^T + \sigma^2_\eps I_n \right)
+\end{equation}
+* Parameter wie $\sigma_{b}^2$ und $\sigma^2_\eps$ nennt man deshalb auch *Kovarianzkomponenten*.
+
+
+# Modellformulierung
+\footnotesize
+\begin{definition}[Hierarchische Darstellung des Linear Mixed Models]
+Gegeben sei ein Linear Mixed Model in Kompaktdarstellung, 
+\begin{equation}
+y = X\beta + Zb + \eps \mbox{ mit } b \sim N(0_q, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n, \Sigma_\eps).
+\end{equation}
+Dann nennt man die äquivalente Darstellung dieses Modells in der Form
+\begin{align}\label{eq:lmm-hierarchisch}
+\begin{split}
+b & = 0_q + \eta \quad\quad\quad\,
+\mbox{ mit } \eta \sim N(0_q, \Sigma_{b}) \,\,
+\Leftrightarrow\,\, b \,\sim  N(0_q,\Sigma_{b}) \\
+y       & = X\beta + Zb + \eps   \,           
+\mbox{ mit } \eps \sim N(0_n, \Sigma_{\eps})   
+\Leftrightarrow y\,|\, b \sim N(X\beta + Zb,\Sigma_{\eps}) \\
+\end{split}
+\end{align}
+die \textit{hierarchische Darstellung des Linear Mixed Models}
+\end{definition}
+
+Bemerkung
+
+* Man nennt diese Darstellung auch ein *Mehrebenenmodell*.
+* Es ist leicht, sich LMMs mit mehr als den hier spezifizierten zwei Ebenen vorzustellen.
+* Die obigen Verteilungsaussagen gelten natürlich auch für die Hierarchische Form des Linear Mixed Models.
+
+
+
+
+# 
+\vfill
+\setstretch{3}
+\large
+Modellformulierung
+
+**Modellschätzung**
+
+Modellevaluation
+
+Selbstkontrollfragen
+\vfill
+
+
+# Modellschätzung 
+\vspace{1mm}
+Überblick zur Modellschätzung
+\vspace{1mm}
+
+\footnotesize
+Wie bereits gesehen, impliziert das Linear Mixed Model mit 
+\begin{equation}
+\Sigma_{b} := \sigma_{b}^2I_q \mbox{ und } 
+\Sigma_{\eps} := \sigma_{\eps}^2I_n
+\end{equation}
+die gemeinsame Verteilung von Datenvektor und Random-Effects-Vektor
+\begin{equation}
+\begin{pmatrix}
+b \\
+y 
+\end{pmatrix}
+\sim 
+N\left(
+\begin{pmatrix}
+0_q \\
+X\beta  
+\end{pmatrix},
+\begin{pmatrix}
+\sigma^2_{b}I_q    & \sigma^2_{b}Z^T  \\
+\sigma^2_{b}Z    & \sigma^2_{b}ZZ^T + \sigma_\eps^2 I_n  \\
+\end{pmatrix}
+\right),
+\end{equation}
+sowie die marginale Datenverteilung
+\begin{equation}
+y \sim N\left(X\beta, \sigma^2_{b} ZZ^T + \sigma_\eps^2 I_n\right).
+\end{equation}
+Mithilfe der Definitionen des *Varianzkomponentenvektors* $\theta$ und des marginalen Datenkovarianzmatrixparameters $V_\theta$
+\begin{equation}
+\theta := \left(\sigma^2_{b}, \sigma^2_\eps\right) \mbox{ und } V_\theta := \sigma^2_{b} ZZ^T + \sigma_\eps^2 I_n,
+\end{equation}
+wird die marginale Datenverteilung des Linear Mixed Models häufig auch als
+\begin{equation}
+y \sim N\left(X\beta, V_\theta\right)
+\end{equation}
+geschrieben. Das Schätzproblem für ein Linear Mixed Model hat dann drei zentrale Aspekte:
+
+(1) Die Angabe eines Schätzers $\hat{\beta}$ für den Fixed-Effects-Parameter $\beta$.
+(2) Die Angabe eines Schätzers $\hat{\theta}$ für den Varianzkomponentenparameter $\theta$.
+(3) Die Angabe eines Schätzers $\hat{b}$ für den Random-Effects-Parameter $b$.
+
+
+# Modellschätzung 
+\vspace{1mm}
+Überblick zur Modellschätzung
+\vspace{1mm}
+
+\footnotesize
+\setstretch{1.8}
+
+Die Lösung dieses Problems ist nicht trivial und Gegenstand aktueller Forschung 
+
+Generell werden in der Anwendung iterative Verfahren genutzt 
+
+Wir beschreiben hier folgenden, der Funktion `lme()` aus dem R Paket `nlme` nahen Ansatz
+
+\noindent (1) Schätzung von $\beta$ basierend auf der geschätzten Marginalverteilung von $y$ 
+
+$\Rightarrow$ $V_\theta$ wird durch $V_{\hat{\theta}}$ ersetzt und $\beta$ durch den *Generalisierten-Kleinste-Quadrate Schätzer* geschätzt.
+
+\noindent (2) Schätzung von $\theta$  basierend auf der geschätzten Marginalverteilung von $y$ 
+
+$\Rightarrow$  $\theta$ wird iterativ mit dem *Restricted Maximum-Likelihood* Verfahren geschätzt.
+
+\noindent (3) Schätzung von $b$ basierend auf der geschätzten gemeinsamen Verteilung von $b$ und $y$ 
+
+$\Rightarrow$  $V_\theta$ und $\beta$ werden durch $V_{\hat{\theta}}$ und $\hat{\beta}$ ersetzt und $b$ durch seinen *bedingten Erwartungswert* geschätzt.
+
+
+# Modellschätzung 
+\vspace{1mm}
+Überblick zur Modellschätzung
+\vspace{1mm}
+
+\small
+\setstretch{1.8}
+Iteratives Verfahren zur LMM Parameterschätzung
+
+\noindent (0) Initialisierung
+
+* Wahl eines geeigneten Startwerts $\hat{\beta}^{(0)}$ 
+
+\noindent (1) Für $k = 1,..., K$
+
+* ReML-Schätzung $\hat{\theta}^{(k)}$ basierend auf $\hat{\beta}^{(k-1)}$
+* GLS-Schätzung  $\hat{\beta}^{(k)}$ basierend auf $\hat{\theta}^{(k)}$ 
+
+\noindent (2) Schätzung von $\hat{b}$ basierend auf $\hat{\beta}^{(K)}$ und $\hat{\theta}^{(K)}$ 
+
+# Modellschätzung 
+\setstretch{2}
+
+Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+
+\footnotesize
+* Kleinste-Quadrate Schätzung heißt auf English "Ordinary Least Squares" (OLS).
+* Zur Abgrenzung nennen wir den bekannten Betaparameterschätzer im Folgenden "OLS-Schätzer".
+* Generalisierte Kleinste-Quadrate Schätzung heißt auf English "Generalized Least Squares" (GLS).
+* Der GLS-Schätzer ist ein Betaparameterschätzer für das ALM
+\begin{equation}
+y = X\beta + \eps \mbox{ mit } \eps \sim N\left(0_n,\sigma^2V\right) \mbox{ mit } V \neq I_n
+\end{equation}
+* Der GLS-Schätzer ist also im Fall nicht-sphärischer Fehlerkovarianzmatrixparameter angezeigt.
+* Der GLS-Schätzer stellt sicher, dass $T$-Statistiken auch im Fall $V \neq I_n$ $t$-verteilt sind.
+* Im Kontext der Fixed-Effects-Schätzung eines LMMs gilt in Hinblick auf obiges ALM speziell
+\begin{equation}
+X := X, 
+\beta := \beta, 
+\sigma^2 :=  \sigma_\eps^2\sigma^2_{b},  
+V :=  \frac{1}{\sigma_\eps^2}ZZ^T + \frac{1}{\sigma^2_{b}} I_n \mbox{ und somit } 
+\sigma^2V = V_\theta.
+\end{equation}
+
+# Modellschätzung 
+\footnotesize
+\begin{definition}[Generalisierte Kleinste-Quadrate Schätzer]
+Gegeben sei ein Allgemeines Lineares Modell der Form
+\begin{equation}
+y = X\beta + \eps \mbox{ mit } \eps \sim N\left(0_n,\sigma^2V\right) \mbox{ mit }
+\end{equation}
+mit $\sigma^2 > 0$ und einer positiv-definiten Matrix $V \in \mathbb{R}^{n \times n}$.
+Dann heißt
+\begin{equation}
+\hat{\beta}_{\tiny \mbox{GLS}} := \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}y
+\end{equation}
+der \textit{Generalisierte-Kleinste-Quadrate-Schätzer von $\beta$} und 
+\begin{equation}
+\hat{\sigma}_{\tiny \mbox{GLS}}^2 := \frac{\left(y - X\hat{\beta}_{\tiny \mbox{GLS}}\right)^T V^{-1} \left(y - X\hat{\beta}_{\tiny \mbox{GLS}}\right)}{n-p}
+\end{equation}
+der \textit{Generalisierte-Kleinste-Quadrate-Schätzer von $\sigma^2$}.
+\end{definition}
+
+Bemerkungen
+
+* Es muss nicht notwendigerweise $V = I_n$ gelten.
+* Die Fehlerkomponenten in $\eps$ können unterschiedliche Varianzen haben oder korreliert sein. 
+* Im Fall $V = I_n$ gilt weiterhin
+\begin{equation}
+\hat{\beta}_{\tiny \mbox{GLS}} 
+= \left(X^TI_n^{-1}X\right)^{-1}X^TI_n^{-1}y 
+= \left(X^TX\right)^{-1}X^Ty 
+=: \hat{\beta}_{\tiny \mbox{OLS}}.
+\end{equation}
+
+
+# Modellschätzung 
+\footnotesize
+\begin{theorem}[GLS-Schätzer und OLS-Schätzer]
+\justifying
+\normalfont
+Gegeben sei ein \textit{untransformiertes ALM} der Form
+\begin{equation}
+y = X\beta + \eps \mbox{ mit } \eps \sim N\left(0_n,\sigma^2V\right) 
+\end{equation}
+mit $\sigma^2 > 0$ und einer positiv-definiten Matrix $V \in \mathbb{R}^{n \times n}$ und es sei
+$\hat{\beta}_{\tiny \mbox{GLS}}$ der Generalisierte-Kleinste-Quadrate-Schätzer von $\beta$. 
+Weiterhin sei $K \in \mathbb{R}^{n \times n}$ eine Matrix mit den Eigenschaften
+\begin{equation}
+KK^T = V \mbox{ und } \left(K^{-1}\right)^TK^{-1} = V^{-1}
+\end{equation}
+Schließlich sei 
+\begin{equation}
+y^* = X^*\beta + \eps^* 
+\mbox{ mit }
+y^* := K^{-1}y,  X^* := K^{-1}X,  \eps^* := K^{-1}\eps 
+\end{equation}
+das \textit{transformierte ALM}. Dann gelten
+\begin{itemize}
+\item[(1)] Der GLS-Schätzer des untransformierten ALMs ist der OLS-Schätzer des transformierten ALMs.
+\item[(2)] Für den Zufallsfehler im transformierten ALM gilt $\eps^* \sim N(0_n,\sigma^2I_n)$.
+\end{itemize}
+\end{theorem}
+
+Bemerkungen
+
+* Der zu schätzende wahre, aber unbekannte, Parameter $\beta$ ist in beiden ALMs identisch.
+* Im transformierten ALM ist der Fehlerkovarianzmatrixparameter sphärisch, also $T$-Statistiken $t$-verteilt.
+* Man nennt die Transformation des ALMs durch $K$ auch eine "Whitening-Transformation".
+* $K$ mit den geforderten Eigenschaften kann durch die *Cholesky-Zerlegung* von $V$ gewonnen werden.
+
+
+# Modellschätzung 
+\footnotesize
+\underline{Beweis}
+
+\noindent (1) Für den GLS-Schätzer im untransformierten Modell gilt
+\begin{align}
+\begin{split}
+\hat{\beta}_{{\tiny \mbox{GLS}}}
+& = \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}y      \\
+& = \left(X^T\left(K^{-1}\right)^TK^{-1}X\right)^{-1}X^T\left(K^{-1}\right)^TK^{-1}y         \\
+& = \left(\left(K^{-1}X\right)^T K^{-1}X\right)^{-1}\left(K^{-1}X\right)^TK^{-1}y           \\
+& = \left(X^{*^T}X^{*}\right)^{-1}X^{*^T}y^*.    \\
+\end{split}
+\end{align}
+Dies aber entspricht dem OLS-Schätzer im transformierten Modell.
+
+\noindent (2) Mit der Tatsache, dass für eine invertierbare Matrix $A$ immer gilt,
+dass $\left(A^{-1}\right)^T = \left(A^T\right)^{-1}$ und dem Theorem zur 
+linear-affinen Transformation multivariater Normalverteilungen ergibt sich
+\begin{align}
+\begin{split}
+\eps^*
+& \sim N\left(K^{-1}0_n, K^{-1}(\sigma^2 V)K^{-1^{T}}\right)      \\
+& = N\left(0_n, \sigma^2K^{-1}VK^{-1^{T}}\right)      \\
+& = N\left(0_n, \sigma^2K^{-1}KK^TK^{-1^{T}}\right)      \\
+& = N\left(0_n, \sigma^2K^{-1}KK^TK^{T^{-1}}\right)      \\
+& = N\left(0_n, \sigma^2I_n\right).      \\
+\end{split}
+\end{align}
+$\hfill\Box$
+
+# Modellschätzung 
+\footnotesize
+
+\begin{definition}[Fixed-Effects-Parameterschätzer]
+\justifying
+Gegeben sei die marginale Datenverteilung eines LMMs 
+mit einem Schätzer $\hat{\theta}$ für $\theta$, also
+\begin{equation}
+y \sim N(X\beta, V_{\hat{\theta}}).
+\end{equation}
+Dann ist der GLS-Schätzer  
+\begin{equation}
+\hat{\beta} = \left(X^T V_{\hat{\theta}}^{-1}X\right)^{-1}X^T V_{\hat{\theta}}^{-1}y
+\end{equation}
+ein populärer Schätzer für den Fixed-Effects-Parameter $\beta$.
+\end{definition}
+
+
+
+# Modellschätzung 
+Implementation des Fixed-Effects-Parameterschätzers
+\vspace{3mm}
+ 
+\setstretch{1}
+\tiny 
+```{r, echo = T}
+gls = function(y, X, V){
+    # Diese Funktion bestimmt den generalisierten Kleinste-Quadrate-Schätzer. 
+    # 
+    # Inputs
+    #   y           : y x 1 Datenvektor
+    #   X           : n x p Designamtrix
+    #   V           : n x n marginale Datenkovarianzmatrix
+    #
+    # Outputs 
+    #   beta_hat    : p x 1 generalisierter Kleinste-Quadrate-Schätzer
+    # ------------------------------------------------------------------------- 
+    Vi          = solve(V)                                                      # Inverse 
+    beta_hat    = solve(t(X) %*% Vi %*% X) %*% t(X) %*% Vi %*% y                # GKQ Schätzer
+    return(beta_hat)                                                            # Output
+}
+```
+
+
+# Modellschätzung 
+Motivation von Varianzkomponentenschätung und Restricted Maximum-Likelihood 
+
+\footnotesize
+Die Maximum-Likelihood Methode kann auf verzerrte Varianzschätzer führen
+
+Zum Beispiel ist der Maximum-Likelihood-Schätzer des Varianzparameters des Normalverteilungsmodells
+\begin{equation}
+\hat{\sigma}^2_{\tiny \mbox{ML}} 
+= \frac{1}{n}\sum_{i=1}^n \left(y_i - \hat{\mu}_{\tiny \mbox{ML}} \right)^2 \mbox{ mit } \hat{\mu}_{\tiny \mbox{ML}}  := \frac{1}{n}\sum_{i=1}^n y_i =: \bar{y}.
+\end{equation}
+verzerrt und nur asymptotisch erwartungstreu. Speziell gilt mit der Erwartungstreue der Stichprobenvarianz
+\begin{equation}
+\mathbb{E}\left(\hat{\sigma}^2\right)
+= \mathbb{E}\left(\frac{1}{n-1}\sum_{i=1}^n \left(y_i - \bar{y} \right)^2\right)
+= \frac{1}{n-1}\mathbb{E}\left(\sum_{i=1}^n \left(y_i - \bar{y} \right)^2\right)
+= \sigma^2,
+\end{equation}
+dass
+\begin{equation}
+\mathbb{E}\left(\hat{\sigma}^2_{\tiny \mbox{ML}} \right)
+= \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n \left(y_i - \hat{\mu}_{\tiny \mbox{ML}} \right)^2 \right)
+= \frac{1}{n}\mathbb{E}\left(\sum_{i=1}^n \left(y_i - \bar{y}_n \right)^2 \right)
+= \frac{n-1}{n}\sigma^2.  
+\end{equation}
+Da $(n-1)/n <  1$ insbesondere bei kleinem $n$, unterschätzt der Maximum-Likelihood-Schätzer den Wert von $\sigma^2$.
+
+@patterson1971 schreiben "The difference between the two methods [ML und ReML] 
+is analogous to the well-known difference between two methods of estimating the 
+variance $\sigma^2$ of a normal distribution [wie oben] (...)." und @harville1977 
+merkt an "One criticism of the ML approach to the estimation of [$\sigma^2$] is 
+that the ML estimator (...) takes no account of the loss in degrees of freedom 
+that results from estimat­ing [$\mu$] (...) These "deficiencies" are eliminated 
+in the restricted Maximum-Likelihood (REML) approach (...)"
+
+$\Rightarrow$ ReML für Varianzparameterschätzung scheint eine gute Idee zu sein.
+
+# Modellschätzung 
+
+\small
+Referenzen zur Theorie der Restricted Maximum-Likelihood Schätzung
+
+\footnotesize
+
+@patterson1971
+
+* Fehlerkontrastmotivation der Restricted Maximum-Likelihood Zielfunktion
+
+@harville1977
+
+* Übersicht zu Restricted Maximum-Likelihood Methoden und numerischer Auswertung
+
+@searle1992
+
+* Ausführliche Übersicht zum Problem der Varianzkomponentenschätzung
+
+@bates2004
+
+* Integration von Restricted Maximum-Likelihood in Penalized Least Squares
+
+@starke2017
+
+* Expectation-Maximization und Restricted Maximum-Likelihood aus der Perspektive von Variational Inference
+
+
+# Modellschätzung 
+
+\small
+Maximum-Likelihood und Restricted Maximum-Likelihood  
+
+\footnotesize
+Betrachtet man die marginale Datenverteilung des LMMs
+\begin{equation}
+y \sim N(X\beta, V_\theta)
+\end{equation}
+so ergibt sich für die Log-Likelihood Funktion der Varianzkomponenten $\theta$ für einen Schätzer $\hat{\beta}$ von $\beta$
+\begin{align}
+\begin{split}
+\ell(\theta) 
+& = \ln \left((2\pi)^{-\frac{n}{2}}|V_\theta|^{-\frac{1}{2}}\exp\left(-\frac{1}{2}(y-X\hat{\beta})^T V_\theta^{-1} (y-X\hat{\beta})\right)\right)   \\
+& = -\frac{n}{2}\ln 2\pi - \frac{1}{2} \ln |V_\theta| -\frac{1}{2}(y-X\hat{\beta})^T V_\theta^{-1} (y-X\hat{\beta}) 
+\end{split}
+\end{align}
+Die (numerische) Maximierung dieser Funktion hinsichtlich $\theta$ führt zu einem Maximum-Likelihood-Schätzer von $\theta$,
+\begin{equation}
+\hat{\theta}_{\tiny \mbox{ML}} := \mbox{argmax}_{\theta} \left( - \frac{1}{2} \ln |V_\theta| -\frac{1}{2}(y-X\hat{\beta})^T V_\theta^{-1} (y-X\hat{\beta}) \right).
+\end{equation}
+Ein zentrales Resultat ist, dass ein Restricted Maximum-Likelihood-Schätzer von $\theta$  gegeben ist durch
+\begin{equation}
+\hat{\theta}_{\tiny \mbox{ReML}} 
+:= \mbox{argmax}_{\theta} \left( - \frac{1}{2} \ln |V_\theta|  -\frac{1}{2} \ln |X^T  V_\theta^{-1} X|  -\frac{1}{2}(y-X\hat{\beta})^T V_\theta^{-1} (y-X\hat{\beta}) \right).
+\end{equation}
+Die Zielfunktion der ReML Methode und der ML Methode unterscheiden sich also nur hinsichtlich eines Terms.
+
+Im Folgenden wollen wir die Motivation für die Einführung des Terms $-\frac{1}{2} \ln|X^T  V_\theta^{-1} X|$ (sehr) grob skizzieren.
+
+# Modellschätzung 
+\small
+Motivation der Restricted Maximum-Likelihood Funktion durch Fehlerkontraste
+
+\footnotesize
+Grundidee des von @patterson1971 formulierten Ansatzes ist es, den Effekt von $\beta$ aus $y$ herauszurechnen
+und dann die Likelihood-Funktion der so transformierten Daten hinsichtlich von $\theta$ zu maximieren.
+
+Genauer ist das Ziel den Datenvektor durch eine lineare Transformation mit einer
+Matrix $M \in \mathbb{R}^{m\times n}$ in einen anderen Vektor $z$ zu transformieren, 
+dessen Erwartungswert für jeden möglichen Wert von $\beta$ der Nullvektor ist, also
+\begin{equation}
+z = My \mbox{ mit }  \mathbb{E}(z) = 0_m \mbox{ für alle } \beta \in \mathbb{R}^p 
+\end{equation}
+und dann die Log-Likelihood-Funktion von $z$ zu maximieren.
+
+Eine solche Matrix $M$ muss insbesondere die Bedingung
+\begin{equation}
+MX = 0_{mp}
+\end{equation}
+erfüllen, denn dann gilt
+\begin{equation}
+\mathbb{E}(z) =  \mathbb{E}(My) =  \mathbb{E}(MX\beta) =  \mathbb{E}(0_{mp}\beta) = 0_m \mbox{ für alle } \beta \in \mathbb{R}^p. 
+\end{equation}
+Eine prinzipielle Möglichkeit für die Wahl von $M$ ist die $n \times n$ Matrix
+\begin{equation}
+M = I_n - P_n \mbox{ mit } P_n := X(X^TX)^{-1}X^T \in \mathbb{R}^{n \times n}
+\end{equation}
+mit der sogenannten *Projektionsmatrix* $P$.
+
+# Modellschätzung 
+\small
+Motivation der Restricted Maximum-Likelihood Funktion durch Fehlerkontraste
+
+\footnotesize
+Es gilt dann nämlich
+\begin{equation}
+MX = (I_n - P_n)X =  X - P_nX =  X - X(X^TX)^{-1}X^TX = X - X = 0_{np}.
+\end{equation}
+Nutzt man also diese Matrix $M$ zur Transformation der Daten, ergibt sich
+\begin{equation}
+z = My = (I_n - P_n)y =  y - X(X^TX)^{-1}X^Ty = y - X\hat{\beta} = \hat{\eps}
+\end{equation}
+und wir sehen, dass eine solche Matrix $M$ die Daten auf die Residuals, also die
+Differenz zwischen Daten und Modellvorhersage nach Schätzung der Fixed-Effects projiziert.
+Die Matrix $P_n$ nennt man dementsprechend auch *Residual-forming matrix* oder *Projektionsmatrix*
+und die Matrix $M$ *Fehlerkontrastmatrix*. Der Vektor $z$ sind dann die Residuals
+und ReML wird auch häufig als *Residual Maximum-Likelihood* bezeichnet. Eine Zeile 
+einer solchen Matrix $M$ nennt man auch *Fehlerkontrast*, die Matrix $M$ daher 
+eine *Fehlerkontrastmatrix*. 
+
+Prinzipiell würde man nun die Log-Likelihood Funktion
+von $z \in \mathbb{R}^n$, das aufgrund des Theorems zur linear-affinen Transformation
+multivariater Normalverteilungen die Verteilung
+\begin{equation}
+z \sim N(MX\beta, MV_\theta M^T)
+\end{equation}
+hat, also
+\begin{equation}
+\ell(\theta) = \frac{n}{2}\ln 2\pi - \frac{1}{2} \ln |MV_\theta M^T| - \frac{1}{2}(My)^T(MV_\theta M^T)^{-1}My.
+\end{equation}
+ 
+# Modellschätzung 
+\small
+Motivation der Restricted Maximum-Likelihood Funktion durch Fehlerkontraste
+
+\footnotesize
+Leider funktioniert die vorgeschlagene Wahl von $M$ in dieser Form nicht, "da $\mbox{rg}(M) = m < n$".
+
+Man wählt daher die ersten $n - p$ Zeilen von $M$ und erhält eine Matrix $K \in \mathbb{R}^{m \times n}$ mit vollem Spaltenrang $m = n - p$.
+
+Dabei gilt weiterhin $\mathbb{E}(z) = \mathbb{E}(Ky) = 0_m$ und man möchte 
+\begin{equation}
+\ell(\theta) = \frac{m}{2}\ln 2\pi - \frac{1}{2} \ln |KV_\theta K^T| - \frac{1}{2}(Ky)^T(KV_\theta K^T)^{-1}Ky
+\end{equation}
+maximieren. 
+
+@searle1992 beweisen nun, dass 
+\begin{equation}
+\ln |KV_\theta K^T| = \ln |V_\theta | + \ln |XV_\theta^{-1}X|
+\end{equation}
+und 
+\begin{equation}
+(Ky)^T(KV_\theta K^T)^{-1}Ky = y^T P_n y = (y-X\hat{\beta})^T V_\theta^{-1} (y-X\hat{\beta})
+\end{equation}
+Dies ist intuitiv zumindest unter dem Aspekt, dass $K$ Teil von $P_n$ ist, einsichtig. Damit ergibt
+sich für die Log-Likelihood-Funktion von $z = Ky$ aber, dass 
+\begin{equation}
+\ell(\theta) = \frac{m}{2}\ln 2\pi - \frac{1}{2}\ln |V_\theta | - \frac{1}{2} \ln |XV_\theta^{-1}X| - \frac{1}{2}(y-X\hat{\beta})^T V_\theta^{-1} (y-X\hat{\beta})
+\end{equation}
+also identisch mit der ReML Zielfunktion ist.
+
+
+# Modellschätzung 
+\setstretch{2.5}
+
+\small
+Die hier gegebene Darstellung lässt allerdings viele Fragen offen 
+\footnotesize
+
+* Warum sind ReML Schätzer der Varianzkomponenten unverzerrt (vgl. @foulley1993)?
+* Was sind weitere generelle Eigenschaften der ReML Schätzer (vgl. @harville1977)
+* Was genau ist das Problem bei Residualprojektion mit $M = (I_n - P_n)$?
+* Wie und wann funktionieren die Beweise von @searle1992?
+
+\small
+Darüber hinaus ergeben sich zumindest folgende Fragen
+\footnotesize
+
+* Was verhält sich die Fehlerkontrastmotivation zur Expectation-Maximization Motivation (vgl. @laird1982)?
+* Wie verhält sich die Fehlerkontrastmotivation zur bedingten Verteilungsmotivation (vgl. @verbyla1990)?
+* Welche Algorithmen eignen sich zur Maximierung der ReML Zielfunktion (vgl. @lindstrom1990)?
+* Wie verhalten sich ReML und Penalized-Least-Squares (vgl. @bates2004)?
+
+
+# Modellschätzung 
+\vspace{2mm}
+\footnotesize
+\begin{definition}[ReML-Varianzkomponentenschätzer]
+\justifying
+Gegeben sei die marginale Datenverteilung eines LMMs basierend
+auf einem Fixed-Effects-Parameterschätzer $\hat{\beta}$, also
+\begin{equation}
+y \sim N(X\hat{\beta}, V_\theta)
+\end{equation}
+Dann ist der ReML Schätzer in diesem Modell,
+\begin{equation}
+\hat{\theta}_{\tiny \mbox{ReML}} 
+:= \mbox{argmax}_{\theta} \left( - \frac{1}{2} \ln |V_\theta|  -\frac{1}{2} \ln |X^T  V_\theta^{-1} X|  -\frac{1}{2}(y-X\hat{\beta})^T V_\theta^{-1} (y-X\hat{\beta}) \right),
+\end{equation}
+ein populärer Schätzer für den Varianzkomponentenvektor $\theta$. 
+\end{definition}
+
+
+# Modellschätzung 
+Implementation des ReML-Varianzkomponentenschätzers
+\vspace{3mm}
+\setstretch{1.2}
+\tiny 
+```{r, echo = T}
+llh_reml = function(theta, y, X, Z, beta_hat, Sigma_eps){
+    # Diese Funktion evaluiert die negative restricted log likelihood 
+    # Zielfunktion für  das Random-Effects-Modell der Metanalyse.
+    #
+    # Inputs
+    #   theta     : k x 1 Varianzkomponentenvektor
+    #   y         : n x 1 Datenvektor                                 
+    #   X         : n x p Fixed-Effects-Designmatrix
+    #   Z         : n x q  Random-Effects-Designmatrix
+    #   beta_hat  : p x 1 Fixed-Effects Schätzer
+    #
+    # Outputs
+    #   llh_reml    : 1 x 1 Wert der ReML Zielfunktion  
+    # ------------------------------------------------------------------------- 
+    n           = nrow(Z)                                                       # Datenpunktanzahl
+    V           = theta[1]*Z %*% t(Z) + theta[2]*diag(n)                        # marginale Datenkovarianzmatrix
+    Vi          = solve(V)                                                      # Inverse
+    R           = y - X%*%beta_hat                                              # Residuals
+    T1          = -(1/2)*log(det(V))                                            # Erster Term 
+    T2          = -(1/2)*log(det(t(X) %*% Vi %*% X))                            # Zweiter Term
+    T3          = -(1/2)*t(R) %*% Vi %*% R                                      # Dritter Term
+    llh_reml    = T1 + T2 + T3                                                  # Restricted Log Likelihood
+    return(llh_reml)                                                            # Wert der ReML Zielfunktion
+}
+```
+
+
+# Modellschätzung 
+Implementation des ReML-Varianzkomponentenschätzers
+\vspace{2mm}
+\setstretch{1}
+\tiny 
+```{r, echo = T}
+reml  = function(theta, lmm){
+    # Diese Funktion ist eine Wrapperfunktion für l_reml() zum Gebrauch mit 
+    # der generischen R Optimierungsfunktion optim().
+    #
+    # Inputs
+    #   theta   : k x 1 Varianzkomponentenvektor
+    #   lmm     : Liste von LMM Komponenten
+    #
+    # Output
+    #   reml    : Wert der restricted log likelhood Funktion
+    # ------------------------------------------------------------------------- 
+    y           = lmm$y                                                         # Datenvektor
+    X           = lmm$X                                                         # Fixed-Effects-Designmatrix
+    Z           = lmm$Z                                                         # Random-Effects-Designmatrix
+    beta_hat    = lmm$beta_hat                                                  # Fixed-Effects Schätzer
+    l_reml      = llh_reml(theta,y,X,Z,beta_hat)                                # Wert der ReML Zielfunktion
+    return(-l_reml)                                                             # Ausgabeargument
+}
+
+mcov = function(theta, Z){
+    # Diese Funktion schätzt generierte eine marginale Datenkovarianzmatrix
+    # basierend auf einer Random-Effects-Designmatrix und der Varianzkomponenten.
+    # 
+    # Inputs: 
+    #   theta   : c x 1 Varianzkomponentenvektor
+    #   Z       : n x q Random-Effects-Designmatrix
+    # 
+    # Outputs
+    #   V_theta : n x n marginale Kovarianzmatrix
+    # -------------------------------------------------------------------------
+    V_theta = theta[1]*(Z%*%t(Z)) + theta[2]*diag(nrow(Z))                      # marginale Datenkovarianzmatrix
+    return(V_theta)                                                             # Ausgabeargument
+}
+```
+
+
+# Modellschätzung
+\vspace{1mm}
+Motivation zum Random-Effects Parameterschätzer
+\vspace{1mm}
+
+\footnotesize
+Das Linear Mixed Model impliziert wie gesehen eine gemeinsame Verteilung
+von Daten und unbeobachtbarem Random-Effects-Vektor $b$. Ein Standardvorgehen 
+im Bereich der Linear Mixed Model Schätzung ist es, $b$ durch den Erwartungswert 
+der auf den Daten bedingten Verteilung von $b$ zu schätzen, wobei unbekannte 
+Parameterwerte wiederrum durch ihre Schätzer ersetzt werden. 
+
+Dieses Vorgehen entspricht damit letztlich einer Bayesianischen Punktschätzung von $b$ mit
+marginaler Verteilung ("Prior distribution")
+\begin{equation}
+b \sim N\left(0_q, \hat{\sigma}_{b}^2I_q\right)
+\end{equation}
+und bedingter Verteilung ("Likelihood")
+\begin{equation}
+y\, |\, b \sim N\left(X\hat{\beta} + Zb, \hat{\sigma}_{\eps}^2I_n\right)
+\end{equation}
+
+Anwendung des Theorems zur bedingten Normalverteilungen auf die hier relevante gemeinsame Verteilung
+\begin{equation}
+\begin{pmatrix}
+b \\
+y 
+\end{pmatrix}
+\sim 
+N\left(
+\begin{pmatrix}
+0_q \\
+X\hat{\beta} 
+\end{pmatrix},
+\begin{pmatrix}
+\hat{\sigma}^2_{b}I_q &  \hat{\sigma}^2_{b}Z^T                                \\
+\hat{\sigma}^2_{b}Z &  V_{\hat{\theta}}
+\end{pmatrix}
+\right)
+\end{equation}
+ergibt dann als Schätzer für den Random-Effects Parameter den Erwartungswertparameter der Verteilung $b \, |\, y$  
+\begin{equation}
+\hat{b} = \mu_{b|y} = \hat{\sigma}^2_{b}Z^TV_{\hat{\theta}}^{-1}(y - X\hat{\beta}).
+\end{equation}
+
+
+# Modellschätzung
+\vspace{2mm}
+\footnotesize
+\begin{definition}[Random-Effects-Parameterschätzer]
+\justifying
+Gegeben sei die gemeinsame Verteilung von Random-Effects und Daten eines 
+LMMs basierend auf einem Fixed-Effects-Parameterschätzer $\hat{\beta}$
+und einem Varianzkomponentenschätzer $\hat{\theta} := \left(\hat{\sigma}^2_{b}, \hat{\sigma}^2_\eps \right)$, also
+\begin{equation}
+\begin{pmatrix}
+b \\
+y 
+\end{pmatrix}
+\sim 
+N\left(
+\begin{pmatrix}
+0_q \\
+X\hat{\beta} 
+\end{pmatrix},
+\begin{pmatrix}
+\hat{\sigma}^2_{b}I_q &  \hat{\sigma}^2_{b}Z^T                                \\
+\hat{\sigma}^2_{b}Z &  V_{\hat{\theta}}
+\end{pmatrix}
+\right).
+\end{equation}
+Dann ist bedingte Erwartungswert von $b$ in diesem Modell, also 
+\begin{equation}
+\hat{b} = \mu_{b|y} = \hat{\sigma}^2_{b}Z^TV_{\hat{\theta}}^{-1}(y - X\hat{\beta}).
+\end{equation}
+ein populärer Schätzer für den Random-Effects-Parameter.  
+\end{definition}
+
+
+# Modellschätzung
+Implementation des Random-Effects-Parametschätzers
+\vspace{3mm}
+\setstretch{1.2}
+\tiny 
+```{r, echo = T}
+rfx = function(lmm){
+    # Diese Funktion bestimmt den bedingten Erwartungswert der Random-Effects.
+    #   Inputs :
+    #     lmm   : R Liste mit Einträgen
+    #       $y              : n x 1 Datenvektor
+    #       $X              : n x p Fixed-Effects-Designmatrix
+    #       $Z              : n x q Random-Effects-Designmatrix
+    #       $beta_hat       : p x 1 Fixed-Effects-Parameterschätzer
+    #       $s_b_hat        : 1 x 1 Random-Effects-Varianzkomponente    
+    #       $s_eps_hat      : 1 x 1 Fehler-Varianzkomponente 
+    #   Outputs :
+    #     lmm               : R Liste mit zusätzlichen Einträgen
+    #       $b_hat          : q x 1 Random-Effects-Parameterschätzer
+    # ------------------------------------------------------------------
+    y               = lmm$y                                             # Daten
+    Z               = lmm$Z                                             # Random-Effects-Designmatrix
+    X               = lmm$X                                             # Fixed-Effects-Designmatrix
+    beta_hat        = lmm$beta_hat                                      # Fixed-Effects-Parameterschätzer
+    s_b_hat         = lmm$s_b_hat                                       # Random-Effects-Varianzkomponentenschätzer
+    s_eps_hat       = lmm$s_eps_hat                                     # Fehlervarianzkomponentenschätzer
+    theta_hat       = c(s_b_hat,s_eps_hat)                              # Varianzkomponentenschätzer  
+    V_theta_hat_i   = solve(mcov(theta_hat, Z))                         # Inverser Datenkovarianzmatrixschätzer
+    eps_hat         = (y - X %*% beta_hat)                              # Residuals
+    lmm$b_hat       = s_b_hat*t(Z) %*% V_theta_hat_i %*% eps_hat        # Random-Effects-Parameterschätzer
+}
+```
+
+# Modellschätzung 
+\vspace{1mm}
+Überblick zur Modellschätzung
+\vspace{1mm}
+
+\small
+\setstretch{1.8}
+Iteratives Verfahren zur LMM Parameterschätzung
+
+\noindent (0) Initialisierung
+
+* Wahl eines geeigneten Startwerts $\hat{\beta}^{(0)}$ 
+
+\noindent (1) Für $k = 1,..., K$
+
+* ReML-Schätzung $\hat{\theta}^{(k)}$ basierend auf $\hat{\beta}^{(k-1)}$
+* GLS-Schätzung $\hat{\beta}^{(k)}$ basierend auf $\hat{\theta}^{(k)}$ 
+
+\noindent (2) Schätzung von $\hat{b}$ basierend auf $\hat{\theta}^{(K)}$ und $\hat{\theta}^{(K)}$
+
+# Modellschätzung
+\vspace{3mm}
+\small
+Iteratives Verfahren zur LMM Parameterschätzung
+\vspace{1mm}
+\tiny
+\setstretch{0.9}
+```{r, echo = T}
+estimate = function(lmm){
+    # Diese Funktion schätzt die Parameter eines LMMs.
+    #   Inputs :
+    #     lmm   : R Liste mit Einträgen
+    #       $y              : n x 1 Datenvektor
+    #       $X              : n x p Fixed-Effects-Designmatrix
+    #       $Z              : n x q Random-Effects-Designmatrix
+    #       $c              : 1 x 1 Varianzkomponentenanzahl
+    #   Outputs :
+    #     lmm   : R Liste mit zusätzlichen Einträgen
+    #       $beta_hat       : p x 1 Fixed-Effects-Parameterschätzer
+    #       $s_b_hat        : 1 x 1 Random-Effects-Varianzschätzer
+    #       $s_eps_hat      : 1 x 1 Datenvarianzschätzer
+    # -------------------------------------------------------------------------   
+    y               = lmm$y                                                     # Datenvektor
+    X               = lmm$X                                                     # Fixed-Effects-Designmatrix
+    Z               = lmm$Z                                                     # Random-Effects-Designmatrix
+    c               = lmm$c                                                     # Anzahl Varianzkomponenten
+    n               = nrow(X)                                                   # Anzahl Datenpunkte
+    p               = ncol(X)                                                   # Anzahl Fixed-Effects
+    q               = ncol(Z)                                                   # Anzahl Random-Effects
+    K               = 2^3                                                       # maximale Iterationsanzahl
+    theta_hat_k     = matrix(rep(NaN, c*K), nrow = c)                           # Varianzkomponentenschätzerarray  
+    theta_hat_k[,1] = rep(1,c)                                                  # Initialisierung 
+    beta_hat_k      = matrix(rep(NaN, p*K), nrow = p)                           # Fixed-Effects-Schätzerarray
+    V_theta_hat_k   = mcov(theta_hat_k[,1], Z)                                  # marginale Datenkovarianzmatrix
+    beta_hat_k[,1]  = gls(y,X,V_theta_hat_k)                                    # Fixed-Effects-Parameterschätzer
+    for (k in 2:K){                                                             # Iterationen
+        lmm$beta_hat    = beta_hat_k[, k-1]                                     # Fixed-Effects-Schätzer k-1
+        max_l_reml      = optim(par=theta_hat_k[,k-1],fn=reml,lmm=lmm)          # ReML-Varianzkomponentschätzung
+        theta_hat_k[,k] = max_l_reml$par                                        # Varianzkomponentenschätzer k
+        V_theta_hat_k   = mcov(theta_hat_k[,k], Z)                              # marginale Datenkovarianzmatrix
+        beta_hat_k[,k]  = gls(y,X,V_theta_hat_k)}                               # Fixed-Effects-Parameterschätzer
+    lmm$beta_hat    = beta_hat_k[,K]                                            # Fixed-Effects-Parameterschätzer
+    lmm$s_b_hat     = theta_hat_k[1,K]                                          # Random-Effects-Varianzkomponente    
+    lmm$s_eps_hat   = theta_hat_k[2,K]                                          # Fehler-Varianzkomponente 
+    lmm$b_hat       = rfx(lmm)                                                  # Random-Effects-Parameterschätzer
+    return(lmm)                                                                 # Ausgabe
+}
+```
+
+# Modellschätzung
+Parameterschätzung im Anwendungsbeispiel
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+D       = read.csv("./3_Daten/mz-anova.csv")                        # Dateneinlesen                                                        
+n_i     = 4                                                         # Anzahl Zentren 
+n_j     = 2                                                         # Anzahl Bedingungen 
+n_ij    = 5                                                         # Patient:innen pro Zentrum und Bedingung
+n       = n_i*n_j*n_ij                                              # Gesamtanzahl an Patient:innen
+X_i     = kronecker(matrix(c(1,1,0,1), ncol = 2), rep(1,n_ij))      # Treatment-Control Designmatrix
+X       = kronecker(rep(1,n_i), X_i)                                # Fixed-Effects-Designmatrix
+Z       = kronecker(diag(n_i), rep(1,n_j*n_ij))                     # Random-Effects-Designmatrix    
+y       = D$BDI                                                     # Daten
+lmm     = list(y = y, X = X, Z = Z, c = 2)                          # LMM Komponenten 
+lmm     = estimate(lmm)                                             # Modellschätzung    
+```
+```{r, echo = F}
+cat("beta_hat         :", round(lmm$beta_hat,2), 
+    "\nb_hat            :", round(lmm$b_hat,2),
+    "\nsigsqr_b_hat     :", round(lmm$s_b_hat,2),
+    "\nsigsqr_eps_hat   :", round(lmm$s_eps_hat,2)) 
+```
+
+
+
+# Modellschätzung
+Parameterschätzung im Anwendungsbeispiel mit `lme()` aus `nlme`
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(nlme)                                                       # nlme R Paket
+D           = read.csv("./3_Daten/mz-anova.csv", head = T)          # Dataframe
+D$TRM       = as.factor(D$TRM)                                      # R Faktor Kodierung
+D$HSA       = as.factor(D$HSA)                                      # R Faktor Kodierung    
+M           = lme(BDI ~ TRM, data = D, random = ~ 1 | HSA)          # LMM Schätzung
+X           = model.matrix(M,D)                                     # Fixed-Effects-Designmatrix
+Z           = model.matrix(~ M$groups[[1]] - 1)                     # Random-Effects-Designmatrix
+beta_hat    = M$coefficients$fixed                                  # Fixed-Effects-Parameterschätzer
+b_hat       = M$coefficients$random$HSA                             # Random-Effects-Parameterschätzer
+s_eps_hat   = M$sigma**2                                            # Datenvarianzkomponentenschätzer
+s_b_hat     = diag(getVarCov(M))                                    # Random-Effects-Varianzkomponentenschätzer
+ci_beta     = intervals(M, which = "fixed", 0.95)                   # Konfidenzintervalle
+```
+
+```{r, echo = F}
+cat("beta_hat         :", round(beta_hat,2), 
+    "\nb_hat            :", round(b_hat,2),
+    "\nsigsqr_b_hat     :", round(s_b_hat,2),
+    "\nsigsqr_eps_hat   :", round(s_eps_hat,2)) 
+```
+
+
+
+
+# 
+\vfill
+\setstretch{3}
+\large
+Modellformulierung
+
+Modellschätzung
+
+**Modellevaluation**
+
+Selbstkontrollfragen
+\vfill
+
+
+# Modellevaluation
+\small
+Überblick
+\footnotesize
+\setstretch{2.6}
+
+* Im Gegensatz zum ALM gibt es nicht für alle LMM Parameterschätzer nicht-iterative Lösungen. 
+* $\Rightarrow$ Die Frequentistische Verteilungstheorie der LMM Parameter ist komplex.
+* Wir sind hier nur an Konfidenzintervallen für die Fixed Effects Parameter interessiert.
+* Wir fokussieren dazu auf eine Approximation der Frequentistischen Verteilung von $\hat{\beta}$. 
+* Diese Approximation wird in @rencher2008 basierend auf @fuller1974 diskutiert.
+* @demidenko2013 erwähnt diese Approximation nur nebenbei.
+* Software-Lösungen wie `nlme` und `lme4` implementieren diese Approximation nicht notwendigerweise.
+* Alternative Möglichkeiten sind z.B. Profil-Likelihood-Konfidenzintervalle (vgl. @venzon1988).
+
+
+# Modellevaluation
+
+\footnotesize
+\begin{theorem}[Approximative Konfidenzintervalle für Fixed-Effect-Parameter]
+\justifying
+\normalfont
+Für ein LMM sei 
+\begin{equation}
+\hat{\beta} = \left(X^T V^{-1}_{\hat{\theta}} X\right)^{-1}X^TV^{-1}_{\hat{\theta}} y
+\end{equation}
+der Fixed-Effects-Parameterschätzer. Dann gilt für $n \to \infty$, dass
+\begin{equation}
+\hat{\beta} \stackrel{a}{\sim} N\left(\beta, \left(X^TV_{\hat{\theta}}X \right)^{-1}\right).
+\end{equation}
+Weiterhin gilt mit der kumulativen Verteilungsfunktion $\Phi$ der Standardnormalverteilung, 
+\begin{equation}
+z_\delta := \Phi^{-1}\left(\frac{1+\delta}{2}\right).
+\end{equation}
+sowie 
+\begin{equation}
+\lambda_j := \left(\left(X^TV^{-1}_{\hat{\theta}} X \right)^{-1}\right)_{jj}
+\mbox{,  dem $j$ten Diagonalelement von } \left(X^TV^{-1}_{\hat{\theta}}X \right)^{-1},
+\end{equation}
+dass für $j = 1,...p$
+\begin{equation}
+\kappa_j := \left[\hat{\beta}_j - \sqrt{\lambda_j}z_{\delta},
+                  \hat{\beta}_j + \sqrt{\lambda_j}z_{\delta}\right]
+\end{equation}
+ein approximatives $\delta$-Konfidenzintervall für die $j$te Komponente $\beta_j$ des 
+Fixed-Effects-Parameters ist. 
+\end{theorem}
+Bemerkungen
+
+* Wir verzichten auf einen Beweis und verweisen auf @rencher2008, Seiten 490 - 491.
+
+
+# Modellevaluation
+\small
+Approximative Fixed Effects Konfidenzintervalle
+\vspace{2mm}
+
+\tiny
+\setstretch{.9}
+```{r, echo = T}
+evaluate = function(lmm){
+
+    # Diese Funktion evaluiert ein geschätztes LMMs.
+    #   Inputs:
+    #       .lmm    : R Liste mit Einträgen
+    #        $y          : n x 1 Datenvektor
+    #        $X          : n x p Fixed-Effects-Designmatrix
+    #        $Z          : n x q Random-Effects-Designmatrix
+    #        $c          : 1 x 1 Varianzkomponentenanzahl
+    #        $beta_hat   : p x 1 Fixed-Effects-Parameterschätzer
+    #        $s_b_hat    : 1 x 1 Random-Effects-Varianzschätzer
+    #        $s_eps_hat  : 1 x 1 Datenvarianzschätzer          
+    #   Outputs
+    #       .lmm    : R Liste mit zusätzlichen Einträgen
+    #        $C_beta_hat : p x p Fixed-Effects Kovarianzmatrixschätzer
+    #        $se_beta_hat: p x 1 Fixed Effects Standardfehlerschätzer     
+    #        $ci_beta_hat: p x 2 Wald Fixed Effects Wald Konfidenzintervalle
+    #
+    # -------------------------------------------------------------------------
+    y               = lmm$y                                         # Daten
+    Z               = lmm$Z                                         # Random-Effects-Designmatrix
+    X               = lmm$X                                         # Fixed-Effects-Designmatrix
+    beta_hat        = lmm$beta_hat                                  # Fixed-Effects-Parameterschätzer
+    s_b_hat         = lmm$s_b_hat                                   # Random-Effects-Varianzkomponentenschätzer
+    s_eps_hat       = lmm$s_eps_hat                                 # Fehlervarianzkomponentenschätzer
+    theta_hat       = c(s_b_hat,s_eps_hat)                          # Varianzkomponentenschätzer  
+    V_hat_i         = solve(mcov(theta_hat, Z))                     # inverser Datenkovarianzmatrixschätzer
+    lmm$C_beta_hat  = solve(t(X) %*% V_hat_i %*% X)                 # Fixed-Effects Kovarianzmatrixschätzer    
+    lmm$se_beta_hat = sqrt(diag(lmm$C_beta_hat))                    # Fixed-Effects Standardfehlerschätzer            
+    lmm$delta       = 0.95                                          # Konfidenzlevel    
+    lmm$zdelta      = qnorm((1 + lmm$delta)/2)                      # Wald-KI (Rencher (2008) S. 491)                            
+    lmm$kappa_u     = lmm$beta_hat - lmm$zdelta*lmm$se_beta_hat     # untere KI Grenzen
+    lmm$kappa_o     = lmm$beta_hat + lmm$zdelta*lmm$se_beta_hat     # obere KI Grenzen
+    return(lmm) 
+}
+```
+
+# Modellevaluation
+\small
+Approximative Fixed-Effects-Konfidenzintervalle im Anwendungsbeispiel
+\vspace{2mm}
+\tiny
+
+```{r, echo = T}
+lmm     = evaluate(lmm)                                             # Modellevaluation
+E       = data.frame("Std.Error"    = lmm$se_beta_hat,              # Ausgabeformatierung
+                     "Value"        = lmm$beta_hat, 
+                     "lower"        = lmm$kappa_u,
+                     "upper"        = lmm$kappa_o,
+                     row.names = c("mu_hat", "alpha_2"))
+print(E, digits = 3)
+```
+
+# Modellevaluation
+\small
+\vspace{2mm}
+Fixed-Effects Konfidenzintervalle im Anwendungsbeispiel mit `lme()` aus `nlme`
+\vspace{2mm}
+\tiny
+```{r, echo = T}
+library(nlme)                                                       # nlme R Paket
+D           = read.csv("./3_Daten/mz-anova.csv", head = T)          # Dataframe
+D$TRM       = as.factor(D$TRM)                                      # R Faktor Kodierung
+D$HSA       = as.factor(D$HSA)                                      # R Faktor Kodierung    
+M           = lme(BDI ~ TRM, data = D, random = ~ 1 | HSA)          # LMM Schätzung
+se_beta     = summary(M)$tTable[, "Std.Error"]                      # Standardfehlerschätzer
+ci_beta     = intervals(M, which = "fixed", 0.95)                   # Konfidenzintervalle
+print(se_beta, digits = 3)                                          # Ausgabe
+```
+
+\vspace{1mm}
+```{r, echo = T}
+print(ci_beta, digits = 3)                                          # Ausgabe
+```
+
+\footnotesize
+
+$\Rightarrow$ Offenbar nutzt `lme()` **nicht** die hier diskutierte Approximation (vgl. @pinheiro2000, S. 92).
+
+# 
+\vfill
+\setstretch{3}
+\large
+Modellformulierung
+
+Modellschätzung
+
+Modellevaluation
+
+**Selbstkontrollfragen**
+\vfill
+
+# Selbstkontrollfragen
+\footnotesize
+\setstretch{2.1}
+
+1. Geben Sie die Definition des LMMs in Clusterdarstellung wieder.
+1. Geben Sie die Definition des LMMs in Kompaktdarstellung wieder.
+1. Geben Sie das Theorem zur Marginalen Datenverteilung des LMMs wieder.
+1. Geben Sie die Definition der hierarchischen Darstellung des LMMs wieder.
+1. Skizzieren Sie ein iteratives Verfahren zur LMM Parameterschätzung.
+1. Geben Sie die Definition des Generalisierten Kleinste-Quadrate Schätzers wieder.
+1. Erläutern Sie den Zusammenhang von GLS- und OLS-Schätzern.
+1. Geben Sie die Definition des Fixed-Effects-Parameterschätzers im LMM wieder.
+1. Geben Sie die Definition des ReML-Varianzkomponentenschätzers im LMM wieder.
+1. Geben Sie die Definition des Random-Effects-Parameterschätzers im LMM wieder.
+1. Geben Sie das Theorem zu approximativen Konfidenzintervallen für Fixed-Effects-Parameter im LMM wieder.
+
+# Referenzen {.allowframebreaks}
+\footnotesize

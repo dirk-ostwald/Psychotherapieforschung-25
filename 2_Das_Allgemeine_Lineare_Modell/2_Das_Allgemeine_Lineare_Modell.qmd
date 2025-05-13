@@ -1,0 +1,1500 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: 2_Header.tex
+bibliography: 2_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/ptf_2_otto.png")
+```
+
+
+\huge
+Psychotherapieforschung
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2025
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(2) Das Allgemeine Lineare Modell}
+\vfill
+
+
+# 
+\large
+\vfill
+\setstretch{2.2}
+Modellformulierung, Modellschätzung, Modellevaluation
+
+`lm()` und `formulas`
+
+Kronecker-Produkt
+
+Zweistichproben-T-Test
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+# 
+\large
+\vfill
+\setstretch{2.2}
+**Modellformulierung, Modellschätzung, Modellevaluation**
+
+`lm()` und `formulas`
+
+Kronecker-Produkt
+
+Zweistichproben-T-Test
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\large
+
+Naturwissenschaft als modell-basierter Realismus \vspace{7mm}
+
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("2_Abbildungen/ptf_2_wissenschaft.pdf")
+```
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+
+\vfill
+Modellformulierung
+
+\begin{equation}
+y = X\beta + \varepsilon, \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+ 
+Modellschätzung
+\begin{equation}
+\hat{\beta} = (X^TX)^{-1} X^Ty, \quad  \hat{\sigma}^2 = \frac{(y-X\hat{\beta})^T(y-X\hat{\beta})}{n-p}
+\end{equation}
+ 
+Modellevaluation
+\begin{equation}
+T = \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}},\quad 
+F = \frac{(\hat{\varepsilon}_0^T\hat{\varepsilon}_0 - \hat{\varepsilon}^T\hat{\varepsilon})/p_1}{\hat{\varepsilon}^T\hat{\varepsilon}/(n-p)}
+\end{equation}
+\vfill
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\small
+\begin{definition}[Allgemeines Lineares Modell]
+Es sei
+\begin{equation}\label{eq:alm}
+y = X\beta + \varepsilon, 
+\end{equation}
+wobei
+\begin{itemize}
+\item $y$ ein $n$-dimensionaler beobachtbarer Zufallsvektor ist, der \textit{Daten} genannt wird,
+\item $X \in \mathbb{R}^{n \times p}$ mit $n>p$ eine vorgegebene Matrix ist, die \textit{Designmatrix} genannt wird,
+\item $\beta \in \mathbb{R}^p$ ein unbekannter Parametervektor ist, der \textit{Betaparametervektor} genannt wird, 
+\item $\varepsilon$ ein $n$-dimensionaler nicht-beobachtbarer Zufallsvektor ist, der \textit{Zufallsfehler} genannt wird und für den angenommen wird, dass
+mit einem unbekannten Varianzparameter $\sigma^2>0$ gilt, dass
+\begin{equation}
+\varepsilon \sim N\left(0_n, \sigma^2I_n\right).
+\end{equation}
+\end{itemize}
+Dann heißt \eqref{eq:alm} \textit{Allgemeines Lineares Modell (ALM)}.
+\end{definition}
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+Bemerkungen
+\setstretch{1.8}
+
+* \justifying Wir nehmen durchgängig an, dass $X \in \mathbb{R}^{n \times p}$ vollen Spaltenrang hat, also dass $\mbox{rg}(X)=p$.
+* $y$ ist ein Zufallsvektor, weil er aus der Addition des Zufallsvektors $\varepsilon$ zu dem Vektor $X\beta \in \mathbb{R}^n$ resultiert.
+* Wir nennen $X\beta \in \mathbb{R}^n$ den \textit{deterministischen Modellaspekt} und $\varepsilon$ den \textit{probabilistischen Modellaspekt}.
+* $n \in \mathbb{N}$ bezeichnet durchgängig die Anzahl an Datenpunkten.
+* $p \in \mathbb{N}$ bezeichnet durchgängig die Anzahl an Betaparametern.
+* Die Gesamtzahl an Parametern des ALMs ist $p + 1$ ($p$ Betaparameterkomponenten und $1$ Varianzparameter).
+* Der Betaparametervektor wird auch \textit{Gewichtsvektor} oder \textit{Effektvektor} genannt.
+* Weil der Kovarianzmatrixparameter von $\varepsilon$ als sphärisch angenommen wird, 
+sind die $\varepsilon_1,...,\varepsilon_n$ unabhängige normalverteilte
+Zufallsvariablen mit identischem Varianzparameter; weil zusätzlich der 
+Erwartungswertparameter von $\varepsilon$ als $0_n$ angenommen wird, sind die
+$\varepsilon_1,...,\varepsilon_n$ auch identisch normalverteilte Zufallsvariablen.
+* Für jede Komponente $y_i, i = 1,...,n$ von $y$ impliziert \eqref{eq:alm} nach Definition des Matrixprodukts, dass
+\begin{equation}
+y_i = x_{i1}\beta_1 + x_{i2}\beta_2 + \cdots +  x_{ip}\beta_p + \varepsilon_i \mbox{ mit } \varepsilon_i \sim N\left(0,\sigma^2\right),
+\end{equation}
+wobei $x_{ij} \in \mathbb{R}$ das $ij$te Element der Designmatrix $X$ bezeichnet.
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+\begin{theorem}[Datenverteilung des Allgemeinen Linearen Modells]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Dann gilt
+\begin{equation}
+y \sim N(\mu,\sigma^2I_n) \mbox{ mit } \mu := X\beta \in \mathbb{R}^n.
+\end{equation}
+\end{theorem}
+
+\underline{Beweis}
+
+Mit dem Theorem zur linear-affinen Transformation multivariater Normalverteilungen
+gilt für $\varepsilon \sim N(0_n,\sigma^2I_n)$ und $y := I_n\varepsilon + X\beta$, dass
+\begin{equation}
+y \sim N\left(I_n0_n + X\beta, I_n (\sigma^2 I_n) I_n^T\right) = N(X\beta, \sigma^2 I_n) = N(\mu,\sigma^2I_n) \mbox{ mit } \mu := X\beta \in \mathbb{R}^n.
+\end{equation}
+Bemerkungen
+
+* \justifying Im ALM sind die Daten $y$ also ein $n$-dimensionaler normalverteilter
+Zufallsvektor mit Erwartungswertparameter $\mu = X\beta \in \mathbb{R}^n$ und 
+Kovarianzmatrixparameter $\sigma^2I_n \in \mathbb{R}^{n \times n}$. 
+* Die Komponenten $y_1,...,y_n$ von $y$, also die Datenpunkte, sind damit 
+unabhängige, aber im Allgemeinen nicht identisch verteilte, normalverteilte 
+Zufallsvariablen der Form $y_i \sim N\left(\mu_i,\sigma^2\right)$ für $i = 1,...,n$.
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+\begin{theorem}[Betaparameterschätzer]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM und es sei
+\begin{equation}
+\hat{\beta} := \left(X^TX\right)^{-1}X^Ty.
+\end{equation}
+der \textit{Betaparameterschätzer}. Dann gilt, dass $\hat{\beta}$ die Summe der Abweichungsquadrate minimiert,
+\begin{equation}
+\hat{\beta} = \argmin_{\tilde{\beta}} (y-X\tilde{\beta})^T(y-X\tilde{\beta}),
+\end{equation}
+und dass $\hat{\beta}$ ein unverzerrter Maximum-Likelihood Schätzer von $\beta \in \mathbb{R}^p$ ist.
+\end{theorem}
+
+Bemerkungen
+
+* Das Theorem gibt ein Formel an, um $\beta$ anhand von Designmatrix und Daten zu schätzen.
+* Da $\hat{\beta}$ die Summe der Abweichungsquadrate minimiert, heißt $\hat{\beta}$ auch Kleinste-Quadrate (KQ) Schätzer.
+* Die $\tilde{\beta}$ Notation des Maximierungarguments dient lediglich zur Abgrenzung vom w.a.u. $\beta$.
+* Als ML Schätzer ist $\hat{\beta}$ weiterhin konsistent, asymptotisch normalverteilt und asymptotisch effizient.
+* Wir sehen später, dass $\hat{\beta}$ sogar normalverteilt ist.
+* Außerdem hat $\hat{\beta}$ die "kleinste Varianz" in der Klasse der linearen unverzerrten Schätzer von $\beta$.
+* Letztere Eigenschaft ist Kernaussage des \textit{Gauss-Markov Theorems}, auf das wir hier nicht näher eingehen wollen.
+* Für eine Diskussion und einen Beweis des Gauss-Markov Theorems siehe z.B. @searle1971, Kapitel 3.
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+\begin{theorem}[Frequentistische Verteilung des Betaparameterschätzers]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Weiterhin sei
+\begin{equation}
+\hat{\beta} := \left(X^TX\right)^{-1}X^Ty
+\end{equation}
+der Betaparameterschätzer. Dann gilt
+\begin{equation}
+\hat{\beta} \sim N\left(\beta,\sigma^2(X^T X)^{-1}\right).
+\end{equation}
+\end{theorem}
+
+Bemerkungen
+
+* \justifying Es gilt also wie bereits gesehen $\mathbb{E}(\hat{\beta}) = \beta$ und außerdem $\mathbb{C}(\hat{\beta}) = \sigma^2(X^TX)^{-1}$.
+* Die Varianzen der Komponenten von $\hat{\beta}$ sind die Diagonalelemente von $\mathbb{C}(\hat{\beta})$, also
+\begin{equation}
+\mathbb{V}(\hat{\beta}_i) = (\sigma^2(X^TX)^{-1})_{ii} \mbox{ für } i = 1,...p.
+\end{equation}
+* Die Streuung von $\hat{\beta}$ hängt von $\sigma^2$ und der Designmatrix $X$ ab.
+$\sigma^2$ ist ein experimentell nicht zu beinflussender wahrer, aber unbekannter, Parameter
+$X$ dagegen kann so gewählt werden, um zum Beispiel die Diagonalelemente von
+$\mathbb{C}(\hat{\beta})$ bei festem $\sigma^2$ zu minimieren.
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+\setstretch{1.3}
+\begin{theorem}[Varianzparameterschätzer]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM in generativer Form. Dann ist
+\begin{equation}
+\hat{\sigma}^2 := \frac{(y-X\hat{\beta})^T(y-X\hat{\beta})}{n - p}
+\end{equation}
+ein unverzerrter Schätzer von $\sigma^2 > 0$.
+\end{theorem}
+\vspace{-2mm}
+
+\footnotesize
+
+Bemerkungen
+
+* Es handelt sich bei $\hat{\sigma}^2$ \textit{nicht} um einen Maximum Likelihood Schätzer von $\sigma^2$.
+* Für einen Beweis siehe z.B. @searle1971, Kapitel 3 oder @rencher2008, Kapitel 7.
+* Mit Definition des Residuenvektors und der Residuen bieten sich für $\hat{\sigma}^2$ auch folgende Schreibweisen an:
+\begin{equation}
+\hat{\sigma}^2
+= \frac{\hat{\varepsilon}^T \hat{\varepsilon}}{n-p}
+= \frac{1}{n-p} \sum_{i=1}^n \hat{\varepsilon}_i^2
+= \frac{1}{n-p} \sum_{i=1}^n \left(y_i - (X\hat{\beta})_i \right)^2
+\end{equation}
+* $\sigma^2$ wird also durch die eine skalierte Residualquadratsumme geschätzt.
+* Der Maximum Likelihood Schätzer des Varianzparameters ist $\hat{\sigma}^2_{\tiny \mbox{ML}} := \frac{1}{n}\hat{\varepsilon}^T \hat{\varepsilon}$.
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+\begin{theorem}[Frequentistische Verteilung des Varianzparameterschätzers]
+\normalfont
+\justifying
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Weiterhin sei
+\begin{equation}
+\hat{\sigma}^2 = \frac{(y -  X\hat{\beta})^T(y -  X\hat{\beta})}{n-p}
+\end{equation}
+der Varianzparameterschätzer. Dann gilt
+\begin{equation}
+\frac{n-p}{\sigma^2}\hat{\sigma}^2 \sim \chi^2(n-p)
+\end{equation}
+\end{theorem}
+
+Bemerkungen
+
+* \justifying Wir verzichten auf einen Beweis. Da es sich bei $(y-X\hat{\beta})^T(y-X\hat{\beta})$ 
+um eine Summe quadrierter normalverteilter Zufallsvariablen handelt, liegt die 
+$\chi^2$-Verteilung im Lichte der $\chi^2$ Transformation zumindest nahe.
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+\begin{definition}[T-Statistik]
+Es sei 
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N\left(0_n,\sigma^2I_n\right) 
+\end{equation}
+das ALM. Weiterhin seien 
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^Ty \mbox{ und } \hat{\sigma}^2 := \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n-p} 
+\end{equation}
+die Betaparameter- und Varianzparameterschätzer, respektive. Dann ist für einen 
+\textit{Kontrastgewichtsvektor} $c \in \mathbb{R}^p$ und einen Parameter 
+$\beta_0 \in \mathbb{R}^p$ die \textit{T-Statistik} definiert als 
+\begin{equation}
+T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}. 
+\end{equation}
+\end{definition}
+
+Bemerkungen
+
+* Die T-Statistik hängt via $\hat{\beta}$ und $\hat{\sigma}^2$ von den Daten $y$ ab.
+* Der Kontrastgewichtsvektor projiziert $\hat{\beta}$ auf einen Skalar $c^T\hat{\beta} \in \mathbb{R}$.
+* Die Wahl $p$-dimensionaler Einheitsvektoren für $c$ erlaubt die Auswahl einzelner Komponenten von $\hat{\beta}$ bzw. $\beta_0$.
+* Eine generelle Wahl von $c$ erlaubt die Evaluation beliebiger Linearkombinationen von $\hat{\beta}$ bzw. $\beta_0$.
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+
+\footnotesize
+Bemerkungen (fortgeführt)
+
+Die Wahl von $\beta_0 \in \mathbb{R}^p$ erlaubt es, die T-Statistik unterschiedlich einzusetzen:
+
+* \justifying Wählt man $\beta_0 := 0_p$, so erhält man mit der T-Statistik eine Deskriptivstatistik, 
+die es erlaubt, geschätzte Regressoreffekte, also Komponenten oder Linearkombinationen von $\hat{\beta}$,
+im Sinne eines Signal-zu-Rauschen Verhältnisses in Bezug zu der durch $\hat{\sigma}^2$ 
+quantifizierten Residualdatenvariabilität zu setzen. Der Nenner der T-Statistik
+stellt dabei sicher, dass insbesondere die adequate (Ko)Standardabweichung der
+entsprechenden Betaparameterkomponentenkombination als Bezugsgröße dient, da es
+sich bei $\hat{\sigma}^2\left(X^TX\right)^{-1}$ bekanntlich um die Kovarianz des
+Betaparameterschätzers handelt. Folgende erste Intuition ist in diesem Kontext hilfreich:
+\begin{equation}
+T = \frac{\mbox{Geschätzte Effektstärke}}{\mbox{Geschätzte stichprobenumfangskalierte Datenvariabilität}}
+\end{equation}
+
+* \justifying Wählt man für $\beta_0 = \beta$, also den wahren, aber unbekannten, Betaparameterwert,
+so eröffnet die T-Statistik die Möglichkeit, für einzelen Komponenten des
+Betaparametervektors Konfidenzintervalle zu bestimmen. 
+
+* \justifying Deklariert man schließlich $\beta_0 \in \Theta_0$ im Kontext eines Testszenarios 
+als das Element einer Nullhypothese $\Theta_0$, so eröffnet die T-Statistik die 
+Hypothesentest-basierte Inferenz über Betaparameterkomponenten und ihrer Linearkombinationen. 
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\vspace{1mm}
+\footnotesize
+\begin{theorem}[Frequentistische Verteilung der T-Statistik]
+\normalfont
+\justifying
+Es sei 
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n) 
+\end{equation}
+das ALM. Weiterhin seien 
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^Ty \mbox{ und } \hat{\sigma}^2 := \frac{(y-X\hat{\beta})^T(y-X\hat{\beta})}{n-p} 
+\end{equation}
+die Betaparameter- und Varianzparameterschätzer, respektive. Schließlich sei für 
+einen Kontrastgewichtsvektor $c \in \mathbb{R}^p$ und einen Parameter 
+$\beta_0 \in \mathbb{R}^p$ 
+\begin{equation}
+T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}  
+\end{equation}
+die T-Statistik. Dann gilt 
+\begin{equation}
+T \sim t(\delta, n-p) \mbox{ mit } \delta := \frac{c^T\beta - c^T\beta_0}{\sqrt{\sigma^2 c^T(X^TX)^{-1}c}}. 
+\end{equation}
+\end{theorem}
+\vspace{-2mm}
+
+Bemerkungen
+\vspace{-2mm}
+
+* Wir verzichten auf einen Beweis.
+* $T$ ist eine Funktion der Parameterschätzer, $\delta$ ist eine Funktion der wahren, aber unbekannten, Parameter
+* Für $c^T\beta = c^T\beta_0$, also bei Zutreffen der Nullhypothese, gilt $\delta = 0$ und damit $T \sim t(n-p)$.
+* Für $c^T\beta \neq c^T\beta_0$ kann die Verteilung von $T$ zur Herleitung von Powerfunktionen benutzt werden.
+
+
+# Modellformulierung, Modellschätzung, Modellevaluation
+\footnotesize
+\begin{theorem}[Konfidenzintervalle für Betaparameterkomponenten]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM,  $\hat{\beta}$ und $\hat{\sigma}^2$ seien die Betaparameter- und Varianzparameterschätzer,
+respektive und und für ein $\delta \in ]0,1[$ sei 
+\begin{equation}
+t_\delta := \Psi^{-1}\left(\frac{1+\delta}{2}; n - p \right).
+\end{equation}
+Schließlich sei für $j = 1,...p$
+\begin{equation}
+\lambda_j := \left(\left(X^TX \right)^{-1}\right)_{jj}
+\mbox{ das $j$te Diagonalelement von } \left(X^TX \right)^{-1}. 
+\end{equation}
+Dann ist für $j = 1,...p$
+\begin{equation}
+\kappa_j := \left[\hat{\beta}_j - \hat{\sigma}\sqrt{\lambda_j}t_{\delta},\hat{\beta}_j + \hat{\sigma}\sqrt{\lambda_j}t_{\delta}\right]
+\end{equation}
+ein $\delta$-Konfidenzintervall für die $j$te Komponente $\beta_j$ des Betaparameters $\beta = (\beta_1,...,\beta_p)^T$.
+\end{theorem}
+
+Bemerkungen
+
+* Intuitiv gilt im Vergleich zum  Konfidenzintervall für den Erwartungswertparameter bei Normalverteilung
+\begin{equation}
+\hat{\beta}_j \approx \bar{y}, \hat{\sigma} \approx S, \sqrt{\lambda_j} \approx \sqrt{n^{-1}} \mbox{ und } t_\delta = t_\delta.
+\end{equation}
+
+
+# 
+\large
+\vfill
+\setstretch{2.2}
+Modellformulierung, Modellschätzung, Modellevaluation
+
+**`lm()` und `formulas`**
+
+Kronecker-Produkt
+
+Zweistichproben-T-Test
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+# `lm()` und `formulas`
+\setstretch{2.2}
+
+Die **R** Implementation des Allgemeinen Linearen Modells
+\small
+
+* In R wird das ALM  mit der Funktion `lm()` formuliert und geschätzt  
+* `lm()` wird üblicherweise in der Form `alm = lm(formula, data)` aufgerufen 
+* `lm()` schätzt  dass durch `formula` spezifierte Modell anhand der Daten im Dataframe `data` 
+* Zur Modellevaluation können verschiedene Funktionen auf `alm` angewendet werden 
+* `summary(alm)` gibt vor allem Schätzer und Konfidenzintervalle aus 
+* `aov(alm)` gibt ANOVA Tabellen aus
+* Eine ausführliche Dokumentation von `lm()` geben @chambers1992  
+
+# `lm()` und `formulas`
+\footnotesize
+Modelle der Form $y = X\beta + \varepsilon$ mit $\varepsilon \sim N(0_n,\sigma^2 I_n)$ werden in R symbolisch durch `formulas` dargestellt
+
+\vspace{2mm}
+```{r, eval = F, error = F, echo = T}
+Daten ~ Term 1 + Term 2 + ... + Term k
+```
+
+* Der `~` Operator trennt die linke Seite und rechte Seite einer `formula` 
+* `Daten` wird zur Identifikation der abhängigen Variable $y$ genutzt 
+* `Term 1 + Term 2 + ... + Term k` dient der Spezifikation der Spalten der Designmatrix $X$ 
+* Die `formulas` Syntax geht zurück auf @wilkinson1973 und @chambers1992 
+
+Terme können numerische Prädiktoren oder kategoriale Faktoren (R `factors`) sein
+
+Die `formula` Syntax ist symbolisch, zur Laufzeit müssen die Prädiktoren und Faktoren nicht spezifiziert sein
+
+Essentielle Operatoren in `formulas` sind `+` und `:`
+
+* `+` fügt der Designmatrix Prädiktoren hinzu, `:` dient der Spezifikation von Interaktionen
+
+Nichtessentielle Operatoren in `formulas` sind `*`, `/`, `%in%`, `-` und `^`
+
+* Für zwei Faktoren `f1` und `f2` gilt beispielsweise `f1*f2 = f1 + f2 + f1:f2`
+
+
+# `lm()` und `formulas`
+
+\footnotesize 
+Beispiele mit `f1`, `f2` als R `factors` und `x1`, `x2` als numerische Vektoren  
+\vspace{3mm}
+
+\setstretch{1.5}
+\tiny
+```{r, echo = T, eval = F}
+formula(y ~ f1)         # Spezifikation eines einfaktoriellen ANOVA Designs mithilfe der formula() Funktion 
+y ~ f1                  # Aufruf der formula() Funktion ist aber nicht nötig, R erkennt formulas auch so 
+y ~ f1 + f2             # Additives zweifaktorielles ANOVA Design 
+y ~ f1 + f2 + f1:f2     # Zweifaktorielles ANOVA Design mit Interaktion
+y ~ f1 + x1             # Additives einfaktorielles ANCOVA Design mit einer Kovariate 
+
+formula(y ~ x1)         # Spezifikation einer einfachen linearen Regresssion mithilfe der formula() Funktion   
+y ~ x1                  # Aufruf der formula() Funktion ist aber nicht nötig, R erkennt formulas auch so 
+y ~ 1 + x1              # Explizite Interzeptdefinition bei einfacher linearer Regression, nicht nötig
+y ~ 0 + x1              # Verzicht auf Interzeptdefinition bei einfacher lineare Regression
+y ~ 1 + x1 + x2         # Multiple Regression mit zwei Regressoren und expliziter Interzeptdefinition
+y ~ f1 + x1 + f1:x1     # Einfaktorielles ANCOVA Design mit einer Kovariate und Interaktion
+```
+
+\footnotesize
+Wir betrachten im Folgenden die durch diese `formulas` erzeugten Designmatrizen $X \in \mathbb{R}^{n \times p}$.
+
+
+# `lm()` und `formulas`
+\footnotesize
+Zweistichproben-T-Test = Einfaktorielles ANOVA Design mit zwei Faktorleveln
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+f1  = as.factor(c(1,1,1,1,1,1,2,2,2,2,2,2))                 # Faktorlevel der Datenpunkte
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, f1 = f1)                            # Dataframe
+M   = lm(y ~ f1, D)                                         # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+# `lm()` und `formulas`
+\footnotesize
+Einfaktorielles ANOVA Design mit drei Faktorleveln
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+f1  = as.factor(c(1,1,1,1,2,2,2,2,3,3,3,3))                 # Faktorlevel der Datenpunkte
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, f1 = f1)                            # Dataframe
+M   = lm(y ~ f1, D)                                         # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+# `lm()` und `formulas`
+
+\footnotesize
+Zweifaktorielles additives ANOVA Design mit jeweils zwei Faktorleveln
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+f1  = as.factor(c(1,1,1,1,1,1,2,2,2,2,2,2))                 # Faktor-1-Level der Datenpunkte
+f2  = as.factor(c(1,1,1,2,2,2,1,1,1,2,2,2))                 # Faktor-2-Level der Datenpunkte
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, f1 = f1, f2 = f2)                   # Dataframe
+M   = lm(y ~ f1 + f2, D)                                    # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+
+# `lm()` und `formulas`
+\footnotesize
+Zweifaktorielles additives ANOVA Design mit Interaktion
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+f1  = as.factor(c(1,1,1,1,1,1,2,2,2,2,2,2))                 # Faktor-1-Level der Datenpunkte
+f2  = as.factor(c(1,1,1,2,2,2,1,1,1,2,2,2))                 # Faktor-2-Level der Datenpunkte
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, f1 = f1, f2 = f2)                   # Dataframe
+M   = lm(y ~ f1 + f2 + f1:f2, D)                            # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+# `lm()` und `formulas`
+
+\footnotesize
+Einfache Lineare Regression
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+x1  = 1:n                                                   # Regressor
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, x1 = x1)                            # Dataframe
+M   = lm(y ~ x1, D)                                         # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+
+# `lm()` und `formulas`
+
+\footnotesize
+Einfache Lineare Regression mit expliziter Interzeptdefinition
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+x1  = 1:n                                                   # Regressor
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, x1 = x1)                            # Dataframe
+M   = lm(y ~ 1 + x1, D)                                     # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+
+# `lm()` und `formulas`
+\footnotesize
+Einfache Lineare Regression mit Verzicht auf Interzeptdefinition
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+x1  = 1:n                                                   # Regressor
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, x1 = x1)                            # Dataframe
+M   = lm(y ~ 0 + x1, D)                                     # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+# `lm()` und `formulas`
+
+\footnotesize
+Multiple Regression mit zwei Regressoren und expliziter Interzeptdefinition
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+x1  = 1:n                                                   # Regressor 1
+x2  = (1:n)+5                                               # Regressor 2
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, x1 = x1, x2 = x2)                   # Dataframe
+M   = lm(y ~ 1 + x1 + x2, D)                                # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+# `lm()` und `formulas`
+\footnotesize
+Additives einfaktorielles ANCOVA Design mit einer Kovariate 
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+f1  = as.factor(c(1,1,1,1,1,1,2,2,2,2,2,2))                 # Faktorlevel der Datenpunkte
+x1  = 1:n                                                   # Kovariatenwerte der Datenpunkte
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, f1 = f1, x1 = x1)                   # Dataframe
+M   = lm(y ~ f1 + x1, D)                                    # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+# `lm()` und `formulas`
+\footnotesize
+Einfaktorielles ANCOVA Design mit einer Kovariate und Interaktion
+
+\vspace{2mm}
+\tiny 
+\setstretch{1.1}
+```{r, echo = T}
+n   = 12                                                    # Anzahl Datenpunkte
+f1  = as.factor(c(1,1,1,1,1,1,2,2,2,2,2,2))                 # Faktorlevel der Datenpunkte
+x1  = 1:n                                                   # Kovariatenwerte der Datenpunkte
+y   = rnorm(n)                                              # Beispieldaten
+D   = data.frame(y = y, f1 = f1, x1 = x1)                   # Dataframe
+M   = lm(y ~ f1 + x1 + f1:x1, D)                            # Modellevaluation
+X   = model.matrix(M)                                       # Designmatrix    
+```
+```{r}
+print(X)
+```
+
+# 
+\large
+\vfill
+\setstretch{2.2}
+Modellformulierung, Modellschätzung, Modellevaluation
+
+`lm()` und `formulas`
+
+**Kronecker-Produkt**
+
+Zweistichproben-T-Test
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+# Kronecker-Produkt
+\footnotesize
+\begin{definition}[Kronecker-Produkt]
+Es seien $A \in \mathbb{R}^{m \times n}$ und  $B \in \mathbb{R}^{p \times q}$. 
+Dann ist das \textit{Kronecker-Produkt} von $A$ und $B$ definiert als die Abbildung
+\begin{equation}
+\otimes : \mathbb{R}^{m \times n} \times \mathbb{R}^{p \times q} \to \mathbb{R}^{mp \times nq}, \,
+(A,B) \mapsto \otimes(A,B) := A \otimes B
+\end{equation}
+mit
+\begin{equation}
+A \otimes B = 
+\begin{pmatrix}
+a_{11} B & \cdots & a_{1n}B \\
+\vdots   & \ddots & \vdots  \\
+a_{m1} B & \cdots & a_{mn}B \\
+\end{pmatrix}.
+\end{equation}
+\end{definition}
+
+Bemerkungen
+
+* Das Kronecker-Produkt kann zur Konstruktion von Matrizen mit repetitiver Struktur genutzt werden.
+* In der Form $1_n \otimes M$ setzt das Kronecker-Produkt die Matrix $M$ $n$-mal übereinander.
+* In der Form $M \otimes 1_n$ repliziert das Kronecker-Produkt jede Zeile von $M$ $n$-mal.
+* In der Form $I_n \otimes M$ erzeugt das Kronecker-Produkt eine Blockdiagonalmatrix $M$ auf der Diagonale.
+
+# Kronecker-Produkt
+\small
+Beispiel (1)
+
+\footnotesize
+\begin{equation}
+\begin{pmatrix} 
+1 \\ 
+1 
+\end{pmatrix} 
+\otimes 
+\begin{pmatrix} 
+1 & 1 \\ 
+1 & 2 \\ 
+1 & 3 
+\end{pmatrix} 
+=
+\begin{pmatrix} 
+1 & 1 \\ 
+1 & 2 \\ 
+1 & 3 \\
+1 & 1 \\ 
+1 & 2 \\ 
+1 & 3  
+\end{pmatrix}   
+\end{equation}
+
+\setstretch{1.2}
+\tiny
+```{r, echo = TRUE}
+M       = matrix(c(1,1,                             # Matrix
+                   1,2,
+                   1,3),
+                   byrow = TRUE, nrow = 3)        
+j_2     = matrix(rep(1,2)      , nrow = 2)          # 1_2 Vektor
+X       = kronecker(j_2,M)                          # Kronecker-Produkt
+```
+
+```{r}
+print(X)
+```
+
+# Kronecker-Produkt
+\small
+Beispiel (2)
+\footnotesize
+\begin{equation}
+\begin{pmatrix} 
+1 & 0 & 0 & 0 \\  
+1 & 1 & 0 & 0 \\  
+1 & 0 & 1 & 0 \\  
+1 & 0 & 0 & 1 
+\end{pmatrix} 
+\otimes
+\begin{pmatrix} 
+1 \\ 
+1 
+\end{pmatrix} 
+=  
+\begin{pmatrix} 
+1 & 0 & 0 & 0 \\  
+1 & 0 & 0 & 0 \\  
+1 & 1 & 0 & 0 \\  
+1 & 1 & 0 & 0 \\
+1 & 0 & 1 & 0 \\  
+1 & 0 & 1 & 0 \\ 
+1 & 0 & 0 & 1 \\
+1 & 0 & 0 & 1 \\
+\end{pmatrix}  
+\end{equation}
+
+\setstretch{1.2}
+\tiny
+```{r, echo = TRUE}
+M       = matrix(c(1,0,0,0,                         # Matrix
+                   1,1,0,0,
+                   1,0,1,0,
+                   1,0,0,1),
+                   byrow = TRUE, nrow = 4)         
+j_2     = matrix(rep(1,2)      , nrow = 2)          # 1_2 Vektor
+X       = kronecker(M,j_2)                          # Kronecker-Produkt
+```
+
+```{r}
+print(X)
+```
+
+# Kronecker-Produkt
+\small
+Beispiel (3)
+\footnotesize
+\begin{equation}
+\begin{pmatrix} 
+1 & 0 \\
+0 & 1 \\  
+\end{pmatrix} 
+\otimes
+\begin{pmatrix} 
+2 & 1 \\ 
+1 & 2
+\end{pmatrix} 
+=  
+\begin{pmatrix} 
+2 & 1 & 0 & 0 \\  
+1 & 2 & 0 & 0 \\  
+0 & 0 & 2 & 1 \\  
+0 & 0 & 1 & 2 \\
+\end{pmatrix}  
+\end{equation}
+
+\setstretch{1.2}
+\tiny
+```{r, echo = TRUE}    
+M       = matrix(c(2,1,                             # Matrix
+                   1,2),
+                   byrow = TRUE, nrow = 2)          
+I_2     = diag(2)                                   # I_2
+X       = kronecker(I_2,M)                          # Kronecker-Produkt
+```
+
+```{r}
+print(X)
+```
+
+
+
+# 
+\large
+\vfill
+\setstretch{2.2}
+Modellformulierung, Modellschätzung, Modellevaluation
+
+`lm()` und `formulas`
+
+Kronecker-Produkt
+
+**Zweistichproben-T-Test**
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+
+# Zweistichproben-T-Test  
+\setstretch{1.8}
+
+\textcolor{darkblue}{Anwendungsszenario des Zweistichproben-T-Tests}
+\small 
+
+* Parallelgruppendesign mit Treatmentgruppe und Kontrollgruppe
+* $\Rightarrow$ Zwei Gruppen (= Stichproben) randomisierter experimenteller Einheiten.
+* Annahme unabhängiger identischer Normalverteilungen $N(\mu_0,\sigma^2)$ und $N(\mu_0+\alpha_2,\sigma^2)$.
+* $\mu_0,\alpha_2$ und $\sigma^2$ unbekannt.
+* Annahme eines identischen Varianzparameters für beide Gruppen.
+* Quantifizieren der Unsicherheit beim inferentiellen Vergleich von $\alpha_2$ mit $0$ beabsichtigt.
+
+\vspace{2mm}
+\textcolor{darkblue}{Anwendungsbeispiel}
+
+\small
+* BDI-II Differenzwert-Datenanalyse bei zwei Gruppen von Patient:innen
+* Treatmentfaktor (`TRM`) mit zwei Leveln (`1`: Waitlist Control, `2`: Treatment)
+* $\alpha_2 \neq 0 \Leftrightarrow$  Unterscheiden sich die wahren, aber unbekannten, Therapiewirksamkeiten?
+
+# Zweistichproben-T-Test  
+\footnotesize
+\setstretch{1.3}
+\begin{definition}[Zweistichproben-T-Test-Modell in Effektdarstellung]
+\justifying
+\normalfont
+Für $i = 1,2$ Gruppen und $j = 1,...,n_i$ experimentelle Einheiten pro Gruppe  seien 
+$y_{ij}$ Zufallsvariablen, die die Datenpunkte eines Zweistichproben-T-Test
+Szenarios modellieren. Dann hat das \textit{Zweistichproben-T-Test Modell in Effektdarstellung}
+die strukturelle Form
+\begin{align}\label{eq:ztt_1_effekt_1}
+\begin{split}
+y_{1j} & = \mu_0 + \varepsilon_{1j} \quad\quad\,\,  \mbox{ mit }  \varepsilon_{1j} \sim N(0,\sigma^2) \mbox{ u.i.v. für } j = 1,...,n_1     \\
+y_{2j} & = \mu_0 + \alpha_2 + \varepsilon_{2j}      \mbox{ mit }  \varepsilon_{2j} \sim N(0,\sigma^2) \mbox{ u.i.v. für } j = 1,...,n_2
+\end{split}
+\end{align}
+und die entsprechende Datenverteilungsform
+\begin{align}\label{eq:ztt_1_effekt_2}
+\begin{split}
+y_{1j} & \sim N(\mu_0,\sigma^2)  \quad\quad\,\, \mbox{ u.i.v. für } j = 1,...,n_i \mbox{ mit } \mu_0 \in \mathbb{R}, \sigma^2 > 0           \\
+y_{2j} & \sim N(\mu_0 + \alpha_2,\sigma^2)      \mbox{ u.i.v  für } j = 1,...,n_2 \mbox{ mit } \mu_0, \alpha_2 \in \mathbb{R}, \sigma^2 > 0 \\
+\end{split}
+\end{align}
+\end{definition}
+\vspace{-2mm}
+\footnotesize
+Bemerkung
+
+* Das Zweistichproben-T-Testmodell in Effektdarstellung entspricht dem einfaktoriellen
+Varianzanalysemodell in Effektdarstellung mit Referenzgruppe für einen experimentellen
+Faktor mit zwei Leveln.
+
+# Zweistichproben-T-Test  
+\footnotesize
+\vspace{2mm}
+\begin{theorem}[Zweistichproben-T-Test-Modell in Effektdarstellung]
+\justifying
+\normalfont
+Gegeben sei die strukturelle Form des Zweistichproben-T-Test Modells in Effektdarstellung.
+Dann hat dieses Modell die Designmatrixform
+\begin{equation}
+y =  X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2 I_n), n := n_1 + n_2
+\end{equation}
+und
+\begin{equation}
+y
+:=
+\begin{pmatrix}
+y_{11} 	\\ 	\vdots 	\\ y_{1n_1}
+\\
+y_{21} 	\\ 	\vdots 	\\ y_{2n_2}
+\end{pmatrix}
+\in \mathbb{R}^n, \,
+X :=
+\begin{pmatrix}
+1 		    & 	0		    \\
+\vdots    &  	\vdots  \\
+1 		    & 	0		    \\
+1 		    & 	1		    \\
+\vdots    & 	\vdots  \\
+1 		    & 	1 		  \\
+\end{pmatrix}
+\in \mathbb{R}^{n \times 2},\,
+\beta :=
+\begin{pmatrix}
+\mu_0 		\\
+\alpha_2	\\
+\end{pmatrix}
+\in \mathbb{R}^2
+\mbox{ und }
+\sigma^2 > 0.
+\end{equation}
+\end{theorem}
+Bemerkung
+
+* Das Theorem ergibt sich direkt mit den Regeln der Matrixmultiplikation.
+
+# Zweistichproben-T-Test  
+\vspace{1mm}
+Datengeneration
+\vspace{2mm}
+
+\tiny
+\setstretch{1.6}
+```{r, echo = T}
+library(MASS)                                                        # multivariate Normalverteilung
+set.seed(0)                                                          # Zufallszahlengeneratorzustand
+n_j     = 2                                                          # Anzahl Bedingungen 
+n_i     = 10                                                         # Patient:innen pro  Bedingung
+n       = n_i*n_j                                                    # Gesamtanzahl an Patient:innen
+X       = kronecker(matrix(c(1,1,0,1), ncol = 2), rep(1,n_i))        # Treatment-Control Designmatrix
+beta    = matrix(c(5,2), nrow = n_j)                                 # Fixed-Effects-Parameter
+s_eps   = 1                                                          # Varianzparameter
+eps     = mvrnorm(1, rep(0,n), s_eps*diag(n))                        # Fehlervektor
+y       = X %*% beta + eps                                           # Datengeneration   
+TRM     = kronecker(c(1:n_j), rep(1,n_i))                            # Treatmentfaktor    
+D       = data.frame(TRM = TRM, BDI =  y)                            # Dataframe
+write.csv(D, "./2_Daten/ztt.csv", row.names = FALSE)                 # Speichern
+```
+
+# Zweistichproben-T-Test  
+\vspace{1mm}
+Datensatz
+\vspace{2mm}
+\footnotesize
+\setstretch{1}
+```{r}
+fname = "./2_Daten/ztt.csv"
+D     = read.table(fname, sep = ",", header = T)
+```
+\vspace{2mm}
+
+```{r, echo = F}
+knitr::kable(D, "pipe", align = "rr", digits = 1)
+```
+
+
+
+# Zweistichproben-T-Test  
+\vspace{1mm}
+Deskriptivstatistik
+\vspace{2mm}
+
+\setstretch{1.6}
+\tiny
+```{r, echo = T}
+library(dplyr)                                                         # dplyr für einfache Datengruppierug     
+D   = read.csv("./2_Daten/ztt.csv")                                    # Dateneinlesen
+DS  = D %>% group_by(TRM) %>%  summarise(av = mean(BDI, na.rm = TRUE), # Group mean
+                                         sd = sd(BDI, na.rm = TRUE),   # Group standard deviation
+                                         .groups = "drop")             # Gruppierungsaufhebung
+print(DS)
+```
+
+
+# Zweistichproben-T-Test  
+\vspace{3mm}
+Visualisierung
+
+```{r, eval = F}
+pdf(
+file        = "./2_Abbildungen/ptf_2_ztt.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Datenreformatierung für barplot
+av_m        = with(DS, tapply(av, list(TRM), identity))
+sd_m        = with(DS, tapply(sd, list(TRM), identity))
+
+# Barplot mit Fehlerbalken
+x           = barplot(
+av_m, 
+beside      = TRUE, 
+col         = c("lightgray", "darkgray"),
+ylim        = c(0, 12),
+xlim        = c(0, 2.6),
+ylab        = "BDI-II Abnhame",
+xaxt        = "n")
+arrows(
+x0          = x, 
+y0          = av_m,
+x1          = x, 
+y1          = av_m + sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+arrows(
+x0          = x,
+y0          = av_m,
+x1          = x, 
+y1          = av_m - sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+abline(h    = 0)
+legend(
+"topright", 
+legend      = c("Waitlist Control", "Treatment"),
+fill        = c("lightgray", "darkgray"),
+bty         = "n")
+dev.off()
+```
+
+```{r, echo = FALSE, out.width="65%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/ptf_2_ztt.pdf")
+```
+
+# Zweistichproben-T-Test  
+\vspace{1mm}
+Modellschätzung und Modellevaluation
+\vspace{2mm}
+\setstretch{1.6}
+\tiny
+```{r, echo = T}
+D           = read.csv("./2_Daten/ztt.csv")                       # Dateneinlesen                                                        
+n_j         = 2                                                   # Anzahl Bedingungen 
+n_i         = 10                                                  # Patient:innen pro Bedingung
+n           = n_i*n_j                                             # Gesamtanzahl an Patient:innen
+p           = 2                                                   # Anzahl Betaparameter
+X           = kronecker(matrix(c(1,1,0,1), ncol = p), rep(1,n_i)) # Treatment-Control Designmatrix
+y           = D$BDI                                               # Daten
+beta_hat    = solve(t(X) %*% X) %*% t(X) %*% y                    # Betaparameterschätzer
+eps_hat     = y - X %*% beta_hat                                  # Prädiktionsfehler
+sigsqr_hat  = (t(eps_hat) %*% eps_hat)/(n-p)                      # Varianzparameterschätezr
+delta       = 0.95                                                # Konfidenzbedingung  
+t_delta     = qt((1+delta)/2,n-p)                                 # \Psi^{-1}((1+\delta)/2,n-1)
+lambda      = diag(solve(t(X) %*% X))                             # \lambda_j Werte
+ses         = sqrt(sigsqr_hat)*sqrt(lambda)                       # Betaparameterstandardfehlerschätzer
+tvals       = beta_hat/ses                                        # T Werte
+kappa_u     = beta_hat - ses*t_delta                              # untere KI Grenze
+kappa_o     = beta_hat + ses*t_delta                              # obere  KI Grenze
+```
+
+# Zweistichproben-T-Test  
+\vspace{1mm}
+Modellschätzung und Modellevaluation
+\vspace{2mm}
+\setstretch{1.6}
+\tiny
+```{r, echo = T}
+# Ergebnisausgabe
+print(
+data.frame(
+"Estimate"   = beta_hat,                      
+"Std.Error"  = ses,
+"t.value"    = beta_hat/ses,
+"p.value"    = 2*(1-pt(abs(tvals), n-p)),
+"KI.u"       = kappa_u,
+"KI.o"       = kappa_o,
+row.names    = c("mu_0_hat", "alpha_2_hat")), 
+digits = 4)
+```
+
+
+# Zweistichproben-T-Test  
+\vspace{1mm}
+Modellschätzung und Modellevaluation mit `lm()`
+\vspace{2mm}
+\tiny
+\setstretch{1.6}
+```{r, echo = T}
+D           = read.csv("./2_Daten/ztt.csv", head = T)           # Dataframe
+D$TRM       = as.factor(D$TRM)                                  # R Faktor Kodierung
+M           = lm(BDI ~ TRM, data = D)                           # ALM Schätzung
+coefs       = summary(M)$coefficients                           # Betaparameterschätzer
+ci          = confint(M, level  = 0.95)                         # Konfidenzintervalle
+print(cbind(coefs, KI.u = ci[, 1], KI.o = ci[, 2]), digits = 4)
+```
+
+# 
+\large
+\vfill
+\setstretch{2.2}
+Modellformulierung, Modellschätzung, Modellevaluation
+
+`lm()` und `formulas`
+
+Kronecker-Produkt
+
+Zweistichproben-T-Test
+
+**Einfache lineare Regression**
+
+Selbstkontrollfragen
+\vfill
+
+
+# Einfache lineare Regression
+\setstretch{1.6}
+
+\textcolor{darkblue}{Anwendungsszenario der einfachen linearen Regression}
+\small 
+
+* Frage nach dem linear-affinen Zusammenhang univariater UV und AV
+* Annahme einer linear-affinen funktionalen Abhängigkeit der Form 
+\begin{equation}
+y = \beta_0 + \beta_1 x + \varepsilon \mbox{ mit } \varepsilon \sim N(0,\sigma^2)
+\end{equation}
+* $\beta_0$: Schnittpunkt von Gerade und $y$-Achse ("Intercept Parameter")
+* $\beta_1$: $y$-Differenz pro $x$-Einheitsdifferenz ("Slope Parameter")
+* $\beta_0,\beta_1$ und $\sigma^2$ unbekannt.
+* Quantifizieren der Unsicherheit bei Parameterinferenz beabsichtigt.
+
+\vspace{1mm}
+\textcolor{darkblue}{Anwendungsbeispiel}
+
+\small
+* Dosis-Wirkungs-Kurvenuntersuchung bei Psychotherapie
+* $x$: Anzahl Therapiestunden (`ATS`) $y$: BDI-II Abnahme (`BDI`)
+* $\beta_1 < 0$  für einen linearen Zusammenhang
+
+
+# Einfache lineare Regression
+\footnotesize
+\begin{definition}[Modell der einfachen linearen Regression I]
+Für $i = 1,...,n$ experimentelle Einheiten hat das \textit{Modell der einfachen linearen Regression}
+die strukturelle Form
+\begin{equation}
+y_i = \beta_0 + \beta_1x_i + \varepsilon_{i} \mbox{ mit } \varepsilon_{i} \sim N(0,\sigma^2)
+\end{equation}\label{eq:modell}
+wobei
+\begin{itemize}
+\item $y_i$ beobachtbare Zufallsvariablen sind, die Werte einer abhängigen Variable modellieren,
+\item $x_i \in \mathbb{R}$ fest vorgegebene sogenannte \textit{Prädiktorwerte} oder \textit{Regressorwerte} sind,
+die Werte einer unabhängigen Variable modellieren
+\item $\beta_0,\beta_1 \in \mathbb{R}$ wahre, aber unbekannte, Intercept- und Slope-Parameterwerte sind und
+\item $\varepsilon_{i} \sim N(0,\sigma^2)$ unabhängig und identisch normalverteilte nicht-beobachtbare Zufallsvariablen mit
+wahrem, aber unbekanntem, Varianzparameter $\sigma^2>0$ sind, die Messfehler modellieren.
+\end{itemize}
+und die entsprechende Datenverteilungsform
+\begin{equation}\label{eq:modell_normal}
+y_i \sim N\left(\mu_i,\sigma^2\right) \mbox{ u.v. für } 
+\mbox{ mit } \mu_i := \beta_0 + \beta_1x_i \mbox{ und }i = 1,...,n
+\end{equation}
+\end{definition}
+
+Bemerkung
+
+* \justifying Die Werte der abhängigen Variable werden im Modell der einfachen
+  linearen Regression also durch unabhängige normalverteilte Zufallsvariablen 
+  mit im Allgemeinen unterschiedlichen Erwartungswertparametern modelliert.
+
+# Einfache lineare Regression
+\footnotesize
+\vspace{2mm}
+\begin{theorem}[Modell der einfachen linearen Regression II]
+\justifying
+\normalfont
+Gegeben sei die strukturelle Form des Modells der einfachen linearen Regression
+Dann hat dieses Modell die Designmatrixform
+\begin{equation}
+y =  X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2 I_n) \mbox{ für } n := n_1 + n_2
+\end{equation}
+und
+\begin{equation}
+y
+:=
+\begin{pmatrix}
+y_{1} 	
+\\ 	
+y_{2} 	
+\\ 	
+\vdots 	
+\\ 
+y_{n}
+\end{pmatrix}
+\in \mathbb{R}^n, \,
+X :=
+\begin{pmatrix}
+1 		    & 	x_1		    \\
+1 		    & 	x_2		    \\
+\vdots 	  &  	\vdots    \\
+1 		    & 	x_n		    \\
+\end{pmatrix}
+\in \mathbb{R}^{n \times 2},\,
+\beta :=
+\begin{pmatrix}
+\beta_0 		\\
+\beta_1	\\
+\end{pmatrix}
+\in \mathbb{R}^{2}
+\mbox{ und }
+\sigma^2 > 0.
+\end{equation}
+\end{theorem}
+
+Bemerkung
+
+* Das Theorem ergibt sich direkt mit den Regeln der Matrixmultiplikation.
+
+# Einfache lineare Regression
+\vspace{1mm}
+Datengeneration
+\vspace{2mm}
+
+\tiny
+\setstretch{1.6}
+```{r, echo = T}
+library(MASS)                                                        # multivariate Normalverteilung
+set.seed(0)                                                          # Zufallszahlengeneratorzustand
+n       = 20                                                         # Gesamtanzahl an Patient:innen
+X       = matrix(c(rep(1,n), 1:n), ncol = 2)                         # Designmatrix
+beta    = matrix(c(5,2), nrow = 2)                                   # Betaparameter
+s_eps   = 15                                                         # Varianzparameter
+eps     = mvrnorm(1, rep(0,n), s_eps*diag(n))                        # Fehlervektor
+y       = X %*% beta + eps                                           # Datengeneration   
+D       = data.frame(ATS = X[,2], BDI =  y)                          # Dataframe
+write.csv(D, "./2_Daten/elr.csv", row.names = FALSE)                 # Speichern
+```
+
+# Einfache lineare Regression
+\vspace{1mm}
+Datensatz
+\vspace{2mm}
+\footnotesize
+\setstretch{1}
+```{r}
+fname = "./2_Daten/elr.csv"
+D     = read.table(fname, sep = ",", header = T)
+```
+\vspace{2mm}
+
+```{r, echo = F}
+knitr::kable(D, "pipe", align = "rr", digits = 1)
+```
+
+
+
+# Einfache lineare Regression
+\vspace{1mm}
+Visualisierung
+\vspace{2mm}
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+D           = read.csv("./2_Daten/elr.csv")                                     
+x           = D$ATS
+y           = D$BDI
+pdf(
+file        = "./2_Abbildungen/ptf_2_elr.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1,
+xpd        = T)
+plot(
+x,
+y,
+pch        = 16,
+xlab       = "Anzahl Therapiestunden",
+ylab       = "BDI-II Abnahme",
+xlim       = c(0,21),
+ylim       = c(0, 50))
+legend(
+"topleft",
+TeX("$(x_i,y_i)$"),
+lty         = 0,
+pch         = 16,
+col         = "black",
+bty         = "n",
+cex         = 1,
+x.intersp   = 1)
+dev.off()
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/ptf_2_elr.pdf")
+```
+
+
+# Einfache lineare Regression
+\vspace{1mm}
+Modellschätzung und Modellevaluation
+\vspace{2mm}
+\setstretch{1.6}
+\tiny
+```{r, echo = T}
+D           = read.csv("./2_Daten/elr.csv")                       # Dateneinlesen                                                        
+y           = D$BDI                                               # Daten
+X           = matrix(c(rep(1,n), D$ATS), ncol = 2)                # Designmatrix
+n           = nrow(X)                                             # Gesamtanzahl an Patient:innen
+p           = ncol(X)                                             # Anzahl Betaparameter
+beta_hat    = solve(t(X) %*% X) %*% t(X) %*% y                    # Betaparameterschätzer
+eps_hat     = y - X %*% beta_hat                                  # Prädiktionsfehler
+sigsqr_hat  = (t(eps_hat) %*% eps_hat)/(n-p)                      # Varianzparameterschätezr
+delta       = 0.95                                                # Konfidenzbedingung  
+t_delta     = qt((1+delta)/2,n-p)                                 # \Psi^{-1}((1+\delta)/2,n-1)
+lambda      = diag(solve(t(X) %*% X))                             # \lambda_j Werte
+ses         = sqrt(sigsqr_hat)*sqrt(lambda)                       # Betaparameterstandardfehlerschätzer
+tvals       = beta_hat/ses                                        # T Werte
+kappa_u     = beta_hat - ses*t_delta                              # untere KI Grenze
+kappa_o     = beta_hat + ses*t_delta                              # obere  KI Grenze
+```
+
+# Einfache lineare Regression
+\vspace{1mm}
+Modellschätzung und Modellevaluation
+\vspace{2mm}
+\setstretch{1.6}
+\tiny
+```{r, echo = T}
+# Ergebnisausgabe
+print(
+data.frame(
+"Estimate"   = beta_hat,                      
+"Std.Error"  = ses,
+"t.value"    = beta_hat/ses,
+"p.value"    = 2*(1-pt(abs(tvals), n-p)),
+"KI.u"       = kappa_u,
+"KI.o"       = kappa_o,
+row.names    = c("beta_0_hat", "beta_1_hat")), 
+digits = 4)
+```
+
+
+# Einfache lineare Regression
+\vspace{1mm}
+Modellschätzung und Modellevaluation mit `lm()`
+\vspace{2mm}
+\tiny
+\setstretch{1.6}
+```{r, echo = T}
+D           = read.csv("./2_Daten/elr.csv", head = T)           # Dataframe
+M           = lm(BDI ~ ATS, data = D)                           # ALM Schätzung
+coefs       = summary(M)$coefficients                           # Betaparameterschätzer
+ci          = confint(M, level  = 0.95)                         # Konfidenzintervalle
+print(cbind(coefs, KI.u = ci[, 1], KI.o = ci[, 2]), digits = 4)
+```
+
+
+
+# 
+\large
+\vfill
+\setstretch{2.2}
+Modellformulierung, Modellschätzung, Modellevaluation
+
+`lm()` und `formulas`
+
+Kronecker-Produkt
+
+Zweistichproben-T-Test
+
+Einfache lineare Regression
+
+**Selbstkontrollfragen**
+\vfill
+
+# Selbstkontrollfragen
+\footnotesize
+
+1. Geben Sie die Definition des Allgemeinen Linearen Modells wieder und erläutern Sie sie.
+1. Geben Sie das Theorem zur Datenverteilung des Allgemeinen Linearen Modells wieder.
+1. Geben Sie das Theorem zum Betaparameterschätzer wieder und erläutern Sie es.
+1. Geben Sie das Theorem zur Frequentistischen Verteilung des Betaparameterschätzers wieder.
+1. Geben Sie das Theorem zum Varianzparameterschätzer wieder und erläutern Sie es.
+1. Geben Sie das Theorem zur Frequentistischen Verteilung des Varianzparameterschätzers wieder.
+1. Geben Sie die Definition der T-Statistik wieder und erläutern Sie sie in Abhängigkeit von $\beta_0$.
+1. Geben Sie das Theorem zur Frequentistischen Verteilung der T-Statistik wieder.
+1. Geben Sie das Theorem zu den Konfidenzintervallen für Betaparameterkomponenten wieder.
+1. Erläutern Sie die Syntax und Semantik der R `lm()` Funktion.
+1. Erläutern Sie die Syntax und Semantik von R `formulas`.
+1. Geben Sie die Definition des Kronecker-Produkts zweier Matrizen wieder.
+1. Erläutern Sie das Anwendungsszenario eines Zweistichproben-T-Tests.
+1. Geben Sie die strukturelle Form, die Datenverteilungsform und die Designmatrixform des Zweistichproben-T-Testmodells in Effektdarstellung wieder.
+1. Erläutern Sie das Anwendungsszenario einer einfachen linearen Regression.
+1. Geben Sie die strukturelle Form, die Datenverteilungsform und die Designmatrixform des Modells
+der einfachen linearen Regression wieder.
+
+# Referenzen
+\footnotesize

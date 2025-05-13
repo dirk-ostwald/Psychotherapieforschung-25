@@ -1,0 +1,226 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: "5_Header.tex"
+bibliography: 5_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf_5_otto.png")
+```
+
+\huge
+Psychotherapieforschung
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2025
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(5) Multizentrendesigns}
+\vfill
+
+
+```{r, echo = T}
+gls = function(y, X, V){
+    # Diese Funktion bestimmt den generalisierten Kleinste-Quadrate-Schätzer. 
+    # 
+    # Inputs
+    #   y           : y x 1 Datenvektor
+    #   X           : n x p Designamtrix
+    #   V           : n x n marginale Datenkovarianzmatrix
+    #
+    # Outputs 
+    #   beta_hat    : p x 1 generalisierter Kleinste-Quadrate-Schätzer
+    # ----------------------------------------------------------------- 
+    Vi          = solve(V)                                                      # Inverse 
+    beta_hat    = solve(t(X) %*% Vi %*% X) %*% t(X) %*% Vi %*% y                # GKQ Schätzer
+    return(beta_hat)                                                            # Output
+}
+
+reml = function(theta, lmm){
+    # Diese Funktion ist eine Wrapperfunktion für l_reml() zum Gebrauch mit 
+    # der generischen R Optimierungsfunktion optim().
+    #
+    # Inputs
+    #   theta   : k x 1 Varianzkomponentenvektor
+    #   lmm     : Liste von LMM Komponenten
+    #
+    # Output
+    #   reml    : Wert der restricted log likelhood Funktion
+    # ------------------------------------------------------------------ 
+    y           = lmm$y                                                         # Datenvektor
+    X           = lmm$X                                                         # Fixed-Effects-Designmatrix
+    Z           = lmm$Z                                                         # Random-Effects-Designmatrix
+    beta_f_hat  = lmm$beta_f_hat                                                # Fixed-Effects Schätzer
+    l_reml      = llh_reml(theta,y,X,Z,beta_f_hat)                              # Wert der ReML Zielfunktion
+    return(-l_reml)}    
+
+llh_reml = function(theta, y, X, Z, beta_f_hat, Sigma_eps){
+    # Diese Funktion evaluiert die negative restricted log likelihood 
+    # Zielfunktion für  das Random-Effects-Modell der Metanalyse.
+    #
+    # Inputs
+    #   theta       : k x 1 Varianzkomponentenvektor
+    #   y           : n x 1 Datenvektor                                 
+    #   X         : n x p Fixed-Effects-Designmatrix
+    #   Z         : n x q  Random-Effects-Designmatrix
+    #   beta_f_hat  : p x 1 Fixed-Effects Schätzer
+    #
+    # Outputs
+    #   llh_reml    : 1 x 1 Wert der ReML Zielfunktion  
+    # ------------------------------------------------------------------------- 
+    n           = nrow(Z)                                                       # Datenpunktanzahl
+    V           = theta[1]*Z %*% t(Z) + theta[2]*diag(n)                        # marginale Datenkovarianzmatrix
+    Vi          = solve(V)                                                      # Inverse
+    R           = y - X%*%beta_f_hat                                            # Residuals
+    T1          = -(1/2)*log(det(V))                                            # Erster Term 
+    T2          = -(1/2)*log(det(t(X) %*% Vi %*% X))                            # Zweiter Term
+    T3          = -(1/2)*t(R) %*% Vi %*% R                                      # Dritter Term
+    llh_reml    = T1 + T2 + T3                                                  # Restricted Log Likelihood
+    return(llh_reml)}                                                           # Wert der ReML Zielfunktion
+
+mcov = function(theta, Z){
+    # Diese Funktion schätzt generierte eine marginale Datenkovarianzmatrix
+    # basierend auf einer Random-Effects-Designmatrix und der Varianzkomponenten.
+    # 
+    # Inputs: 
+    #   theta   : c x 1 Varianzkomponentenvektor
+    #   Z       : n x q Random-Effects-Designmatrix
+    # 
+    # Outputs
+    #   V_theta : n x n marginale Kovarianzmatrix
+    # -------------------------------------------------------------------------
+    V_theta = theta[1]*(Z%*%t(Z)) + theta[2]*diag(nrow(Z))                      # marginale Datenkovarianzmatrix
+    return(V_theta)}                                                            # Ausgabeargument
+
+rfx = function(lmm){
+    # Diese Funktion bestimmt den bedingten Erwartungswert der Random-Effects
+    #   Inputs :
+    #     lmm   : R Liste mit Einträgen
+    #       $y              : n x 1 Datenvektor
+    #       $X            : n x p Fixed-Effects-Designmatrix
+    #       $Z            : n x q Random-Effects-Designmatrix
+    #       $beta_f_hat     : p x 1 Fixed-Effects-Parameterschätzer
+    #       $s_beta_r_hat   : 1 x 1 Random-Effects-Varianzkomponente    
+    #       $s_eps_hat      : 1 x 1 Fehler-Varianzkomponente 
+    #   Outputs :
+    #     lmm               : R Liste mit zusätzlichen Einträgen
+    #       $beta_r_hat     : q x 1 Random-Effects-Parameterschätzer
+    # ------------------------------------------------------------------- 
+    y               = lmm$y                                                     # Daten
+    Z             = lmm$Z                                                       # Random-Effects-Designmatrix
+    X             = lmm$X                                                       # Fixed-Effects-Designmatrix
+    beta_f_hat      = lmm$beta_f_hat                                            # Fixed-Effects-Parameterschätzer
+    s_beta_r_hat    = lmm$s_beta_r_hat                                          # Random-Effects-Varianzkomponentenschätzer
+    s_eps_hat       = lmm$s_eps_hat                                             # Fehlervarianzkomponentenschätzer
+    theta_hat       = c(s_beta_r_hat,s_eps_hat)                                 # Varianzkomponentenschätzer  
+    V_theta_hat_i   = solve(mcov(theta_hat, Z))                                 # Inverser Datenkovarianzmatrixschätzer
+    eps_hat         = (y - X %*% beta_f_hat)                                    # Residuals
+    lmm$beta_r_hat  = s_beta_r_hat*t(Z) %*% V_theta_hat_i %*% eps_hat}          # Random-Effects-Parameterschätzer
+
+estimate = function(lmm){
+    # Diese Funktion schätzt die Parameter eines LME Modelle.
+    #   Inputs :
+    #     lmm   : R Liste mit Einträgen
+    #       $y              : n x 1 Datenvektor
+    #       $X            : n x p Fixed-Effects-Designmatrix
+    #       $Z            : n x q Random-Effects-Designmatrix
+    #       $c              : 1 x 1 Varianzkomponentenanzahl
+    #   Outputs :
+    #     lmm   : R Liste mit zusätzlichen Einträgen
+    #       $beta_f_hat     : p x 1 Fixed-Effects-Parameterschätzer
+    #       $s_beta_r_hat   : 1 x 1 Random-Effects-Varianzschätzer
+    #       $s_eps_hat      : 1 x 1 Datenvarianzschätzer
+    # -------------------------------------------------------------------------    
+    y                       = lmm$y                                             # Datenvektor
+    X                       = lmm$X                                             # Fixed-Effects-Designmatrix
+    Z                       = lmm$Z                                             # Random-Effects-Designmatrix
+    c                       = lmm$c                                             # Anzahl Varianzkomponenten
+    n                       = nrow(X)                                           # Anzahl Datenpunkte
+    p                       = ncol(X)                                           # Anzahl Fixed-Effects
+    q                       = ncol(Z)                                           # Anzahl Random-Effects
+    K                       = 2^3                                               # maximale Iterationsanzahl
+    theta_hat_k             = matrix(rep(NaN, c*K), nrow = c)                   # Varianzkomponentenschätzerarray  
+    theta_hat_k[,1]         = rep(1,c)                                          # Initialisierung 
+    beta_f_hat_k            = matrix(rep(NaN, p*K), nrow = p)                   # Fixed-Effects-Schätzerarray
+    V_theta_hat_k           = mcov(theta_hat_k[,1], Z)                          # marginale Datenkovarianzmatrix
+    beta_f_hat_k[,1]        = gls(y,X,V_theta_hat_k)                            # Fixed-Effects-Parameterschätzer
+    for (k in 2:K){                                                             # Iterationen
+        lmm$beta_f_hat      = beta_f_hat_k[, k-1]                               # Fixed-Effects-Schätzer k-1
+        max_l_reml          = optim(par=theta_hat_k[,k-1],fn=reml,lmm=lmm)      # ReML-Varianzkomponentschätzung
+        theta_hat_k[,k]     = max_l_reml$par                                    # Varianzkomponentenschätzer k
+        V_theta_hat_k       = mcov(theta_hat_k[,k], Z)                          # marginale Datenkovarianzmatrix
+        beta_f_hat_k[,k]    = gls(y,X,V_theta_hat_k)}                           # Fixed-Effects-Parameterschätzer
+    lmm$beta_f_hat          = beta_f_hat_k[,K]                                  # Fixed-Effects-Parameterschätzer
+    lmm$s_beta_r_hat        = theta_hat_k[1,K]                                  # Random-Effects-Varianzkomponente    
+    lmm$s_eps_hat           = theta_hat_k[2,K]                                  # Fehler-Varianzkomponente 
+    lmm$beta_r_hat          = rfx(lmm)                                          # Random-Effects-Parameterschätzer
+    return(lmm)}                                                                # Ausgabe
+
+library(Matrix)                                                                 # Blockdiagonalmatrizen
+D           = read.csv("./5_Daten/BDI.csv")                                     # Dateneinlesen 
+
+# these should be inferred from the data 
+# ----------------------------------------------------------------------
+n_i     = 4                                                                     # Anzahl Zentren (Cluster) 
+n_j     = 2                                                                     # Anzahl Treatments
+n_ij    = 20                                                                    # Anzahl Patient:innen pro Zentrum und Treatment
+n       = n_i*n_j*n_ij                                                          # Gesamtanzahl an Patient:innen
+X_i     = matrix(c(rep(1,n_ij*n_j),rep(0,n_ij),rep(1,n_ij)), ncol = 2)          # Zentrenspezifische ANOVA Designmatrizen Array
+X       = kronecker(matrix(1, n_i, 1), X_i)                                     # Fixed-Effects Designmatrix
+lmm     = list(y = y, X = X, Z = Z, c = 2)                                      # LMM Komponenten 
+lmm     = estimate(lmm)                                                         # Modellschätzung                           
+cat("beta_f_hat        :", round(lmm$beta_f_hat,2), 
+    "\nbeta_r_hat        :", round(lmm$beta_r_hat,2),
+    "\nsigsqr_beta_r_hat :", round(lmm$s_beta_r_hat,2),
+    "\nsigsqr_eps_hat    :", round(lmm$s_eps_hat,2)) 
+```
+
+```{r}
+library(nlme)                                                                   # ReML
+library(lme4)                                                                   # Better ReML 
+D   = read.csv("Example1.txt", head = T)                                        # read data
+M   = subset(D, !(treatment_idx %in% c(3, 4, 5)))                               # two condition data set
+
+D$treatment_idx = as.factor(D$treatment_idx)
+M$treatment_idx = as.factor(M$treatment_idx)
+
+# analysis of D
+dim(D)                                                                          # data dimensions
+names(D)                                                                        # column names
+table(D$treatment_idx)                                                          # observations per treatment
+table(D$midx)                                                                   # observations per mouse
+obj.lm = lm(res ~ treatment_idx, data = D)                                      # ALM Analysis
+summary(obj.lm)                                                                 # Parameterschätzer und Konfidenzintervalle
+anova(obj.lm)                                                                   # ANOVA Tabelle und F-Werte
+obj.lme = lme(res~treatment_idx, data = D, random = ~ 1 | midx)                 # LME ReML fit
+summary(obj.lme)                                                                # Results
+obj.lmer = lmer(res ~ treatment_idx + (1|midx), data = D)                       # LME lmer fit
+summary(obj.lmer)                                                               # LMER results
+
+# analysis of M
+dim(M)                                                                          # data dimensions
+names(M)                                                                        # column names
+table(M$treatment_idx)                                                          # observations per treatment
+table(M$midx)                                                                   # observations per mouse
+obj.lm = lm(res ~ treatment_idx, data = M)                                      # ALM Analysis
+summary(obj.lm)                                                                 # Parameterschätzer und Konfidenzintervalle
+anova(obj.lm)                                                                   # ANOVA Tabelle und F-Werte
+obj.lme = lme(res~treatment_idx, data = M, random = ~ 1 | midx)                 # LME ReML fit
+summary(obj.lme)                                                                # Results
+obj.lmer = lmer(res ~ treatment_idx + (1|midx), data = M)                       # LME lmer fit
+summary(obj.lmer)                                                               # LMER results
+```

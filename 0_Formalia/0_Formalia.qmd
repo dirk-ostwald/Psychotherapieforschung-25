@@ -1,0 +1,156 @@
+---
+fontsize: 8pt
+lang: de
+format:
+    beamer:
+        include-in-header: "0_Header.tex"
+bibliography: 0_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("0_Abbildungen/ptf_0_otto.png")
+```
+\vspace{2mm}
+
+\huge
+Psychotherapieforschung
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2025
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+
+#  {.plain}
+\vfill
+\center
+\Huge
+\textcolor{red}{Aufnahme läuft!}
+\vfill
+
+
+# Formalia
+\small
+\textcolor{darkblue}{Modul A2}
+
+Vertiefung allgemeine Forschungsmethoden
+
+* A2.1 Vorlesung: Methoden der Evaluationsforschung (2 SWS) $\Leftrightarrow$ Psychotherapieforschung
+* A2.2 Seminar: Methoden der Evaluationsforschung (1 SWS)  $\Leftrightarrow$  Psychotherapieforschung
+
+\textcolor{darkblue}{Inhalt}
+
+In Vorlesung und Seminar A2.1 und A2.2 werden neben den wissenschaftshistorischen 
+und messtheoretischen Grundlagen der Evaluation z.B. folgende Themengebiete abgedeckt: 
+Hierarchische Modelle und Strukturgleichungsmodelle; Verfahren der Metaanalyse; 
+Prinzipien der kausalen Inferenz und Propensity Scores. Insbesondere im Seminar wird 
+die selbstständige Durchführung exemplarischer Analysemethoden in Anwendungsbeispielen 
+mit modernen datenanalytischen Programmierumgebungen wie R, Python und Julia 
+behandelt und eingeübt.  
+
+\textcolor{darkblue}{Prüfungsleistungen}
+
+Modulprüfung A2.1: Klausur (60 Minuten) (30 Multiple Choice Fragen) 
+
+Studienleistung A2.2: Die Form des Leistungsnachweises wird zu Beginn der 
+Lehrveranstaltung bekannt gegeben. 
+
+Die Modulnote entspricht der Klausurnote. 
+
+# Formalia  
+\small
+\vspace{1mm}
+\setstretch{2}
+\textcolor{darkblue}{Vorlesung Psychotherapieforschung SoSe 2025 (2 SWS)}
+
+
+* Donnerstags 9 - 11 Uhr in G22A-216   
+* Kursmaterialien (Folien, Videos) auf der [\textcolor{darkblue}{Kurswebseite}](https://bit.ly/43RVqvl) 
+* Ankündigungen und weiterführende Literatur auf der [\textcolor{darkblue}{Moodleseite}](https://elearning.ovgu.de/course/view.php?id=18877) 
+
+Vorwissen aus dem BSc Psychologie
+
+* [\textcolor{darkblue}{Vorkurs Mathematische Grundlagen}](https://bit.ly/4eTiEU5) 
+* [\textcolor{darkblue}{Wahrscheinlichkeitstheorie und Frequentistische Inferenz}](https://bit.ly/3zWe3l5) 
+* [\textcolor{darkblue}{Allgemeines Lineares Modell}](https://bit.ly/4a1YvII)
+* [\textcolor{darkblue}{Programmierung mit R}](https://bit.ly/4iYFcF4) 
+
+
+# Formalia 
+\setstretch{2}
+\small 
+\textcolor{darkblue}{Seminar Psychotherapieforschung SoSe 2025 (1 SWS)}
+
+* Donnerstags 11 - 12 Uhr in G22A-120
+* *"Die Form des Leistungsnachweises wird zu Beginn der Lehrveranstaltung bekannt gegeben."* 
+
+Leistungsnachweis
+
+* Präsentation einer aktuellen (2015-2025) Studie zur Psychotherapieeffektivität 
+unter Anwendungen von Linear Mixed Models in einem Randomized Controlled Trial oder einer Metaanalyse
+* Studienvorschläge auf [\textcolor{darkblue}{Moodle}](https://elearning.ovgu.de/mod/folder/view.php?id=573764) 
+* Eigene Studienwahl möglich, z.B. aus [\textcolor{darkblue}{Psychotherapy and Psychosomatics}](https://karger.com/pps)
+* 3 Studierende pro Studie, Präsentationsdauer 45 Minuten
+* Terminvergabe durch OVGU-Cloud Excel-Datei Eintrag
+
+# Formalia 
+
+\textcolor{darkblue}{Vorläufiger Überblick}
+\vspace{1mm}
+
+\small
+\center
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lll}
+Datum           & Einheit                       & Thema					       	    \\\hline
+10.04.2025      & Einführung                    & (1) Psychotherapieforschung       \\
+17.04.2025      & Linear Mixed Models           & (2) Allgemeines Lineares Modell   \\
+24.04.2025      & Linear Mixed Models           & (3) Modellformulierung            \\
+01.05.2025      & Feiertag                                                          \\
+08.05.2025      & Linear Mixed Models           & (4) Modellinferenz                \\
+15.05.2025      & Linear Mixed Models           & (5) Longitudinaldesigns I         \\
+22.05.2025      & Linear Mixed Models           & (6) Longitudinaldesigns II        \\
+29.05.2025      & Feiertag                                                          \\
+05.06.2025      & Linear Mixed Models           & (7) Mehrebenendesigns I           \\
+12.06.2025      & Linear Mixed Models           & (8) Mehrebenendesigns II          \\
+19.06.2025      & Metanalyse                    & (9) Grundlagen der Metanalyse     \\
+26.06.2025      & Metanalyse                    & (10) Effektsstärkeschätzung       \\
+03.07.2025      & Metaanalyse                   & (11) Fixed-Effects Modelle        \\
+10.07.2025      & Metanalyse                    & (12) Random-Effects Modelle       \\\hline
+18.07.2025      & Klausurtermin                                                     \\                                                         
+Februar 2025    & Klausurwiederholungstermin                                        \\
+\end{tabular}
+
+# Formalia 
+Primärliteratur
+\center
+```{r, echo = FALSE, out.width = "25%", fig.align = "center"}
+knitr::include_graphics("0_Abbildungen/ptf_0_eugene.png")
+```
+
+[\textcolor{darkblue}{Demidenko (2013) Mixed Models, Second Edition}](https://www.eugened.org/mixed-models)
+
+\vspace{2mm}
+\flushleft
+\small
+Weiterführende Literatur
+
+* Raudenbusch & Bryk (2002) Hierarchical Linear Models
+* Hedges & Olkin (1985) Statistical Methods for Meta-Analysis
+* Harrer et al. (2022) Doing Meta-Analysis with **R**
+
+# Formalia  
+\vfill
+\Huge
+\center
+Q & A
+\vfill
+

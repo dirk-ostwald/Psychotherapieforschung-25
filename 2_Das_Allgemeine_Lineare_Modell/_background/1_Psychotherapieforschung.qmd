@@ -1,0 +1,800 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: "1_Header.tex"
+bibliography: 1_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("1_Abbildungen/ptf_1_otto.png")
+```
+
+
+\huge
+Psychotherapieforschung
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2025
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(1) Psychotherapieforschung}
+\vfill
+
+
+# 
+\footnotesize
+
+**Approbationsordnung für Psychotherapeutinnen und Psychotherapeuten (2020) Anlage 2 (zu § 8 Nummer 2)**
+
+Inhalte, die im Masterstudiengang im Rahmen der 
+hochschulischen Lehre zu vermitteln und bei dem Antrag auf Zulassung zur 
+psychotherapeutischen Prüfung nachzuweisen sind.
+
+*Vertiefte Forschungsmethodik* 
+
+Die studierenden Personen 
+
+(a) wenden komplexe und multivariate Erhebungs- und Auswertungsmethoden zur 
+Evaluierung und Qualitätssicherung von Interventionen an, 
+(b) nutzen und beurteilen einschlägige Forschungsstudien und deren Ergebnisse 
+für die Psychotherapie 
+(c) Planen selbständig Studien zur Neu- oder Weiterentwicklung der Psychotherapieforschung 
+oder der Forschung in angrenzenden Bereichen, führen solche Studien durch, 
+werten sie aus und fassen sie zusammen, 
+(d) bewerten wissenschaftliche Befunde sowie Neu- oder Weiterentwicklungen in 
+der Psychotherapie inhaltlich und methodisch in Bezug auf deren Forschungsansatz 
+und deren Aussagekraft, so dass sie daraus fundierte Handlungsentscheidungen 
+für die psychotherapeutische Diagnostik, für psychotherapeutische Interventionen 
+und für die Beratung ableiten können. 
+
+Zur Vermittlung der Inhalte der vertieften Forschungsmethodik sind bei der Planung 
+der hochschulischen Lehre mindestens 6 ECTS-Punkte vorzusehen und die folgenden 
+Wissensbereiche abzudecken: 
+
+(a) multivariate Verfahren und Messtheorie, 
+(b) Evaluierung wissenschaftlicher Befunde und deren Integration in die eigene psychotherapeutische Tätigkeit.
+
+# 
+\large
+\vfill
+\setstretch{2.7}
+Evaluationsforschung
+
+Phasen der Psychotherapieforschung
+
+Anforderungen an Wirksamkeitsstudien
+
+Ablaufprinzipien randomisierter kontrollierter Studien
+
+Selbstkontrollfragen
+\vfill
+
+
+# 
+Literaturhinweise
+
+\small
+\setstretch{1.8}
+
+* Die Vorlesungseinheit orientiert sich an @jacobi2020
+* @wampold2015 gibt einen Gesamtüberblick 
+* @mattejat2011 gibt einen historischen Überblick zur deutschen Psychotherapieforschung
+* @westen2004 geben eine kritische Einordnung  
+* @rief2024 geben einen Ausblick zur Psychotherapieforschung
+
+\normalsize
+Wissenschaftliche Anerkennung von Psychotherapieverfahren in Deutschland
+
+\small
+* @duehrssen1965 zur Aufnahme in die gesetzliche Krankenversorgung 
+* [\textcolor{darkblue}{Wissenschaftlicher Beirat Psychotherapie}](www.wbpsychotherapie.de/)
+* [\textcolor{darkblue}{Methodenpapier des Wissenschaftlichen Beirats Psychotherapie 2023}](https://www.wbpsychotherapie.de/methodenpapier)
+
+
+# 
+\large
+\vfill
+\setstretch{2.7}
+**Evaluationsforschung**
+
+Phasen der Psychotherapieforschung
+
+Anforderungen an Wirksamkeitsstudien
+
+Ablaufprinzipien randomisierter kontrollierter Studien
+
+Selbstkontrollfragen
+\vfill
+
+# Evaluationsforschung
+\textcolor{darkblue}{Evaluation} 
+
+\small
+"action of appraising or valuing," from French *évaluation*, noun of action 
+from *évaluer* "to find the value of," from *é-* "out" (see ex-) + *valuer*, from Latin 
+*valere* "be strong, be well; be of value, be worth" (from Proto-Indo-European
+ *wal-* "to be strong") by 1755. Meaning "job performance review" attested by 1947.
+
+\flushright
+\footnotesize
+Online Etymology Lexicon
+
+\vspace{2mm}
+\flushleft
+\normalsize
+
+* Evaluationsforschung $=$    Evaluation mit wissenschaftlichen Methoden
+
+* Evaluationsforschung $\neq$ Forschung zur Evaluation
+
+* Evaluation von psychologischen Interventionen/Psychotherapien
+
+\vspace{2mm}
+Hauptquelle: "Grundlagen der Evaluationsforschung" @holling2009, Kapitel 1
+
+# Evaluationsforschung
+\setstretch{2.5}
+Einordnung
+\small
+
+* Wissenschaftliche Begleituntersuchungen von sozialpolitischen Reformen in den USA der 1960er
+
+* Heute eigenständige Disziplin mit Anwendung in vielen gesellschaftlichen Bereichen 
+
+* $\Rightarrow$ Evaluationen in Bildung, Gesundheit, Verkehr, Umwelt, Städtebau, Justiz, ...
+
+* [\textcolor{darkblue}{Deutsche Gesellschaft für Evaluation}](https://www.degeval.org/)
+
+* Synonyme "Controlling", "Qualitätskontrolle", "Erfolgskontrolle", "Effizienzforschung", ...
+
+
+# Evaluationsforschung
+\textcolor{darkblue}{Lehrbuchdefinitionen}
+\small
+
+@suchman1967
+
+* Evaluation als "Prozess der Bewertung eines Sachverhalts", Evaluationsforschung 
+als "die explizite Verwendung wissenschaftlicher Forschungsmethoden zur Bewertung 
+eines Sachverhalts."
+
+@rossi2004
+
+* Evaluationsforschung als "systematische Anwendung empirischer Forschungsmethoden
+zur Bewertung des Konzepts, des Untersuchungsplans, der Implementierung und der
+Wirksamkeit sozialer Interventionsprogramme".
+
+@bortz2006
+
+* Evaluationsforschung als "alle forschenden Aktivitäten, bei denen es um die 
+Bewertung des Erfolges von gezielt eingesetzten Maßnahmen oder um Auswirkungen
+von Wandel in Natur, Kultur, Technik und Gesellschaft geht".
+
+# Definition und Funktion
+\textcolor{darkblue}{Lehrbuchdefinitionen}
+\small
+
+@wottawa1998
+
+* "(Evaluatorische Tätigkeiten) haben etwas mit Bewerten zu tun. Evaluation dient
+  als Planungs- und Entscheidungshilfe und hat etwas mit der Bewertung von 
+  Handlungsalternativen zu tun. Evaluation ist ziel- und zweckorientiert. Sie hat 
+  primär das Ziel, praktische Maßnahmen zu überprüfen, zu verbessern oder über sie 
+  zu entscheiden"
+
+@hager2000
+
+* Evaluationsforschung als "die wissenschaftlich fundierte, empirische und 
+hypothesenorientierte Forschung unter systematischer Anwendung sozialwissenschaftlicher
+Forschungsmethoden. Die Ergebnisse diese Forschung bilden die wesentliche, wenn auch
+nicht die einzige Grundlage einer wissenschaftlichen Evaluation oder Bewertung der
+Konzeption, Ausgestaltung, Umsetzung und des Nutzens sozialer und psychologischer
+Interventionsprogramme."
+
+Attkinson and Broskowski (1978)
+
+* Programmevaluation als "ein Prozess der Durchführung vernunftgeleiter Beurteilung
+eines Programms [umfangreiche Intervention] hinsichtlich Aufwand, Effektivität 
+und Angemessenheit auf der Grundlage systematischer Datenerhebung und Datenanalyse."
+
+
+# Evaluationsforschung
+\setstretch{1.8}
+\textcolor{darkblue}{Evaluation von Psychologischen Interventionen}
+
+Psychologische Intervention 
+
+\small
+Jede Art von außen gesteuerter, zielorientierter und systematischer Beeinflussung
+von Personen mithilfe von Lernerfahrungen, insbesondere im Gespräch und angeleitetem Selbststudium.
+
+\flushright
+\footnotesize
+Vgl. @hager2000
+\flushleft
+
+\normalsize
+Entwicklung und Evaluation psychologischer Interventionen  
+
+* Klinische Psychologie und Psychotherapie
+* Arbeits- und Organisationspsychologie
+* Pädagogische Psychologie
+
+\flushright
+$\Rightarrow$ Im Bereich KliPP: Intervention = Psychotherapie
+
+
+# Evaluationsforschung
+\textcolor{darkblue}{Funktionen der Evaluation von Psychologischen Interventionen}
+
+\textcolor{darkblue}{Erkenntnisfunktion}
+
+* Wirkt eine Intervention und wenn ja wie?
+
+\textcolor{darkblue}{Optimierungsfunktion}
+
+* Welche Stärken, Schwächen, oder Nebenwirkungen hat eine Intervention?
+
+\textcolor{darkblue}{Kontrollfunktion}
+
+* Wird die Intervention korrekt umgesetzt und wie ist ihre Kosten-Nutzen-Bilanz? 
+
+\textcolor{darkblue}{Entscheidungsfunktion}
+
+* Soll eine Intervention gefördert, weiterentwickelt, genutzt werden oder nicht? 
+
+\textcolor{darkblue}{Legitimationsfunktion}
+
+* Jede Evaluation dient auch der Legitimation der Intervention nach außen
+
+\vspace{2mm}
+\footnotesize
+\flushright
+Vgl. @bortz2006
+
+# Evaluationsforschung
+\setstretch{1.8}
+
+\textcolor{darkblue}{Allgemeine Standards der Evaluationsforschung}
+
+* Joint Committee on Standards for Educational Evaluation (1981)
+* Neufassung als Program Evaluation Standards (1994)
+
+$\Rightarrow$ Leitlinien für die Beurteilung, Planung, Durchführung und Vergabe von Evaluationen.
+
+\textcolor{darkblue}{Standards der Deutschen Gesellschaft für Evaluation} [(\textcolor{darkblue}{DeGEval})](https://www.degeval.org/)
+
+* Nützlichkeit
+* Durchführbarkeit
+* Genauigkeit
+* Fairness
+
+$\Leftrightarrow$ [\textcolor{darkblue}{Standards der guten wissenschaftlichen Praxis}](https://wissenschaftliche-integritaet.de/)
+
+# Evaluationsforschung  
+\setstretch{1.6}
+\textcolor{darkblue}{Nützlichkeit}
+
+(N1) Identifizierung der Beteiligten und Betroffenen
+
+(N2) Klärung der Evaluationszwecke 
+
+(N3) Kompetenz und Glaubwürdigkeit des Evaluators/der Evaluatorin
+
+(N4) Auswahl und Umfang der Informationen
+
+(N5) Transparenz von Werthaltungen
+
+(N6) Vollständigkeit und Klarheit der Berichterstattung
+
+(N7) Rechtzeitigkeit der Evaluation
+
+(N8) Nutzung und Nutzen der Evaluation
+
+# Evaluationsforschung
+\setstretch{1.6}
+\textcolor{darkblue}{Durchführbarkeit}
+
+(D1) Angemessene Verfahren
+
+(D2) Diplomatisches Vorgehen
+
+(D3) Effizienz von Evaluation
+
+\textcolor{darkblue}{Fairness}
+
+(F1) Formale Vereinbarungen
+
+(F2) Schutz individueller Rechte
+
+(F3) Umfassende und faire Prüfung
+
+(F4) Unparteiische Durchführung und Berichterstattung
+
+(F5) Offenlegung von Ergebnissen und Berichten
+
+# Evaluationsforschung
+\normalsize
+\setstretch{1.6}
+\textcolor{darkblue}{Genauigkeit}
+
+(G1) Beschreibung des Evaluationsgegenstandes
+
+(G2) Kontextanalyse
+
+(G3) Beschreibung von Zwecken und Vorgehen
+
+(G4) Angabe von Informationsquellen
+
+(G5) Valide und reliable Informationen
+
+(G6) Systematische Fehlerprüfung
+
+(G7) Angemessene Analyse qualitativer und quantitativer Informationen
+
+(G8) Begründete Bewertungen und Schlussfolgerungen
+
+(G9) Meta-Evaluation
+
+
+# 
+\large
+\vfill
+\setstretch{2.7}
+Evaluationsforschung
+
+**Phasen der Psychotherapieforschung**
+
+Anforderungen an Wirksamkeitsstudien
+
+Ablaufprinzipien randomisierter kontrollierter Studien
+
+Selbstkontrollfragen
+\vfill
+
+# Phasen der Psychotherapieforschung
+\textcolor{darkblue}{Konzeptuelle Phasen der Psychotherapieforschung}
+\setstretch{1.5}
+
+Interventionsevaluation
+
+\small
+* Wirkt eine bestimmte Psychotherapie bei einer spezifischen Störung überhaupt?
+* Wirkt eine neu entwickelte Therapieform besser als die momentane Standardtherapie?
+* Konservativer, auf die Wirksamkeit von Interventionen, gerichteter Ansatz
+* Essentieller Ansatz zur Entwicklung von [\textcolor{darkblue}{Behandlungsleitlinien}](https://www.dgppn.de/publikationen/leitlinien.html)
+
+\normalsize
+Prozessforschung
+
+\small
+* Auf welche Weise wirkt Psychotherapie?
+* Können Erkenntnisse der Grundlagenforschung in Therapieverfahren eingebunden werden?
+* Progressiver, auf die Weiterentwicklung von Interventionen, gerichteter Ansatz
+* Aktueller Fokus auf Natural Language Processing und E-Mental-Health
+
+
+# Phasen der Psychotherapieforschung
+\textcolor{darkblue}{Historische Phasen der Psychotherapieforschung}
+\setstretch{1.5}
+
+Legitimationsphase (1950 - )
+
+* Wirkt Psychotherapie überhaupt?
+\footnotesize
+* The figures fail to support the hypothesis that psychotherapy facilitates re­covery (...). (@eysenck1952)
+* The findings provide convincing evidence of the efficacy of psychotherapy. (@smith1977)
+* Was Eysenck right after all? (@cuijpers2019)
+
+\normalsize
+Wettbewerbsphase (1970 - )
+
+* Was wirkt besser: Psychoanalyse oder Verhaltenstherapie?
+
+Verschreibungsphase (1990 - )
+
+* Zuordnung spezifischer Interventionen zu spezifischen Problemen
+* Psychotherapien als psychologische Medikamente
+* Nebenwirkungsforschung
+
+
+
+# Phasen der Psychotherapieforschung
+\textcolor{darkblue}{Phasen klinischer Studien}
+
+\setstretch{1.2}
+\small
+Präklinische Phase
+\vspace{-1mm}
+
+* In-vitro Forschung zu möglicherweise wirksamen Substanzen oder Behandlungsansätzen
+* Überprüfung von Sicherheit und Verträglichkeit in Zellkulturen und Tiermodellen
+
+\vspace{-1mm}
+Phase I
+\vspace{-2mm}
+
+* Studien an geringer Zahl gesunder Freiwilliger zur Verträglichkeitprüfung.
+* Ziel ist es festzustellen, ob die Behandlung für den Menschen überhaupt geeignet ist.
+
+\vspace{-1mm}
+Phase II
+\vspace{-2mm}
+
+* Studien an 100-300 Patient:innen mit der Zielerkrankung.
+* Ermittlung optimaler Dosierung und Behandlungsformen
+* Ermittlung erster Wirksamkeitserkenntnisse 
+
+\vspace{-1mm}
+Phase III
+\vspace{-2mm}
+
+* Groß angelegte Vergleichsstudien (Randomized Controlled Trials).
+* Vergleich mit Kontrollgruppen zur Validierung der Behandlung.
+* Präzise Aussagen zu Wirksamkeit und Verträglichkeit.
+
+\vspace{-1mm}
+Phase IV
+\vspace{-2mm}
+
+* Studien nach breiter Zulassung eines Medikaments oder einer Behandlungsform
+* Untersuchung spezifischer Zielgruppen oder seltener Nebenwirkungen
+* Sicherstellung der breiteren Sicherheit und Wirksamkeit im Praxisalltag
+
+
+# Phasen der Psychotherapieforschung
+\textcolor{darkblue}{Phasen der Psychotherapieevaluation in Analogie zu klinischen Studien}
+
+\setstretch{1.2}
+\small
+
+
+Präklinische Phase und Phase I
+\vspace{-2mm}
+
+* Explizierung theoretischer Annahmen
+* Einzelfallbetrachtungen (Kasuistiken)
+* Manualentwicklung
+
+Phase II
+\vspace{-2mm}
+
+* Durchführbarkeitsstudien
+* Verlaufsbeschreibende Einzelfallstudien
+* Prä-Post-Analysen in verschiedenen Populationen
+
+Phase III 
+\vspace{-2mm}
+
+* Groß angelegte Vergleichsstudien (Randomized Controlled Trials).
+* Vergleich mit Kontrollgruppen zur Validierung der Behandlung.
+* Präzise Aussagen zu Wirksamkeit und Verträglichkeit.
+
+Phase IV 
+\vspace{-2mm}
+
+* Studien nach breiter Finanzierungsübernahme eines Therapieansatzes
+* Untersuchung spezifischer Zielgruppen oder Nebenwirkungen
+* Sicherstellung der breiteren Sicherheit und Wirksamkeit im Praxisalltag
+
+# 
+\large
+\vfill
+\setstretch{2.7}
+Evaluationsforschung
+
+Phasen der Psychotherapieforschung
+
+**Anforderungen an Wirksamkeitsstudien**
+
+Ablaufprinzipien randomisierter kontrollierter Studien
+
+Selbstkontrollfragen
+\vfill
+
+# Anforderungen an Wirksamkeitsstudien
+\setstretch{2.3}
+\textcolor{darkblue}{Standardisierung der Pharmakotherapieforschung}
+
+\small
+International Conference on Harmonisation of Technical Requirements for Registration of Pharmaceuticals for Humans (\textcolor{darkblue}{www.ich.org})
+
+$\Rightarrow$ Internationaler Konsens zu Design- und Analyserichtlinien in der Pharmakologieforschung
+
+$\Rightarrow$ Sinnvoller Ansatzpunkt für klinisch-psychologische Interventionsforschung
+
+$\Rightarrow$ Standards für die Durchführung und Dokumentation von Studien
+
+# Anforderungen an Wirksamkeitstudien
+\setstretch{1.8}
+
+[\textcolor{darkblue}{EQUATOR (Enhancing the QUAlity and Transparency Of health Research) Network}](https://www.equator-network.org/)
+
+\small
+
+* Dachorganisation für Richtlinienentwickler:innen, Wissenschaftler:innen, Forschungsförderer
+* Förderung transparenter und präziser Berichterstattung über Gesundheitsforschung 
+* Sensibilisierung für gute Forschungsberichterstattung.
+* Entwicklung und Verbreitung von Berichterstattungsrichtlinien.
+* Überwachung der Berichterstattungsqualität.
+* Forschung zu Faktoren, die die Berichterstattungsqualität beeinflussen.
+
+Beispiele
+
+* Consolidated Standards of Reporting Trials ([\textcolor{darkblue}{CONSORT}](https://www.equator-network.org/reporting-guidelines/consort/))
+* Preferred Reporting Items for Systematic Reviews and Meta-Analyses ([\textcolor{darkblue}{PRISMA}](https://www.prisma-statement.org/))
+* Strengthening the Reporting of Observational Studies in Epidemiology ([\textcolor{darkblue}{STROBE}](https://www.strobe-statement.org/))
+
+
+# Anforderungen an Wirksamkeitstudien
+\textcolor{darkblue}{Consort Checklist}
+\vspace{2mm}
+```{r, echo = FALSE, out.width = "90%", fig.align = "center"}
+knitr::include_graphics("1_Abbildungen/ptf_1_consort_1.pdf")
+```
+\flushright
+\footnotesize
+@moher2010
+
+# Anforderungen an Wirksamkeitstudien
+\textcolor{darkblue}{Consort Checklist}
+\vspace{2mm}
+```{r, echo = FALSE, out.width = "90%", fig.align = "center"}
+knitr::include_graphics("1_Abbildungen/ptf_1_consort_2.pdf")
+```
+\flushright
+\footnotesize
+@moher2010
+
+# 
+\large
+\vfill
+\setstretch{2.7}
+Evaluationsforschung
+
+Phasen der Psychotherapieforschung
+
+Anforderungen an Wirksamkeitsstudien 
+
+**Ablaufprinzipien randomisierter kontrollierter Studien**
+
+Selbstkontrollfragen
+\vfill
+
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\setstretch{2.5}
+\textcolor{darkblue}{Studienvorbereitung durch Principal Investigators (PIs)}
+
+* Erstellung und Registrierung eines Studienprotokolls (Study protocol)
+* Dokumentation von Fragestellung, Hypothese, Design, Messmethoden, Analysen
+* Dokumentation von Änderungen im Studienverlauf
+* Einholung eines Ethikvotums durch die zuständige Ethikkommission
+* Proband:innenaufklärung und schriftliche Studieneinwillung (Informed consent)
+* Datenschutz und Datenmanagementplan, inkl. Datenbereitstellung (Data sharing)
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\setstretch{2.5}
+\textcolor{darkblue}{Umsetzung der intendierten Behandlungsmaßnahme (Treatment Fidelity)}
+
+* Sicherstellung von Manualtreue und Proband:innencompliance 
+* Ausführliche Manualisierung jeder Sitzung und des Therapieverlaufs
+* Schulung und Zertifizierung der Studientherapeut:innen inklusive Auffrischung
+* Kontinuierliche Supervision mit Video- und Dokumentationsanalyse
+* Sicherstellung und Dokumentation von Proband:innenverständnis 
+
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\setstretch{2.5}
+\textcolor{darkblue}{Primary Outcome Variable}
+
+* Im Vorfeld der Studie festgelegtes zentrales Maß zur Messung des Therapieeffektes
+* Aka "Primäre Zielvariable", "Target variable", "Primary endpoint"
+* Beispiel: BDI-II Score als Maß für Depressionssymptomatik
+* Häufig dichotomisiert im Sinne eines Therapieerfolgs bzw. -nichterfolgs
+* Im Gegensatz zur Pharmakologieforschung oft Erfassung von Sekundärvariablen
+* Zum Teil auch globale Zustandsbeurteilungen (Global Assessment of Functioning)
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\vspace{2mm}
+\textcolor{darkblue}{Häufig genutzte Kontrollgruppen}
+
+\footnotesize
+| Kontrollbedingung                     | Kurzbeschreibung                                                                                   |
+|---------------------------------------|----------------------------------------------------------------------------------------------------|
+| Active comparator                     | Eine evidenzbasiert wirksame Behandlung, die sich von der experimentellen Behandlung unterscheidet |
+| Minimal treatment control             | Treatment-Behandlung, die weniger als vier Sitzungen umfassen |
+| Nonspecific factors control | Zeit mit einem Therapeuten von gleicher Dauer und Häufigkeit wie die experimentelle Behandlung, aber keine Durchführung als therapeutisch angesehenen Übungen oder Techniken. Diese Kontrollbedingung umfasst oft edukative Sitzungen, in denen Patienten nur über verfügbare Behandlungen oder Selbsthilfemöglichkeiten informiert werden |
+| No-Treatment control                  | Enthält keine Studienbehandlung und wird nicht in einem Umfeld durchgeführt, in dem eine Behandlung verfügbar wäre |
+| Patient choice                        | Patienten können frei zwischen den in einer Studie angebotenen Behandlungen wählen (z. B. eine von mehreren Arten der Psychotherapie oder zwischen Psychotherapie und Medikation) |
+
+\footnotesize
+\flushright
+@gold2017, @zipfel2020
+
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\vspace{2mm}
+\textcolor{darkblue}{Häufig genutzte Kontrollgruppen}
+
+\footnotesize
+| Kontrollbedingung                     | Kurzbeschreibung                                                                                   |
+|---------------------------------------|----------------------------------------------------------------------------------------------------|
+| Pill placebo      | Eine Placebo-Pille wird der Kontrollgruppe verabreicht, die die experimentelle Verhaltenstherapie nicht erhält |
+| Specifc factors control | Patienten erhalten die gleiche Zeit mit einem Therapeuten wie in der experimentellen Bedingung, jedoch mit einer anderen oder reduzierten Anzahl spezifischer Faktoren zusätzlich zu den unspezifischen Faktoren |
+| Treatment as usual | Erfordert, dass die Studie in einer Klinik durchgeführt wird, in der Patienten Zugang zu einer Form der Behandlung haben. Was diese übliche Behandlung umfasst, wird jedoch oft nicht berichtet oder sogar bewertet. In den letzten Jahren gab es eine zunehmende Anzahl von Studien, die eine optimierte Behandlung als übliche Kontrollgruppe anwenden, insbesondere bei schweren Störungen (z. B. Anorexia nervosa) |
+| Waitlist control | Während des experimentellen Behandlungszeitraums wird keine Behandlung angeboten, aber die experimentelle Behandlung wird nach der Nachbeurteilung angeboten |
+
+\footnotesize
+\flushright
+@gold2017, @zipfel2020
+
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\vspace{2mm}
+\textcolor{darkblue}{Kontrollgruppeneffekte}
+
+
+```{r, echo = FALSE, out.width = "105%", fig.align = "center"}
+knitr::include_graphics("1_Abbildungen/ptf_1_control_effects.pdf")
+```
+\flushright
+\footnotesize
+@gold2017, @mohr2014
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\setstretch{2}
+\textcolor{darkblue}{Minimierug von systematischen Verzerrungen (Bias minimization)}
+
+Verblindung
+
+* Einfachverblindung, therapeutische Doppelverblindung nicht möglich
+* Idealerweise evaluatorische Verblindung durch externe Untersuchende
+
+
+Randomisierung
+
+* Idealerweise durch technisches Personal, nicht Therapeut:innen
+* Idealerweise zentralisiert, blockweise oder stratifiziert 
+* Erhebung umfangreicher Stichprobencharakteristika
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\textcolor{darkblue}{Designtypen}
+\setstretch{1.5}
+
+Parallelgruppendesigns
+
+* Zwei parallele Gruppen (Treatment und Control)
+* Evtl. problematisches Proband:innenerwartungsmanagement
+
+Crossover-Designs
+
+* Wechsel zwischen aktiver und Placebobehandlung
+* Potentielle Carry-over-Effekte 
+* Evtl. besseres Proband:innenerwartungsmanagement
+
+Multizentrenstudien
+
+* Erhöhung der Proband:innenanzahlen durch mehrere Standorte
+* Generalisierung über spezifische klinische Settings
+* Adversarial collaborations zur Minimierung von Allegiance-Effekten
+
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\textcolor{darkblue}{Trial Monitoring}
+\setstretch{2.3}
+
+* Qualitätssicherung im Studienverlauf
+* Interimsanalysen zu fehlenden Werten (missings) oder Ausfällen (drop-outs)
+* Dokumentation unerwünschter Ereignisse ((severe) adverse effects)
+* Effektanalysen hinsichtlich unerwünschter Treatmenteffekte
+* Abbruch klinischer Studien bei ethisch nicht vertretbaren Nebenwirkungen
+* Abbruch klinischer Studien bei ethisch nicht vertretbarer Unterlegenheit
+* Beispiel: Trial-Steering Committee der [\textcolor{darkblue}{DC Train Aphasia Studie}](https://www.aphasie-hirnstimulation.de/)
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\textcolor{darkblue}{Datenanalytische Prinzipien}
+
+* Idealfall einer vollständigen Datenerhebung aller Proband:innen eher selten
+* Transparente Stichprobendokumentation nach CONSORT-Statement
+
+```{r, echo = FALSE, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("1_Abbildungen/ptf_1_consort_3.pdf")
+```
+\flushright
+\footnotesize
+@moher2010
+
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\textcolor{darkblue}{Intention-To-Treat Analyse}
+
+\small 
+Datenanalyse anhand der randomisierten Gruppenzuweisung, unabhängig davon, ob 
+
+* die Proband:innen das entsprechende Gruppentreatment tatsächlich erhalten haben, 
+* es individuelle Treatmentabweichungen (z.B. Noncompliance) gab oder 
+* die Proband:innen im Studienverlauf aus der Studie ausgeschieden sind. 
+
+Vorteile
+
+* Erhalt der Ausgeglichenheit zwischen bekannten und unbekannten prognostischen Faktoren
+* Minimierung von Verzerrungen durch systematischen Dropout 
+* Klinisch-realistische, konservative Schätzung von Treatmenteffekten 
+
+Per-Protocol Analyse als weiterführende Kontrollanalyse
+
+* Analyse der Proband:innendaten anhand der tatsächlich durchgeführten Intervention
+
+
+# Ablaufprinzipien randomisierter kontrollierter Studien
+\vspace{3mm}
+\textcolor{darkblue}{Intention-To-Treat Analyse | Beispiel}
+\footnotesize
+
+* Nichteffektives Verhaltenstraining zur Prävention von Panikattacken vs. Wartelistenkontrolle
+* Relative Häufigkeit einer Panikattacke im Beobachtungszeitraum als primäres Outcomemaß
+* Auftreten einer Panikattacke führt zum Auschluss aus der Studie und klinischer Standardbehandlung
+* Bestimmung der relativen Häufigkeit unter Intention-To-Treat (ITT) und Per-Protocol (PP) 
+
+\vspace{-1mm}
+```{r, echo = FALSE, out.width = "85%", fig.align = "center"}
+knitr::include_graphics("1_Abbildungen/ptf_1_itt.pdf")
+```
+\vspace{-2mm}
+\flushright
+@montori2001
+
+# 
+\large
+\vfill
+\setstretch{2.7}
+Evaluationsforschung
+
+Phasen der Psychotherapieforschung
+
+Anforderungen an Wirksamkeitsstudien
+
+Ablaufprinzipien randomisierter kontrollierter Studien
+
+**Selbstkontrollfragen**
+\vfill
+
+# Selbstkontrollfragen
+\footnotesize
+\setstretch{1.8}
+
+1. Erläutern Sie die Begriffe der Legitimations-, Wettbewerbs- und Verschreibungsphase der PTF$^*$.
+1. Erläutern Sie den Unterschied zwischen Interventionsevaluation und Prozessforschung im Kontext der PTF.
+1. Erläutern Sie die fünf Phasen klinischer Studien.
+1. Erläutern Sie die vier Phasen der Psychotherapieevaluation in Analogie zu klinischen Studien.
+1. Erläutern Sie die Bedeutung des EQUATOR Networks.
+1. Erläutern Sie die Bedeutung der CONSORT und PRISMA Statements.
+1. Erläutern Sie den Begriff des Study Protocols einer Psychotherapiestudie.
+1. Erläutern Sie den Begriff der Treatment Fidelity im Kontext einer Psychotherapiestudie.
+1. Erläutern Sie den Begriff der Primary Outcome Variable im Kontext einer Psychotherapiestudie.
+1. Erläutern Sie den Begriff der Waitlist Control Bedingung.
+1. Erläutern Sie die Begriffe des Parallelgruppen- und Crossoverdesigns.
+1. Eräutern Sie den Begriff der Multizentrenstudie.
+1. Differenzieren Sie die Begriffe der Intention-To-Treat- und Per-Protocol-Analyse im Kontext der PTF. 
+1. Erläutern Sie den Sinn einer Intetion-To-Treat-Analyse an einem Beispiel. 
+
+$^*$ Psychotherapieforschung
+
+# Referenzen {.allowframebreaks}
+\footnotesize   
+
+

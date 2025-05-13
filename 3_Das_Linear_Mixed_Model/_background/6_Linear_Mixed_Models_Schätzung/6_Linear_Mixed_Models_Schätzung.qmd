@@ -1,0 +1,877 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: "6_Header.tex"
+bibliography: 6_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("6_Abbildungen/eva_6_otto.png")
+```
+
+\huge
+Evaluation und Metaanalyse
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2024
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(6) Linear Mixed Models Schätzung}
+\vfill
+
+# Motivation
+
+\small
+@schaeuffele2024  
+
+\footnotesize
+"Building on previous work, we expected considerable variability and thus used a 
+random-effects model  to account for heterogeneity of included studies (...) 
+Across settings, TD-CBT revealed significantly stronger symptom reduction 
+in depression (g = 0.74, 95% CI = 0.57 - 0.92, P < 0.001) (...) than controls
+at posttreatment"
+
+\vspace{2mm}
+\tiny
+\setstretch{1}
+```{r, echo = T}
+library(metafor)                                                # metafor R Paket
+D       = read.csv("./6_Data/TD-CBT.csv")                       # Präprozessierte Schaueffele et al. Daten
+res     = rma(yi = D$yi, vi = D$vi)                             # metafor random effects 
+```
+
+```{r, echo = F}
+print(res)                                                              
+```
+
+
+# Motivation
+\small
+@schaeuffele2024 
+
+\vspace{2mm}
+\tiny
+
+```{r, echo = T}
+library(metafor)                                                # metafor R Paket
+D       = read.csv("./6_Data/TD-CBT.csv")                       # Präprozessierte Schaueffele et al. Daten
+res     = rma(yi = D$yi, vi = D$vi)                             # metafor random effects 
+```
+
+\vspace{3mm}
+
+\small
+@viechtbauer2010 Conducting Meta-Analyses in R with the `metafor` package
+
+\footnotesize
+
+\setstretch{1.2}
+"Assuming the observed outcomes and corresponding sampling variances are supplied
+via `yi` and `vi`, the random-eﬀects model is ﬁtted with `rma(yi, vi, data = dat)`. 
+Restricted maximum-likelihood estimation is used by default when estimating $\tau^2$
+(the REML estimator is approximately unbiased and quite eﬃcient; see @viechtbauer2005). 
+While the HS, HE, DL, and SJ estimators of $\hat{\tau}^2$ are based on closed-form solutions, 
+the ML, REML, and EB estimators must be obtained numerically. For this, the `rma()` 
+function makes use of the Fisher scoring algorithm, which is robust to poor starting 
+values and usually converges quickly (@harville1977; @jennrich1976). 
+By default, the starting value is set equal to the value of the Hedges estimator 
+and the algorithm terminates when the change in the estimated value of $\tau^2$ is 
+smaller than 10−5 from one iteration to the next. The maximum number of iterations
+100 by default (which should be suﬃcient in most case)."
+
+# Motivation
+\small
+Problemstellung 
+
+\footnotesize
+\setstretch{2}
+Wir betrachten das Linear Mixed Model
+\begin{equation}
+y = X_f\beta_f + X_r\beta_r + \varepsilon
+\end{equation}
+wobei 
+
+* $y$ ein $n$-dimensionaler beobachtbarer Zufallsvektor ist, der Daten modelliert,
+* $X_f \in \mathbb{R}^{n \times p}$ eine vorgegebene Fixed-Effects-Designmatrix ist,
+* $X_r\in \mathbb{R}^{n\times q}$ eine vorgegebene Random-Effects-Designmatrix ist,
+* $\beta_f \in \mathbb{R}^p$ ein fester, aber unbekannter, Vektor von Fixed-Effects ist,
+* $\beta_r \sim N(0_q,\sigma^2_{\beta_r} I_q)$ ein $q$-dimensionaler nicht-beobachtbarer Zufallsvektor von Random-Effects ist,
+* $\varepsilon \sim N(0_n,\sigma^2_\varepsilon I_n)$ ein $n$-dimensionaler nicht-beobachtbarer Zufallsvektor von Fehlertermen ist,
+* $\beta_r$ und $\varepsilon$ unabhängige Zufallsvektoren sind, 
+* $\sigma^2_{\beta_r}, \sigma^2_\varepsilon > 0$ feste unbekannte Parameter, genannt *Varianzkomponenten*, sind.
+
+
+# Motivation
+\small
+Problemstellung
+
+\footnotesize
+Wie bereits gesehen, impliziert das Linear Mixed Model insbesondere die gemeinsame Verteilung 
+\begin{equation}
+\begin{pmatrix}
+\beta_r \\
+y 
+\end{pmatrix}
+\sim 
+N\left(
+\begin{pmatrix}
+0_q \\
+X_f\beta_f  
+\end{pmatrix},
+\begin{pmatrix}
+\sigma^2_{\beta_r}I_q    & \sigma^2_{\beta_r}X_r^T  \\
+\sigma^2_{\beta_r}X_r    & \sigma^2_{\beta_r}X_rX_r^T + \sigma_\varepsilon^2 I_n  \\
+\end{pmatrix}
+\right)
+\end{equation}
+von Datenvektor und Random-Effects-Vektor, sowie die marginale Datenverteilung
+\begin{equation}
+y \sim N(X_f\beta_f, \sigma^2_{\beta_r} X_rX_r^T + \sigma_\varepsilon^2 I_n).
+\end{equation}
+Mithilfe der Definitionen des *Varianzkomponentenvektors* $\theta$ und des marginalen Datenkovarianzmatrixparameters $V_\theta$
+\begin{equation}
+\theta := (\sigma^2_{\beta_r}, \sigma^2_\varepsilon) \mbox{ und } V_\theta := \sigma^2_{\beta_r} X_rX_r^T + \sigma_\varepsilon^2 I_n,
+\end{equation}
+wird die marginale Datenverteilung des Linear Mixed Models häufig auch als
+\begin{equation}
+y \sim N(X_f\beta_f, V_\theta)
+\end{equation}
+geschrieben. 
+
+Das Punktschätzerproblem für ein Linear Mixed Model hat dann drei zentrale Aspekte (vgl. @searle1988):
+
+(1) Die Angabe eines Schätzers $\hat{\beta}_f$ für den Fixed-Effects-Parameter $\beta_f$.
+(2) Die Angabe eines Schätzers $\hat{\beta}_r$ für den Random-Effects-Parameter $\beta_r$.
+(3) Die Angabe eines Schätzers $\hat{\theta}$ für den Varianzkomponentenparameters $\theta$.
+
+
+# Motivation
+\small
+Problemstellung
+\footnotesize
+\setstretch{1.8}
+
+Die Lösung dieses Problems ist nicht trivial, bleibt Gegenstand aktueller Forschung
+und nutzt im Allgmeinen iterative Methoden. Generell werden meist folgende Ansätze verfolgt.
+
+\noindent (1) Schätzung von $\beta_f$ basierend auf der geschätzten Marginalverteilung von $y$ 
+
+$\Rightarrow$ $V_\theta$ wird durch $V_{\hat{\theta}}$ ersetzt und $\beta_f$ durch den *Generalisierten-Kleinste-Quadrate Schätzer* geschätzt.
+
+\noindent (2) Schätzung von $\beta_r$ basierend auf der geschätzten gemeinsamen Verteilung von $\beta_r$ und $y$ 
+
+$\Rightarrow$  $V_\theta$ wird durch $V_{\hat{\theta}}$ und $\beta_f$ durch $\hat{\beta}_f$ ersetzt und $\beta_r$ durch seinen *bedingten Erwartungswert* geschätzt.
+
+\noindent (3) Schätzung von $\theta$  basierend auf der geschätzten Marginalverteilung von $y$ 
+
+$\Rightarrow$  Die Varianzkomponenten $\theta$ werden iterativ mithilfe des *Restricted Maximum-Likelihood* Verfahrens geschätzt.
+
+# 
+\vfill
+\setstretch{3}
+\large
+**Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects**
+
+Bedingter Erwartungswert der Random-Effects
+
+Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+
+Selbstkontrollfragen
+\vfill
+
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+\setstretch{2}
+\small
+Generalisierte Kleinste-Quadrate Schätzung
+
+\footnotesize
+* Kleinste-Quadrate Schätzung heißt auf English "Ordinary Least Squares" (OLS).
+* Zur Abgrenzung nennen wir den bekannten Betaparameterschätzer im Folgenden "OLS-Schätzer".
+* Generalisierte Kleinste-Quadrate Schätzung heißt auf English "Generalized Least Squares" (GLS).
+* Der GLS-Schätzer ist ein Betaparameterschätzer für das ALM
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N\left(0_n,\sigma^2V\right) \mbox{ mit } V \neq I_n
+\end{equation}
+* Der GLS-Schätzer ist also im Fall nicht-sphärischer Fehlerkovarianzmatrixparameter angezeigt.
+* Der GLS-Schätzer stellt sicher, dass $T$-Statistiken auch im Fall $V \neq I_n$ $t$-verteilt sind.
+* Im Kontext der Fixed-Effects-Schätzung eines Linear Mixed Models gilt in Hinblick auf obiges ALM speziell
+\begin{equation}
+X := X_f, 
+\beta := \beta_f, 
+\sigma^2 :=  \sigma_\varepsilon^2\sigma^2_{\beta_r},  
+V :=  \frac{1}{\sigma_\varepsilon^2}X_rX_r^T + \frac{1}{\sigma^2_{\beta_r}} I_n \mbox{ und somit } 
+\sigma^2V = V_\theta.
+\end{equation}
+
+
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+\footnotesize
+\begin{definition}[Generalisierte Kleinste-Quadrate Schätzer]
+Gegeben sei ein Allgemeines Lineares Modell der Form
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N\left(0_n,\sigma^2V\right) \mbox{ mit }
+\end{equation}
+mit $\sigma^2 > 0$ und einer positiv-definiten Matrix $V \in \mathbb{R}^{n \times n}$.
+Dann heißt
+\begin{equation}
+\hat{\beta}_{\tiny \mbox{GLS}} := \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}y
+\end{equation}
+der \textit{Generalisierte-Kleinste-Quadrate-Schätzer von $\beta$} und 
+\begin{equation}
+\hat{\sigma}_{\tiny \mbox{GLS}}^2 := \frac{\left(y - X\hat{\beta}_{\tiny \mbox{GLS}}\right)^T V^{-1} \left(y - X\hat{\beta}_{\tiny \mbox{GLS}}\right)}{n-p}
+\end{equation}
+der \textit{Generalisierte-Kleinste-Quadrate-Schätzer von $\sigma^2$}.
+\end{definition}
+
+Bemerkungen
+
+* Es muss nicht notwendigerweise $V = I_n$ gelten.
+* Die Fehlerkomponenten in $\varepsilon$ können unterschiedliche Varianzen haben oder korreliert sein. 
+* Im Fall $V = I_n$ gilt weiterhin
+\begin{equation}
+\hat{\beta}_{\tiny \mbox{GLS}} 
+= \left(X^TI_n^{-1}X\right)^{-1}X^TI_n^{-1}y 
+= \left(X^TX\right)^{-1}X^Ty 
+=: \hat{\beta}_{\tiny \mbox{OLS}}.
+\end{equation}
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+\small 
+Beispiel 
+
+\footnotesize
+Gegeben sei das Fixed-Effects-Modell der Metaanalyse, 
+\begin{equation}
+y = 1_n\delta + \varepsilon \mbox{ mit } \varepsilon \sim N(0,V)
+\end{equation}
+wobei 
+
+* $y$ der Vektor von $n$ studienspezifischen Effektstärkeschätzern ist 
+* $1_n \in \mathbb{R}^{n\times 1}$ die Fixed-Effects-Designmatrix bezeichnet,
+* $\delta$ die wahre, aber unbekannte, Effektstärke bezeichnet und
+* $\varepsilon$ der Zufallsfehler ist, für den angenommen wird, dass 
+\begin{equation}
+V := \mbox{diag}(\sigma_1^2,...,\sigma_n^2)
+\end{equation}
+mit bekannten studienspezifischen Varianzschätzern $\sigma_i^2, i = 1,...,n$ ist.
+
+Offenbar gilt hier in Hinblick auf die Definition des GLS-Schätzers, dass 
+$\sigma^2 := 1$ und $V \neq I_n$ ist. Weiterhin gilt
+\begin{equation}
+V^{-1} = \mbox{diag}(w_1,...,w_n) \mbox{ mit } w_i := \frac{1}{\sigma_i^2} \mbox{ für } i = 1,...,n.
+\end{equation}
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+\small 
+Beispiel (fortgeführt)
+
+\footnotesize
+Damit ergibt sich aber
+\begin{align}
+\begin{split}
+\hat{\beta}_{\tiny \mbox{GLS}} 
+& = \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}y \\
+& = \left(1_n^T \mbox{diag}(w_1,...,w_n)1_n\right)^{-1}1_n^T\mbox{diag}(w_1,...,w_n)y \\
+& = \left(
+    \begin{pmatrix} 
+    1    & \cdots    & 1         
+    \end{pmatrix}
+    \begin{pmatrix} 
+    w_1     & \cdots    & 0         \\
+    \vdots  & \ddots    & \vdots    \\
+    0       & \cdots    & w_n         
+    \end{pmatrix}
+    \begin{pmatrix} 
+    1    \\ \vdots    \\ 1         
+    \end{pmatrix}
+    \right)^{-1}
+    \begin{pmatrix} 
+    1    & \cdots    & 1         
+    \end{pmatrix}
+    \begin{pmatrix} 
+    w_1     & \cdots    & 0         \\
+    \vdots  & \ddots    & \vdots    \\
+    0       & \cdots    & w_n         
+    \end{pmatrix}
+    \begin{pmatrix} 
+    y_1    \\ \vdots    \\ y_n         
+    \end{pmatrix}
+\\
+& = \left(
+    \begin{pmatrix} 
+    1    & \cdots    & 1         
+    \end{pmatrix}
+    \begin{pmatrix} 
+    w_1    \\ \vdots    \\ w_n         
+    \end{pmatrix}
+    \right)^{-1}
+    \begin{pmatrix} 
+    1    & \cdots    & 1         
+    \end{pmatrix}
+    \begin{pmatrix} 
+    w_1y_1    \\ \vdots    \\ w_ny_n         
+    \end{pmatrix}
+\\
+& = \left(
+    \sum_{i=1}^n w_i
+    \right)^{-1}
+    \sum_{i=1}^n w_iy_i
+\\
+& = \frac{1}{\sum_{i=1}^n w_i} \sum_{i=1}^n w_iy_i
+\\
+& = \hat{\delta}
+\end{split}
+\end{align}
+Wir sehen also, dass der Fixed-Effects-Modell Effektstärkeschätzer der GLS-Schätzer dieses Modells ist.
+
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+\footnotesize
+\begin{theorem}[GLS-Schätzer und OLS-Schätzer]
+\justifying
+\normalfont
+Gegeben sei ein \textit{untransformiertes ALM} der Form
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N\left(0_n,\sigma^2V\right) 
+\end{equation}
+mit $\sigma^2 > 0$ und einer positiv-definiten Matrix $V \in \mathbb{R}^{n \times n}$ und es sei
+$\hat{\beta}_{\tiny \mbox{GLS}}$ der Generalisierte-Kleinste-Quadrate-Schätzer von $\beta$. 
+Weiterhin sei $K \in \mathbb{R}^{n \times n}$ eine Matrix mit den Eigenschaften
+\begin{equation}
+KK^T = V \mbox{ und } \left(K^{-1}\right)^TK^{-1} = V^{-1}
+\end{equation}
+Schließlich sei 
+\begin{equation}
+y^* = X^*\beta + \varepsilon^* 
+\mbox{ mit }
+y^* := K^{-1}y,  X^* := K^{-1}X,  \varepsilon^* := K^{-1}\varepsilon 
+\end{equation}
+das \textit{transformierte ALM}. Dann gelten
+\begin{itemize}
+\item[(1)] Der GLS-Schätzer des untransformierten ALMs ist der OLS-Schätzer des transformierten ALMs.
+\item[(2)] Für den Zufallsfehler im transformierten ALM gilt $\varepsilon^* \sim N(0_n,\sigma^2I_n)$.
+\end{itemize}
+\end{theorem}
+
+Bemerkungen
+
+* Der zu schätzende wahre, aber unbekannte, Betaparameter ist in beiden ALMs identisch.
+* Im transformierten ALM ist der Fehlerkovarianzmatrixparameter sphärisch, also $T$-Statistiken $t$-verteilt.
+* Man nennt die Transformation des ALMs durch $K$ auch eine "Whitening-Transformation".
+* $K$ mit den geforderten Eigenschaften kann durch die *Cholesky-Zerlegung* von $V$ gewonnen werden.
+
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+\footnotesize
+\underline{Beweis}
+
+\noindent (1) Für den GLS-Schätzer im untransformierten Modell gilt
+\begin{align}
+\begin{split}
+\hat{\beta}_{{\tiny \mbox{GLS}}}
+& = \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}y      \\
+& = \left(X^T\left(K^{-1}\right)^TK^{-1}X\right)^{-1}X^T\left(K^{-1}\right)^TK^{-1}y         \\
+& = \left(\left(K^{-1}X\right)^T K^{-1}X\right)^{-1}\left(K^{-1}X\right)^TK^{-1}y           \\
+& = \left(X^{*^T}X^{*}\right)^{-1}X^{*^T}y^*.    \\
+\end{split}
+\end{align}
+Dies aber entspricht dem OLS-Schätzer im transformierten Modell.
+
+\noindent (2) Mit der Tatsache, dass für eine invertierbare Matrix $A$ immer gilt,
+dass $\left(A^{-1}\right)^T = \left(A^T\right)^{-1}$ und dem Theorem zur 
+linear-affinen Transformation multivariater Normalverteilungen ergibt sich
+\begin{align}
+\begin{split}
+\varepsilon^*
+& \sim N\left(K^{-1}0_n, K^{-1}(\sigma^2 V)K^{-1^{T}}\right)      \\
+& = N\left(0_n, \sigma^2K^{-1}VK^{-1^{T}}\right)      \\
+& = N\left(0_n, \sigma^2K^{-1}KK^TK^{-1^{T}}\right)      \\
+& = N\left(0_n, \sigma^2K^{-1}KK^TK^{T^{-1}}\right)      \\
+& = N\left(0_n, \sigma^2I_n\right).      \\
+\end{split}
+\end{align}
+$\hfill\Box$
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+
+\small 
+Anwendung zur Schätzung der Fixed-Effects in einem Linear Mixed Model
+
+\footnotesize
+Gegeben sei die marginale Datenverteilung eines Linear Mixed Models basierend auf einem Schätzer $\hat{\theta}$,
+\begin{equation}
+y \sim N(X_f\beta_f, V_{\hat{\theta}})
+\end{equation}
+Dann ist der GLS-Schätzer in diesem Modell
+\begin{equation}
+\hat{\beta}_f = \left(X_f^T V_{\hat{\theta}}^{-1}X_f\right)^{-1}X_f^T V_{\hat{\theta}}^{-1}y
+\end{equation}
+ein populärer Schätzer für $\beta_f$. 
+
+Für Eigenschaften von $\hat{\beta}_f$ siehe zum Beispiel @harville1977 und @searle1992.  
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+
+\footnotesize
+\begin{theorem}[Frequentistische Verteilung des GLS-Betaparameterschätzers]
+\normalfont
+\justifying
+Gegeben sei ein Allgemeines Lineares Modell der Form
+\begin{equation}
+y  = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2V)
+\end{equation}
+mit $\sigma^2 > 0$ und einer positiv-definiten Matrix $V \in \mathbb{R}^{n \times n}$. 
+Weiterhin sei 
+\begin{equation}
+\hat{\beta}_{\tiny \mbox{GLS}} := \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}y
+\end{equation}
+der Generalisierte-Kleinste-Quadrate-Schätzer von $\beta$. Dann gilt
+\begin{equation}
+\hat{\beta}_{\tiny \mbox{GLS}} \sim N\left(\beta, \sigma^2(X^TV^{-1}X)^{-1}\right).
+\end{equation}
+\end{theorem}
+
+Bemerkung
+
+* Das Theorem ist eine Generalisierung des entsprechenden Theorems für den OLS-Betaparameterschätzer.
+
+# Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+\footnotesize
+\underline{Beweis}
+
+Das Theorem folgt mit dem Theorem zur linear-affinen Transformation von multivariaten
+Normalverteilungen. Speziell gilt hier
+\begin{equation}
+\hat{\beta}_{\tiny \mbox{GLS}} \sim N\left(\mu,\Sigma \right)
+\end{equation}
+mit
+\begin{equation}
+\mu  = \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}X\beta = \beta
+\end{equation}
+und 
+\begin{align}
+\begin{split}
+\Sigma 
+& = \left(X^TV^{-1}X\right)^{-1}X^TV^{-1}\left(\sigma^2V\right)\left(\left(X^TV^{-1}X\right)^{-1}X^TV^{-1}\right) \\
+& = \sigma^2\left(X^TV^{-1}X\right)^{-1}X^TV^{-1}V\left(\left(X^TV^{-1}X\right)^{-1}X^TV^{-1}\right)^T \\
+& = \sigma^2\left(X^TV^{-1}X\right)^{-1}X^T\left(\left(X^TV^{-1}X\right)^{-1}X^TV^{-1}\right)^T \\
+& = \sigma^2\left(X^TV^{-1}X\right)^{-1}X^T\left(V^{-1}\right)^TX\left(\left(X^TV^{-1}X\right)^{-1}\right)^T \\
+& = \sigma^2\left(X^TV^{-1}X\right)^{-1}\left(X^T V^{-1}X\right)\left(X^TV^{-1}X\right)^{-1} \\
+& = \sigma^2\left(X^TV^{-1}X\right)^{-1} \\
+\end{split}
+\end{align}
+$\hfill\Box$
+
+
+
+ 
+
+
+# 
+\vfill
+\setstretch{3}
+\large
+Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+
+**Bedingter Erwartungswert der Random-Effects**
+
+Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+
+Selbstkontrollfragen
+\vfill
+
+# Bedingter Erwartungswert der Random Effects
+\footnotesize
+Das Linear Mixed Model impliziert wie gesehen eine gemeinsame Verteilung
+von Daten und unbeobachtbarem Random-Effects-Vektor $\beta_r$. Ein Standardvorgehen 
+im Bereich der Linear Mixed Model Schätzung ist es, $\beta_r$ durch den Erwartungswert 
+der auf den Daten bedingten Verteilung von $\beta_r$ zu schätzen, wobei unbekannte 
+Parameterwerte wiederrum durch ihre Schätzer ersetzt werden. 
+
+Dieses Vorgehen entspricht damit letztlich einer Bayesianischen Punktschätzung von $\beta_r$ mit
+marginaler Verteilung ("Prior distribution")
+\begin{equation}
+\beta_r \sim N\left(0_q, \hat{\sigma}_{\beta_r}^2I_q\right)
+\end{equation}
+und bedingter Verteilung ("Likelihood")
+\begin{equation}
+y\, |\, \beta_r \sim N\left(X_f\hat{\beta}_f + X_r\beta_r, \hat{\sigma}_{\varepsilon}^2I_n\right)
+\end{equation}
+
+Anwendung des Theorems zur bedingten Normalverteilungen auf die hier relevante gemeinsame Verteilung
+\begin{equation}
+\begin{pmatrix}
+\beta_r \\
+y 
+\end{pmatrix}
+\sim 
+N\left(
+\begin{pmatrix}
+0_q \\
+X_f\hat{\beta}_f 
+\end{pmatrix},
+\begin{pmatrix}
+\hat{\sigma}^2_{\beta_r}I_q &  \hat{\sigma}^2_{\beta_r}X_r^T                                \\
+\hat{\sigma}^2_{\beta_r}X_r &  V_{\hat{\theta}}
+\end{pmatrix}
+\right)
+\end{equation}
+ergibt dann als Schätzer für den Random-Effects Parameter den Erwartungswertparameter der Verteilung $\beta_r \, |\, y$  
+\begin{equation}
+\hat{\beta}_r = \mu_{\beta_r|y} = \hat{\sigma}^2_{\beta_r}X_r^TV_{\hat{\theta}}^{-1}(y - X_f\hat{\beta}_f).
+\end{equation}
+
+
+# 
+\vfill
+\setstretch{3}
+\large
+Generalisierte Kleinste-Quadrate Schätzung der Fixed-Effects
+
+Bedingter Erwartungswert der Random-Effects
+
+**Varianzkomponentenschätzung mit Restricted Maximum-Likelihood**
+
+Selbstkontrollfragen
+\vfill
+
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+
+\small
+Zentrale Referenzen
+
+\footnotesize
+
+@patterson1971
+
+* Fehlerkontrastmotivation der Restricted Maximum-Likelihood Zielfunktion
+
+@harville1977
+
+* Übersicht zu Restricted Maximum-Likelihood Methoden und numerischer Auswertung
+
+@searle1992
+
+* Ausführliche Übersicht zum Problem der Varianzkomponentenschätzung
+
+@bates2004
+
+* Integration von Restricted Maximum-Likelihood in Penalized Least Squares
+
+@starke2017
+
+* Expectation-Maximization und Restricted Maximum-Likelihood aus der Perspektive von Variational Inference
+
+
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+
+\small
+Motivation
+
+
+\footnotesize
+Die Maximum-Likelihood Methode kann auf verzerrte Varianzschätzer führen
+
+Zum Beispiel ist der Maximum-Likelihood-Schätzer des Varianzparameters des Normalverteilungsmodells
+\begin{equation}
+\hat{\sigma}^2_{\tiny \mbox{ML}} 
+= \frac{1}{n}\sum_{i=1}^n \left(y_i - \hat{\mu}_{\tiny \mbox{ML}} \right)^2 \mbox{ mit } \hat{\mu}_{\tiny \mbox{ML}}  := \frac{1}{n}\sum_{i=1}^n y_i =: \bar{y}.
+\end{equation}
+verzerrt und nur asymptotisch erwartungstreu. Speziell gilt mit der Erwartungstreue der Stichprobenvarianz
+\begin{equation}
+\mathbb{E}\left(\hat{\sigma}^2\right)
+= \mathbb{E}\left(\frac{1}{n-1}\sum_{i=1}^n \left(y_i - \bar{y} \right)^2\right)
+= \frac{1}{n-1}\mathbb{E}\left(\sum_{i=1}^n \left(y_i - \bar{y} \right)^2\right)
+= \sigma^2,
+\end{equation}
+dass
+\begin{equation}
+\mathbb{E}\left(\hat{\sigma}^2_{\tiny \mbox{ML}} \right)
+= \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n \left(y_i - \hat{\mu}_{\tiny \mbox{ML}} \right)^2 \right)
+= \frac{1}{n}\mathbb{E}\left(\sum_{i=1}^n \left(y_i - \bar{y}_n \right)^2 \right)
+= \frac{n-1}{n}\sigma^2  
+\end{equation}
+Da $(n-1)/n <  1$ insbesondere bei kleinem $n$, unterschätzt der Maximum-Likelihood-Schätzer $\sigma^2$.
+
+@patterson1971 schreiben "The difference between the two methods [ML und ReML] 
+is analogous to the well-known difference between two methods of estimating the 
+variance $\sigma^2$ of a normal distribution [wie oben] (...)." und @harville1977 
+merkt an "One criticism of the ML approach to the estimation of [$\sigma^2$] is 
+that the ML estimator (...) takes no account of the loss in degrees of freedom 
+that results from estimat­ing [$\mu$] (...) These "deficiencies" are eliminated 
+in the restricted maximum likelihood (REML) approach (...)"
+
+$\Rightarrow$ ReML für Varianzparameterschätzung scheint eine gute Idee zu sein.
+
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+
+\small
+Maximum-Likelihood und Restricted Maximum-Likelihood  
+
+
+\footnotesize
+Betrachtet man die marginale Datenverteilung des Linear Mixed Models
+\begin{equation}
+y \sim N(X_f\beta_f, V_\theta)
+\end{equation}
+so ergibt sich für die Log-Likelihood Funktion der Varianzkomponenten $\theta$ für einen Schätzer $\hat{\beta}_f$ von $\beta_f$
+\begin{align}
+\begin{split}
+\ell(\theta) 
+& = \ln \left((2\pi)^{-\frac{n}{2}}|V_\theta|^{-\frac{1}{2}}\exp\left(-\frac{1}{2}(y-X_f\hat{\beta}_f)^T V_\theta^{-1} (y-X_f\hat{\beta}_f)\right)\right)   \\
+& = -\frac{n}{2}\ln 2\pi - \frac{1}{2} \ln |V_\theta| -\frac{1}{2}(y-X_f\hat{\beta}_f)^T V_\theta^{-1} (y-X_f\hat{\beta}_f) 
+\end{split}
+\end{align}
+Die (numerische) Maximierung dieser Funktion hinsichtlich $\theta$ führt zu einem Maximum-Likelihood-Schätzer von $\theta$,
+\begin{equation}
+\hat{\theta}_{\tiny \mbox{ML}} := \mbox{argmax}_{\theta} \left( - \frac{1}{2} \ln |V_\theta| -\frac{1}{2}(y-X_f\hat{\beta}_f)^T V_\theta^{-1} (y-X_f\hat{\beta}_f) \right).
+\end{equation}
+Ein zentrales Resultat ist, dass ein Restricted Maximum-Likelihood-Schätzer von $\theta$  gegeben ist durch
+\begin{equation}
+\hat{\theta}_{\tiny \mbox{ReML}} 
+:= \mbox{argmax}_{\theta} \left( - \frac{1}{2} \ln |V_\theta|  -\frac{1}{2} \ln |X_f^T  V_\theta^{-1} X_f|  -\frac{1}{2}(y-X_f\hat{\beta}_f)^T V_\theta^{-1} (y-X_f\hat{\beta}_f) \right).
+\end{equation}
+Die Zielfunktion der ReML Methode und der ML Methode unterscheiden sich also nur hinsichtlich eines Terms.
+
+Im Folgenden wollen wir die Motivation für die Einführung des Terms $-\frac{1}{2} \ln|X_f^T  V_\theta^{-1} X_f|$ (sehr) grob skizzieren.
+
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+\small
+Motivation der Restricted Maximum-Likelihood Funktion durch Fehlerkontraste
+
+\footnotesize
+Grundidee des von @patterson1971 formulierten Ansatzes ist es, den Effekt von $\beta_f$ aus $y$ herauszurechnen
+und dann die Likelihood-Funktion der so transformierten Daten hinsichtlich von $\theta$ zu maximieren.
+
+Genauer ist das Ziel den Datenvektor durch eine lineare Transformation mit einer
+Matrix $M \in \mathbb{R}^{m\times n}$ in einen anderen Vektor $z$ zu transformieren, 
+dessen Erwartungswert für jeden möglichen Wert von $\beta_f$ der Nullvektor ist, also
+\begin{equation}
+z = My \mbox{ mit }  \mathbb{E}(z) = 0_m \mbox{ für alle } \beta_f \in \mathbb{R}^p 
+\end{equation}
+und dann die Log-Likelihood-Funktion von $z$ zu maximieren.
+
+Eine solche Matrix $M$ muss insbesondere die Bedingung
+\begin{equation}
+MX_f = 0_m
+\end{equation}
+erfüllen, denn dann gilt
+\begin{equation}
+\mathbb{E}(z) =  \mathbb{E}(My) =  \mathbb{E}(MX_f\beta_f) =  \mathbb{E}(0_{mp}\beta_f) = 0_m \mbox{ für alle } \beta_f \in \mathbb{R}^p. 
+\end{equation}
+Eine prinzipielle Möglichkeit für die Wahl von $M$ ist die $n \times n$ Matrix
+\begin{equation}
+M = I_n - P_n \mbox{ mit } P_n := X_f(X_f^TX_f)^{-1}X_f^T \in \mathbb{R}^{n \times n}
+\end{equation}
+mit der sogenannten *Projektionsmatrix* $P$.
+
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+\small
+Motivation der Restricted Maximum-Likelihood Funktion durch Fehlerkontraste
+
+\footnotesize
+Es gilt dann nämlich
+\begin{equation}
+MX_f = (I_n - P_n)X_f =  X_f - P_nX_f =  X_f - X_f(X_f^TX_f)^{-1}X_f^TX_f = X_f - X_f = 0_{nn}.
+\end{equation}
+Nutzt man also diese Matrix $M$ zur Transformation der Daten, ergibt sich
+\begin{equation}
+z = My = (I_n - P_n)y =  y - X_f(X_f^TX_f)^{-1}X_f^Ty = y - X_f\hat{\beta}_f = \hat{\varepsilon}
+\end{equation}
+und wir sehen, dass eine solche Matrix $M$ die Daten auf die Residuals, also die
+Differenz zwischen Daten und Modellvorhersage nach Schätzung der Fixed-Effects projiziert.
+Die Matrix $P_n$ nennt man dementsprechend auch *Residual-forming matrix* oder *Projektionsmatrix*
+und die Matrix $M$ *Fehlerkontrastmatrix*. Der Vektor $z$ sind dann die Residuals
+und ReML wird auch häufig als *Residual Maximum-Likelihood* bezeichnet. Eine Zeile 
+einer solchen Matrix $M$ nennt man auch *Fehlerkontrast*, die Matrix $M$ daher 
+eine *Fehlerkontrastmatrix*. 
+
+Prinzipiell würde man nun die Log-Likelihood Funktion
+von $z \in \mathbb{R}^n$, das aufgrund des Theorems zur linear-affinen Transformation
+multivariater Normalverteilungen die Verteilung
+\begin{equation}
+z \sim N(MX\beta_f, MV_\theta M^T)
+\end{equation}
+hat, also
+\begin{equation}
+\ell(\theta) = \frac{n}{2}\ln 2\pi - \frac{1}{2} \ln |MV_\theta M^T| - \frac{1}{2}(My)^T(MV_\theta M^T)^{-1}My.
+\end{equation}
+ 
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+\small
+Motivation der Restricted Maximum-Likelihood Funktion durch Fehlerkontraste
+
+\footnotesize
+Leider funktioniert die vorgeschlagene Wahl von $M$ in dieser Form nicht, "da $\mbox{rg}(M) = m < n$".
+
+Man wählt daher die ersten $n - p$ Zeilen von $M$ und erhält eine Matrix $K \in \mathbb{R}^{m \times n}$ mit vollem Spaltenrang $m = n - p$.
+
+Dabei gilt weiterhin $\mathbb{E}(z) = \mathbb{E}(Ky) = 0_m$ und man möchte 
+\begin{equation}
+\ell(\theta) = \frac{m}{2}\ln 2\pi - \frac{1}{2} \ln |KV_\theta K^T| - \frac{1}{2}(Ky)^T(KV_\theta K^T)^{-1}Ky
+\end{equation}
+maximieren. 
+
+@searle1992 beweisen nun, dass 
+\begin{equation}
+\ln |KV_\theta K^T| = \ln |V_\theta | + \ln |X_fV_\theta^{-1}X_f|
+\end{equation}
+und 
+\begin{equation}
+(Ky)^T(KV_\theta K^T)^{-1}Ky = y^T P_n y = (y-X_f\hat{\beta}_f)^T V_\theta^{-1} (y-X_f\hat{\beta}_f)
+\end{equation}
+Dies ist intuitiv zumindest unter dem Aspekt, dass $K$ Teil von $P_n$ ist, einsichtig. Damit ergibt
+sich für die Log-Likelihood-Funktion von $z = Ky$ aber, dass 
+\begin{equation}
+\ell(\theta) = \frac{m}{2}\ln 2\pi - \frac{1}{2}\ln |V_\theta | - \frac{1}{2} \ln |X_fV_\theta^{-1}X_f| - \frac{1}{2}(y-X_f\hat{\beta}_f)^T V_\theta^{-1} (y-X_f\hat{\beta}_f)
+\end{equation}
+also identisch mit der ReML Zielfunktion ist.
+
+
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+\setstretch{2}
+
+\small
+Die hier gegebene Darstellung lässt allerdings viele Fragen offen 
+\footnotesize
+
+* Warum sind ReML Schätzer der Varianzkomponenten unverzerrt (vgl. @foulley1993)?
+* Was sind weitere generelle Eigenschaften der ReML Schätzer (vgl. @harville1977)
+* Was genau ist das Problem bei Residualprojektion mit $M = (I_n - P_n)$?
+* Wie und wann funktionieren die Beweise von @searle1992?
+
+\small
+Darüber hinaus ergeben sich zumindest folgende Fragen
+\footnotesize
+
+* Was verhält sich die Fehlerkontrastmotivation zur Expectation-Maximization Motivation (vgl. @laird1982)?
+* Wie verhält sich die Fehlerkontrastmotivation zur bedingten Verteilungsmotivation (vgl. @verbyla1990)?
+* Welche Algorithmen eignen sich zur Maximierung der ReML Zielfunktion (vgl. @lindstrom1990)?
+* Wie verhalten sich ReML und Penalized-Least-Squares (vgl. @bates2004)?
+
+
+# Varianzkomponentenschätzung mit Restricted Maximum-Likelihood
+
+\small 
+Anwendung zur Schätzung der Fixed-Effects in einem Linear Mixed Model
+
+\footnotesize
+Gegeben sei die marginale Datenverteilung eines Linear Mixed Models basierend auf einem Schätzer $\hat{\beta}_f$, 
+\begin{equation}
+y \sim N(X_f\hat{\beta}_f, V_\theta)
+\end{equation}
+Dann ist der ReML Schätzer in diesem Modell,
+\begin{equation}
+\hat{\theta}_{\tiny \mbox{ReML}} 
+:= \mbox{argmax}_{\theta} \left( - \frac{1}{2} \ln |V_\theta|  -\frac{1}{2} \ln |X_f^T  V_\theta^{-1} X_f|  -\frac{1}{2}(y-X_f\hat{\beta}_f)^T V_\theta^{-1} (y-X_f\hat{\beta}_f) \right),
+\end{equation}
+ein populärer Schätzer für $\theta$. 
+
+# Zusammenfassung
+
+\setstretch{2}
+Algorithmus zur Schätzung der Parameter eines Linear Mixed Models 
+
+\noindent (0) Initialisierung
+
+* Wahl eines geeigneten Startwerts $\hat{\beta}_f^{(0)}$ 
+
+\noindent (1) Für $k = 1,..., K$
+
+* ReML-Schätzung $\hat{\theta}^{(k)}$ basierend auf $\hat{\beta}_f^{(k-1)}$
+* GLS-Schätzung $\hat{\beta}^{(k)}_f$ basierend auf $\hat{\theta}^{(k)}$ 
+
+\noindent (2) Schätzung von $\hat{\beta}_r$ basierend auf $\hat{\theta}^{(K)}$ und $\hat{\theta}^{(K)}$
+
+
+# Referenzen {.allowframebreaks}
+
+\footnotesize
+
+
+# Implementation
+
+```{r}
+rllh = function(theta, y, X_f, X_r, beta_f_hat, Sigma_eps) {
+
+    # This function implements a restricted log likelihood function for the 
+    # metaanalytical random effects modcel
+    #
+    # Inputs
+    #   llm             : list with fields
+    #       .y          : data vector 
+    #       .X_f        : fixed-effects design matrix
+    #       .beta_hat_f : fixed-effects estimate
+    # -------------------------------------------------------------------------
+    
+    V       = theta*X_r %*% t(X_r) + Sigma_eps
+    Vi      = solve(V)
+    T1      = -(1/2)*log(det(V)) 
+    T2      = -(1/2)*log(det(t(X_f) %*% Vi %*% X_f))
+    T3      = -(1/2) * t(y - X_f%*%beta_f_hat) %*% Vi %*% (y - X_f%*%beta_f_hat)
+    rllh    = T1 + T2 + T3
+
+    
+    # Example: quadratic function of elements in theta
+    return(-rllh)
+}
+
+reml  = function(theta, lmm) {
+
+    y           = lmm$y
+    X_f         = lmm$X_f  
+    X_r         = lmm$X_r
+    beta_f_hat  = lmm$beta_f_hat
+    Sigma_eps   = lmm$Sigma_eps
+
+    
+    # Call the objective function with theta, a, and c
+    return(rllh(theta, y, X_f, X_r, beta_f_hat, Sigma_eps))
+}
+
+# Modellspezifikation
+library(MASS)                                           # multivariate Normalverteilung
+n           = 100                                       # Gesamtanzahl Datenpunkte
+p           = 1                                         # Anzahl Fixed-Effects Parameter
+q           = n                                         # Anzahl Random-Effects Parameter    
+X_f         = matrix(rep(1,n), ncol = 1)                # Fixed-Effects-Design Matrix 
+X_r         = diag(n)                                   # Random-Effects-Design Matrix
+beta_f      = 1                                         # wahre, aber unbekannten, Effektstärke
+sigsqr      = rep(1,n)                                  # wahre, bekannte, Studienfehlervarianzen                  
+tausqr      = .5                                        # wahre, aber unbekannte, Studienheterogenität 
+
+# Datenrealisierung
+beta_r      = mvrnorm(1,rep(0,n), tausqr*diag(n))       # Random effects Sampling
+eps         = mvrnorm(1,rep(0,n), sigsqr*diag(n))       # Fehlerterm Sampling
+y           = X_f %*% beta_f + X_r %*% beta_r + eps     # Datenrealisierung
+
+# Modellparameterspezifikation
+lmm         = list(                                     # model specification
+              y             = y, 
+              X_f           = X_f, 
+              X_r           = X_r, 
+              beta_f_hat    = beta_f,  
+              Sigma_eps     = diag(sigsqr))
+
+# Initial guess for theta (vector)
+theta_hat_0  =  1
+
+# Perform the optimization
+rma         = optim(par = theta_hat_0, fn = reml,  lmm = lmm)     
+print(rma) 
+```

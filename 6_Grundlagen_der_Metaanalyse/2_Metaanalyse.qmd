@@ -1,0 +1,761 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: "2_Header.tex"
+bibliography: 2_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/eva_2_otto.png")
+```
+\vspace{2mm}
+
+\huge
+Evaluation und Metaanalyse
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2024
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(2) Metaanalyse}
+\vfill
+
+# 
+\setstretch{3}
+\large
+Motivation
+
+Randomisierte kontrollierte Studien
+
+Effektstärke 
+
+Selbstkontrollfragen
+
+# 
+\setstretch{3}
+\large
+**Motivation**
+
+Randomisierte kontrollierte Studien
+
+Effektstärke 
+
+Selbstkontrollfragen
+
+# Motivation
+\setstretch{1.6}
+\textcolor{darkblue}{Definitionsversuch}
+
+Metaanalyse 
+
+... ist eine Gruppe quantitiver Methoden zur Kombination von Evidenz 
+
+... ist die Analyse der Resultate statistischer Analysen 
+
+... ist überwiegend Frequentistisch geprägt 
+
+\vspace{2mm}
+
+\setstretch{1.4}
+\small
+
+@glass1976 "Primary, Secondary, and Meta-Analysis of Research"
+
+"My major interest currently is in what we have come to call — not for want of 
+a less pretentious name — the **meta-analysis of research**. The term is a bit grand, 
+but it is precise, and apt, and in the spirit of "meta-mathematics," "meta-psychology," 
+and "meta-evaluation." Meta-anal­ysis refers to the analysis of analy­ses. I use it
+to refer to the statistical analysis of a large collection of anal­ysis results 
+from individual studies for the purpose of integrating the findings. It connotes 
+a rigorous al­ternative to the casual, narrative discussions of research studies
+which typify our attempts to make sense of the rapidly expanding research liter­ature."
+
+\footnotesize
+\flushright
+@glass1976
+
+# Motivation
+\textcolor{darkblue}{Ethischer Imperativ}
+\small
+\setstretch{2.2}
+
+* Die Öffentlichkeit investiert substantielle Mittel in die (außer)universitäre Forschung.
+* Neben wenigen Großforschungsprojekten gibt es viele kleine Forschungsprojekte.
+* Die Kleinforschungsprojekte sind oft nicht zentralisiert und interessens- und zufallsgeleitet.
+* Empirische Wissenschaft basiert auf der Replikation oder Nichtreplikation von Erkenntnissen.
+* Die Analyse von Kleinforschungsergebnissen hat den potentiellen Mehrwert von Großforschung. 
+* Es ist intuitiv sinnvoll und plausibel nach der gesammelten Evidenz für etwas zu fragen.
+* Metaanalysen wird das Potential zugeschrieben, aussagekräftiger als Einzelstudien zu sein.
+* Entscheidungsrelevante Aussagen werden gerne aufgrund großer Datenmengen getroffen.
+* Forschung hat die Pflicht, integrierte Evidenz dem Wohle der Gesellschaft bereitzustellen.
+
+\flushright
+\footnotesize
+@borenstein2009, @harrer2021
+
+# Motivation
+\setstretch{1.8}
+\small
+\textcolor{darkblue}{Narrative Reviews}
+
+* Standard der Akkumulation wissenschaftlicher Evidenz bis etwas 1990
+* Subjektive und intransparente Auswahl von Studien durch Expert:innen
+* Nicht-explizite und qualitative Gewichtung von Studien 
+* Relativ gut möglich bei eher geringer Anzahl von zu inkludierenden Studien
+
+\textcolor{darkblue}{Systematische Reviews und Metaanalysen}
+
+* Standard der Akkumulation wissenschaftlicher Evidenz seit etwa 2000
+* Transparente Auswahl von Studien anhand festgelegter Kriterien
+* Explizite, quantitative Wichtung von Studien mithilfe metaanalytischer Statistik
+* Hilfreich bei einer großen Anzahl von zu inkludierenden Studien durch Automatisierung
+
+\flushright
+\footnotesize
+@borenstein2009, @harrer2021
+
+
+
+# Motivation
+\vspace{2mm}
+\setstretch{1}
+\textcolor{darkblue}{Metaanalysen in der Psychotherapieforschung}
+
+\small
+@eysenck1952
+
+\footnotesize
+"A survey was made of reports on the im­provement of neurotic patients after 
+psycho­therapy, and the results compared with the best available estimates of 
+recovery without benefit of such therapy. **The figures fail to support the hypothesis 
+that psychotherapy facilitates re­covery from neurotic disorder**. In view of the 
+many difficulties attending such actuarial com­parisons, no further conclusions 
+could be de­rived from the data whose shortcomings high­light the necessity of 
+properly planned and executed experimental studies into this im­portant field."
+
+\small
+@smith1977
+
+\footnotesize
+"Results of nearly 400 controlled evaluations of psychotherapy and counseling 
+were coded and integrated statistically. **The findings provide convincing evidence 
+of the efficacy of psychotherapy**. On the average, the typical therapy client is 
+better off than 75% of untreated individuals. Few important differences in 
+effectiveness could be established among many quite different types of psychotherapy. 
+More generally, virtually no difference in effectiveness was observed between 
+the class of all behavioral therapies (systematic desensitization, behavior 
+modification) and the nonbehavioral therapies (Rogerian, psychodynamic, rational-emotive, 
+transactional analysis, etc.)."
+
+
+\small
+@cuijpers2019
+\footnotesize
+
+"In the 1950s, Eysenck suggested that psychotherapies may not be effective at all. 
+Twenty-five years later, the first meta-analysis of randomised controlled trials 
+showed that the effects of psychotherapies were considerable and that Eysenck was wrong. 
+However, since that time methods have become available to assess biases in meta-analyses.
+We examined the influence of these biases on the effects of psychotherapies for 
+adult depression, including risk of bias, publication bias and the exclusion of 
+waiting list control groups. The unadjusted effect size of psychotherapies compared 
+with control groups was g = 0.70 (limited to Western countries: g = 0.63) (...). 
+Only 23% of the studies could be considered as a low risk of bias. **When adjusting 
+for several sources of bias, the effect size across all types of therapies dropped 
+to g = 0.31.**"
+
+\flushright
+\footnotesize
+@borenstein2009, @harrer2021
+
+
+# Motivation
+\vspace{2mm}
+\setstretch{1.6}
+\textcolor{darkblue}{Metaanalysen in der Medizin}
+\small
+
+* Inhaltliche Beiträge, z.B. @peto1980
+* Methodische Beiträge, z.B. @dersimonian1986
+* Richtlinien, z.B. @moher2009
+
+[\textcolor{darkblue}{Cochrane Collaboration}](https://www.cochrane.org/)
+
+\small
+* Stiftung zur Förderung der evidenzbasierten metaanalytischen Medizin seit 1993
+* [\textcolor{darkblue}{www.cochrane.org}](https://www.cochrane.org/)
+
+
+\normalsize
+[\textcolor{darkblue}{Campbell Collaboration}](https://www.campbellcollaboration.org/)
+
+\small
+* Stiftung zur Förderung der evidenzbasierten metaanalytischen Sozialwissenschaft seit 2000
+* [\textcolor{darkblue}{www.campbellcollaboration.org}](https://www.campbellcollaboration.org/)
+
+
+
+# Motivation
+\textcolor{darkblue}{Typische Charakteristika des Metaanalysen-Genres}
+\setstretch{2.5}
+
+\small
+* Spezifikation von Suchtermen für Studiendatenbanken wie [\textcolor{darkblue}{Web Of Science}](https://bit.ly/445JN1V)
+* Spezifikation des Studienscreenings
+* Extraktion von Effektstärken (Cohen's $d$)
+* Korrektur von Effektstärken (Hedges' $g$)
+* Angabe eines "mittleren" Hedges' $g$
+* Mehrebenenanalyse mithilfe eines Linear Mixed Models
+* Versuche der Quantifizierung und Korrektur von Biases 
+
+\flushright
+\footnotesize
+@borenstein2009, @harrer2021
+
+# Motivation
+\vspace{1mm}
+\textcolor{darkblue}{Typische Probleme des Metaanalysen-Genres}
+\small
+
+\textcolor{darkblue}{Apples and Oranges}
+
+* Metaanalysen integrieren Studien, die sich in experimentellen Details unterscheiden
+* Die zulässige experimentelle Varianz hängt von der metaanalytischen Fragestellung ab
+
+\textcolor{darkblue}{Garbage In, Garbage Out}
+
+* Die Qualität eines metaanalytischen Ergebnisses hängt von der Qualität der Primärstudien ab 
+* Bei geringer Primärstudienqualität kann eine Metaanalyse zumindest diese Erkenntnis bringen
+
+
+\textcolor{darkblue}{The Filedrawer Problem}
+
+* Nicht alle themenrelevante Forschung wird tatsächlich auch publiziert
+* Insbesondere sind meist hochwertig angefertigte Nullresultatstudien unterrepräsentiert
+
+\textcolor{darkblue}{Researcher Agendas}
+
+* Jeder Studienreport, auch eine Metaanalyse, ist letztlich ein Kommunikationsakt
+* Die Kommunikationssender  sind bewusst oder unbewusst nicht frei von eigenen Motiven
+
+\vspace{1mm}
+\flushright
+\footnotesize
+@borenstein2009, @harrer2021
+
+
+
+# 
+\setstretch{3}
+\large
+Motivation
+
+**Randomisierte kontrollierte Studien**
+
+Effektstärke 
+
+Selbstkontrollfragen
+
+
+# Randomisierte kontrollierte Studien
+\textcolor{darkblue}{Randomisierte kontrollierte Studie}
+\vspace{3mm}
+
+$\Rightarrow$ Randomized controlled trial (RCT) 
+$\Rightarrow$ Goldstandard der Interventionsforschung
+\vspace{3mm}
+
+Randomisierte Studie
+
+* Zuordnung zu einer Behandlungsgruppe nach dem Zufallsprinzip
+* Gewährleistung der gleichmäßigen Verteilung von Einflüssen auf alle Gruppen 
+
+Kontrollierte Studie
+
+* Ergebnisse in der Studiengruppe werden mit denen einer Kontrollgruppe verglichen
+* Kontrollgruppe z.B. keine Intervention, Placebo, beste verfügbare Behandlung 
+
+# Randomisierte kontrollierte Studien
+```{r, echo = FALSE, out.width = "90%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/eva_2_rct.pdf")
+```
+@schulz2010
+
+
+# Randomisierte kontrollierte Studien
+\setstretch{1.6}
+\textcolor{darkblue}{Allgemeine Systematik von Studiendesigns}
+\small
+
+\textcolor{darkblue}{Randomisierte kontrollierte Studie (Experiment)}
+
+* Die experimentellen Einheiten werden den Studienbedingungen zufällig zugeordnet
+* Beispiel: Online Psychotherapie vs. Face-To-Face Psychotherapie bei Depression
+
+\vspace{1mm}
+\textcolor{darkblue}{Nicht-randomisierte kontrollierte Studie (Quasiexperiment)}
+
+* Untersuchung natürlich bzw. bereits bestehender Gruppen
+* Beispiel: Online Psychotherapie bei Depression vs. Schizophrenie
+
+\vspace{1mm}
+\textcolor{darkblue}{Analyse eines bestehenden Datensatzes (Korrelationstudie)}
+
+* Nicht-randomisierte, nicht kontrollierte Studie
+* Beobachtungsstudie ohne Intervention
+* Beispiel: Analyse von Paneldaten
+
+# Randomisierte kontrollierte Studien
+\setstretch{3}
+\textcolor{darkblue}{Charakteristika randomisierter kontrollierter Studien}
+
+* Vorhandensein einer kausaltheoretischen Hypothese vor Studienbeginn
+* Gute Manipulierbarkeit von unabhängigen Variablen
+* Explizite Operationalisierung der untersuchten Konstrukte
+* Kontrollierbarkeit möglichst vieler Studienbedingungen
+* Typisch für bereits gut erschlossene Gegenstandsbereiche
+
+
+# Randomisierte kontrollierte Studien
+\setstretch{1.5}
+
+\textcolor{darkblue}{Designschemata}
+
+* R: Randomisierung
+* O: Observation (Test, Messung)
+* X: Exposition experimenteller Bedingung
+* Experimentelle Bedingungen von oben nach unten
+* Zeitliche Abfolge von links nach rechts
+
+\vspace{1mm}
+\textcolor{darkblue}{Beispiel}
+
+\center
+\begin{tabular}{|ccc|}
+\hline
+$\quad$R$\quad$  & $\quad$X$\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$  & $\quad$ $\quad$ & $\quad$O$\quad$
+\\\hline
+\end{tabular}
+\vspace{2mm}
+
+* \small Bedingungszuweisung erfolgt durch Randomisierung
+* Nur eine Gruppe erhält das Treatment
+* Beide Gruppen absolvieren die Messung
+
+# Randomisierte kontrollierte Studien
+\setstretch{1.8}
+\textcolor{darkblue}{Randomisierte einfaktorielle Studiendesigns}
+
+* Gesamtgruppe wird zufällig auf experimentelle Bedingungen aufgeteilt
+* Eine unabhängige Variable mit zwei oder mehr Leveln
+* Populäres Designs in der klinischen Forschung
+* Varianten
+\begin{itemize}
+\item[o] No-Treatment Kontrollgruppe
+\item[o] Placebo Kontrollgruppe
+\item[o] Vergleich zweier Treatments
+\item[o] Zwei-Treatment Vergleich mit Placebo-Kontrollgruppe
+\item[o] Pretest-Posttest-Designs
+\end{itemize}
+
+# Randomisierte kontrollierte Studien
+
+\setstretch{2}
+\textcolor{darkblue}{No-Treatment Kontrollgruppe}
+\vspace{4mm}
+
+\center
+\begin{tabular}{|ccc|}
+\hline
+$\quad$R$\quad$  & $\quad$X$\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$  & $\quad$ $\quad$ & $\quad$O$\quad$
+\\\hline
+\end{tabular}
+\vspace{2mm}
+
+\normalsize
+* Vergleich eines Treatments zu keinem Treatment
+
+# Randomisierte kontrollierte Studien
+
+\setstretch{2}
+\textcolor{darkblue}{Placebo Kontrollgruppe}
+\vspace{6mm}
+
+\large
+\center
+\begin{tabular}{|clc|}
+\hline
+$\quad$R$\quad$  & $\quad$X     $\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$  & $\quad$X$_P$ $\quad$ & $\quad$O$\quad$
+\\\hline
+\end{tabular}
+\vspace{6mm}
+
+\normalsize
+* Placebo = Scheintreatment
+* Vergleich eines Treatments zu keinem Treatment
+* Kontrolle studieninduzierter Effekte (Placeboeffekte)
+
+
+# Randomisierte kontrollierte Studien
+\setstretch{2}
+\textcolor{darkblue}{Vergleich zweier Treatments}
+\vspace{6mm}
+
+\large
+\center
+\begin{tabular}{|clc|}
+\hline
+$\quad$R$\quad$  & $\quad$X$_A$ $\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$  & $\quad$X$_B$ $\quad$ & $\quad$O$\quad$
+\\\hline
+\end{tabular}
+\vspace{6mm}
+
+\normalsize
+* Vergleich Standardtreatment A und neues Treatment B
+* Keine Aussage über Effektivität des Standardtreatments
+
+
+# Randomisierte kontrollierte Studien
+\textcolor{darkblue}{Zwei-Treatment Vergleich mit Placebo-Kontrollgruppe}
+\vspace{4mm}
+
+\center
+\begin{tabular}{|clc|}
+\hline
+$\quad$R$\quad$  & $\quad$X$_A$ $\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$  & $\quad$X$_B$ $\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$  & $\quad$X$_P$ $\quad$ & $\quad$O$\quad$
+\\\hline
+\end{tabular}
+\vspace{2mm}
+
+\normalsize
+* Vergleich Standardtreatment A und neues Treatment B
+* Aussage über Effektivität des Standardtreatments möglich
+* Placebotreatment kann ethisch nicht vertretbar sein
+
+\small
+\flushleft
+Beispiel: Einfluss von Psychotherapie auf Depressionssymptomatik
+
+* Face-To-Face Psychotherapie (A)
+* Online Psychotherapie (B)
+* Seelsorge (P)
+
+\normalsize
+\textcolor{darkblue}{$\quad\quad\rightarrow$ Keine Aussagen über Pre-Treatment Gruppenunterschiede möglich}
+
+\textcolor{darkblue}{$\quad\quad\rightarrow$ Keine Aussage über Dropout Charakteristika möglich}
+
+# Randomisierte kontrollierte Studien
+\setstretch{2}
+\textcolor{darkblue}{Pretest-Posttest-Designs}
+\vspace{4mm}
+
+\center
+\begin{tabular}{|cclc|}
+\hline
+$\quad$R$\quad$ & $\quad$O$\quad$ & $\quad$X$_A$ $\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$ & $\quad$O$\quad$ & $\quad$X$_B$ $\quad$ & $\quad$O$\quad$
+\\
+$\quad$R$\quad$ & $\quad$O$\quad$ & $\quad$      $\quad$ & $\quad$O$\quad$
+\\\hline
+\end{tabular}
+\vspace{6mm}
+
+\normalsize
+* Untersuchung von Pretest-Posttest-Differenzen
+* Fokus auf Treatment-induzierte Verbesserungen/Verschlechterungen
+* Subtraktion von Pre-Test-Gruppenunterschieden möglich
+* Untersuchung von Dropout Charakteristika möglich
+* Mögliches Auftreten von Testeffekten (Lernen, Gewöhnung, Ermüdung)
+* Höherer Zeit- und Kostenaufwand
+
+
+# Randomisierte kontrollierte Studien
+\textcolor{darkblue}{Treatment-und-Kontrollgruppen-Designs in der Psychotherapieforschung}
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("2_Abbildungen/eva_2_zwei_gruppen_design.pdf")
+```
+\center
+Untersuchung von Pretest-Posttest-Differenzen
+
+# Randomisierte kontrollierte Studien
+\vspace{2mm}
+\textcolor{darkblue}{Treatment-und-Kontrollgruppen-Designs in der Psychotherapieforschung}
+\vspace{1mm}
+```{r, eval = F, echo = F}
+# Initialisierung
+set.seed(1)                                                                     # Random number generator seed
+
+# Simulationsparameter
+n_c    = 2                                                                      # Anzahl Gruppen
+n_i    = 15                                                                     # Anzahl Proband:innen pro Gruppe
+n      = n_c*n_i                                                                # Gesamtanzahl Datenpunte
+
+# Simulationsparameter
+mu_pre = c(30, 30)                                                              # \mu PreBDI Treatment und Kontrolle
+mu_pos = c(27, 30)                                                              # \mu PosBDI Treatment und Kontrolle
+sigsqr = 10                                                                     # \sigma^2
+
+# Datensimulation
+D$Group      = c(rep("T",n_i), rep("C", n_i))                                   # Bedingung
+D$PreBDI     = c(round(rnorm(n_i, mu_pre[1], sqrt(sigsqr))),                    # PreBDI
+                 round(rnorm(n_i, mu_pre[2], sqrt(sigsqr))))
+D$PosBDI     = c(round(rnorm(n_i, mu_pos[1], sqrt(sigsqr))),                    # PosBDI
+                 round(rnorm(n_i, mu_pos[2], sqrt(sigsqr))))
+D$dBDI       =  D$PreBDI - D$PosBDI                                             # -(PosBDI - PreBDI) = PreBDI - PosBDI
+write.csv(D, file = "./2_Daten/Zwei_Gruppen_Design.csv", row.names = F)         # Speichern 
+```
+
+\small
+Beispieldatensatz (`T` = Treatment, `C` = Control, $n_t = 15$ Patient:innen, $n_c = 15$ Patient:innen)
+\setstretch{.9}
+\tiny
+\vspace{1mm}
+```{r, echo = F}
+D           = read.csv("./2_Daten/Zwei_Gruppen_Design.csv")
+print(D)
+```
+
+\normalsize
+Untersuchung der Pretest-Posttest-BDI-Differenzen (dBDI) 
+
+# 
+\setstretch{3}
+\large
+Motivation
+
+Randomisierte kontrollierte Studien
+
+**Effektstärke** 
+
+Selbstkontrollfragen
+
+
+# Effektstärke
+
+\setstretch{2}
+\textcolor{darkblue}{Primary outcome measure}
+
+* Primäres Ergebnismaß
+* Ein zumeist quantitatives Maß, das den Effekt einer Intervention messen soll
+* Festlegung im Rahmen von RCTs üblicherweise vor Studienbeginn 
+* Bei RCTs oft Grundlage von Poweranalysen
+
+Beispiele bei RCTs im Bereich Psychotherapieforschung zur Depression
+
+* BDI-II Reduktion
+
+Primäres Ergebnismaß für Metaanalysen $\Rightarrow$ \textcolor{darkblue}{Cohen's $d$} 
+
+# Effektstärke
+\textcolor{darkblue}{Cohen's $d$ in den Worten von Jacob Cohen}
+
+\tiny
+"Thus, we see that the absence of the phenomenon under study is expressed by a 
+null hypothesis which specifies an exact value for a population parameter, one 
+which is appropriate to the way the phenomenon under study is manifested. 
+Without intending any necessary implication of causality, **it is convenient to 
+use the phrase "effect size" to mean "the degree to which the phenomenon is 
+present in the population," or "the degree to which the null hypothesis is false."**
+
+Whatever the manner of representation of a phenomenon in a particular research 
+in the present treatment, the null hypothesis always means that the effect size 
+is zero. By the above route, it can now readily be made clear that when the 
+null hypothesis is false, it is false to some specific degree, i.e., the effect size 
+(ES) is some specific nonzero value in the population. The larger this value, 
+the greater the degree to which the phenomenon under study is manifested. 
+Thus, in terms of the previous illustrations: 
+
+1. If the percentage of males in the population of psychiatric patients bearing a 
+diagnosis of paranoid schizophrenia is 52%. and the effect is measured as 
+a departure from the hypothesized 50%. the ES is 2%; if it is 60%, the ES is 10%, a larger ES. 
+2. If children of multiple births have a population mean IQ of 96, the ES is 4 IQ units 
+(or- 4, depending on directionality of significance criterion); if it is 92, 
+the ES is 8 (or - 8) IQ units, i.e., a larger ES."
+3. If the population product moment r between neurophysiological and questionnaire 
+measures of introversion-extroversion is .30, the ES is .30; if  r is .60, so is t
+he ES, a larger value and a larger departure from the null hypothesis, which here 
+is r = 0. 
+4. If the population of consumers preferring brand A has a median annual income 
+$700 higher than that of brand B, the ES is $700. If the population median 
+difference and hence the ES is $1000, the effect of income on brand preference 
+would be larger. 
+
+Thus, whether measured in one unit or another, whether expressed  as a difference 
+between two population parameters or the departure of a population parameter 
+from a constant or in any other suitable way, the ES can itself be treated as 
+a parameter which takes the value zero when the null hypothesis is true and some 
+other specific nonzero value when the null hypothesis is false, and in this way 
+the ES serves as an index of degree of departure from the null hypothesis."
+
+\flushright
+\footnotesize
+@cohen1988 Statistical power analysis for the behavioral sciences
+
+# Effektstärke
+\textcolor{darkblue}{Cohen's $d$ in den Worten von Jacob Cohen}
+\vspace{2mm}
+
+```{r, echo = FALSE, out.width = "65%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/eva_2_cohens_d_1.pdf")
+```
+
+\flushright
+\footnotesize
+@cohen1988 Statistical power analysis for the behavioral sciences
+
+# Randomisierte kontrollierte Studien
+\textcolor{darkblue}{Cohen's $d$ in den Worten der metaanalytischen Community}
+\vspace{2mm}
+
+```{r, echo = FALSE, out.width = "55%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/eva_2_cohens_d_2.pdf")
+```
+\vspace{-15mm}
+```{r, echo = FALSE, out.width = "57%", fig.align = "center"}
+knitr::include_graphics("2_Abbildungen/eva_2_cohens_d_3.pdf")
+```
+
+\flushright
+\footnotesize
+@borenstein2009 Introduction to Meta-Analysis
+
+
+# Grundlagen
+\footnotesize
+\vspace{3mm}
+\setstretch{1.2}
+\begin{definition}[Cohen's $d$ im Treatment-und-Kontrollgruppen-Design]
+\justifying
+Gegeben seien ein Treatment-und-Kontrollgruppen-Design mit einer Treatmentgruppe $t$ 
+und einer Kontrollgruppe $c$ und es seien 
+\begin{equation}
+y_{t1}, ..., y_{tn_t} \mbox{ und } y_{c1}, ..., y_{cn_c}
+\end{equation}
+die skalaren reellen Werte des primären Ergebnismaßes jeder Gruppe. Es seien weiterhin
+\begin{equation}
+\bar{y}_t := \frac{1}{n_t}\sum_{j=1}^{n_t} y_{tj}, \quad
+s_t^2     := \frac{1}{n_t - 1}\sum_{j=1}^{n_t} \left(y_{tj} - \bar{y}_t\right)^2 \mbox{ und }  
+\bar{y}_c := \frac{1}{n_c}\sum_{j=1}^{n_c} y_{cj}, \quad
+s_c^2     := \frac{1}{n_c - 1}\sum_{j=1}^{n_c} \left(y_{cj} - \bar{y}_c\right)^2 
+\end{equation}
+die Mittelwerte und die empirischen Varianzen beider Gruppen. Schließlich 
+sei
+\begin{equation}
+s := \sqrt{\frac{(n_t-1)s^2_t + (n_c-1)s^2_c}{n_t + n_c -2}}
+\end{equation}
+die \textit{gepoolte empirische Standardabweichung} der beiden Gruppen. Dann ist 
+\textit{Cohen's $d$ im Treatment-und-Kontrollgruppen-Design} definiert als
+\begin{equation}
+d := \frac{\bar{y}_t - \bar{y}_c}{s}.
+\end{equation}
+\end{definition}
+
+# Grundlagen
+\footnotesize
+\setstretch{1.6}
+Bemerkungen
+
+* $\bar{y}_t - \bar{y}_c$ ist die *empirische Effektstärke*.
+* $d$ ist die mithilfe der gepoolten empirischen Standardabweichung *standardisierte empirische Effekstärke*.
+* $d$ misst den Unterschied der Mittelwerte in Einheiten der gepoolten Standardabweichung, z.B.
+\begin{equation}
+\bar{y}_t - \bar{y}_c = 0   \Leftrightarrow d = 0 \quad
+\bar{y}_t - \bar{y}_c = s   \Leftrightarrow d = 1 \quad
+\bar{y}_t - \bar{y}_c = 2s  \Leftrightarrow d = 2.
+\end{equation}
+* Für $\mu_0 = 0$ gilt im Sinne der Zweistichproben-T-Teststatistik, dass
+\begin{equation}
+T = \sqrt{\frac{n_tn_c}{n_t+n_c}}d \Leftrightarrow d = \sqrt{\frac{n_t+n_c}{n_tn_c}} T.
+\end{equation}
+* Ersetzt man in der Definition von Cohen's $d$ die gepoolte empirische Standardabweichung $s$ durch die
+  empirische Standardabweichung der Kontrollgruppe, so erhält man das nach @glass1976 benannte
+\begin{equation}
+\Delta := \frac{\bar{y}_t - \bar{y}_c}{\sqrt{s_c^2}}.
+\end{equation}
+*  Glass $\Delta$ wird heutzutage  allerdings eher selten als Effektstärkenmaß im metanalytischen Kontext betrachtet.
+
+# Grundlagen
+Bestimmung von Cohen's $d$ für den Beispieldatensatz
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+D       = read.csv("./2_Daten/Zwei_Gruppen_Design.csv")             # Einlesen des Datensatzes
+y_t     = D$dBDI[D$Group == "T"]                                    # Daten der Treatmentgruppe
+y_c     = D$dBDI[D$Group == "C"]                                    # Daten der Kontrollgruppe
+n_t     = length(y_t)                                               # Umfang Treatmentgruppe
+n_c     = length(y_c)                                               # Umfang Kontrollgruppe
+bar_y_t = mean(y_t)                                                 # Mittelwert der Treatmentgruppe
+bar_y_c = mean(y_c)                                                 # Mittelwert der Kontrollgruppe
+s2_t    = var(y_t)                                                  # empirische Varianz der Treatmentgruppe
+s2_c    = var(y_c)                                                  # empirische Varianz der Kontrollgruppe
+s       = sqrt(((n_t-1)*s2_t + (n_c-1)*s2_c)/(n_t + n_c -2))        # gepoolte Standardabweichung
+es      = bar_y_t - bar_y_c                                         # empirische Effektstärke   
+d       = (bar_y_t - bar_y_c)/s                                     # Cohen's d     
+```
+
+```{r, echo = F}
+cat(
+"Mittelwert Treatmentgruppe             :", round(bar_y_t, digits = 2),
+"\nMittelwert Kontrollgruppe              :", round(bar_y_c, digits = 2),
+"\nGepoolte empirische Standardabweichung :", round(s, digits = 2),
+"\nEmpirische Effektstärke                :", round(es, digits = 2), 
+"\nCohen's d                              :", round(d, digits = 2))                                 
+```
+
+
+
+# 
+\setstretch{3}
+\large
+Motivation
+
+Randomisierte kontrollierte Studien
+
+Effektstärke 
+
+Selbstkontrollfragen
+
+
+# Selbstkontrollfragen
+\footnotesize
+\setstretch{2}
+1. Erläutern Sie, warum Metaanalysen aus ethischer Sicht sinnvoll sind.
+1. Erläutern Sie den Unterschied zwischen Narrativen Reviews und Systematischen Reviews/Metaanalysen.
+1. Nennen und erläutern Sie vier typische Probleme des Metaanalyse-Genres.
+1. Erläutern Sie den Begriff der randomisierten kontrollierten Studie.
+1. Erläutern Sie den Begriff des randomisierten kontrollierten Pre-Posttest Design anhand eines Beispiels.
+1. Erläutern Sie den Begriff des Primary Outcome Measures.
+
+# Referenzen
+\setstretch{1.2}
+\footnotesize

@@ -1,0 +1,3207 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: "4_Header.tex"
+bibliography: 4_Referenzen.bib
+---
+
+```{r}
+source("4_estimate.R")
+```
+
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_otto.png")
+```
+
+\huge
+Psychotherapieforschung
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2025
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(4) Multizentrendesigns}
+\vfill
+
+
+# 
+\setstretch{2.7}
+\large
+\vfill
+Motivation
+
+Multizentren-Parallelgruppendesigns
+
+Multizentren-Regressionsdesigns
+
+Ein Multizentren-Simpson's Paradox-Beispiel
+
+Selbstkontrollfragen
+\vfill
+
+
+# 
+\setstretch{2.7}
+\large
+\vfill
+**Motivation**
+
+Multizentren-Parallelgruppendesigns
+
+Multizentren-Regressionsdesigns
+
+Ein Multizentren-Simpson's Paradox-Beispiel
+
+Selbstkontrollfragen
+\vfill
+
+
+# Motivation
+\setstretch{1.6}
+
+Multizentrenstudie
+\small
+
+Definition
+
+* Zentrum = Klinik, Hochschulambulanz, Institut, Praxis  
+* Durchführung einer Studie an zwei oder mehr Zentren nach einem einheitlichen Protokoll 
+
+Motivation 
+
+* Rekrutierung höherer Proband:innenzahlen in kürzerer Zeit als bei einem Zentrum
+* Höhere Übertragbarkeit auf verschiedene regionale Patient:innengruppen
+
+Herausforderungen
+
+* Höhere "Ähnlichkeit" von Daten innerhalb eines Zentrums als zwischen Zentren 
+* Variabilität in der Umsetzung des Studienprotokolls zwischen Zentren
+* Variabilität in den Komorbiditäten der Patient:innen zwischen Zentren
+
+Zu den Praktikalitäten einer Multizentrenstudie, siehe z.B. @friedman2015, Kapitel 21
+
+# Motivation
+\small
+Anwendungsbeispiel 
+
+\footnotesize 
+@li2025 Supported Mindfulness-Based Self-Help Intervention as an Adjunctive Treatment for
+Rapid Symptom Change in Emotional Disorders: A Practice-Oriented Multicenter Randomized
+Controlled Trial 
+
+\vspace{-1mm}
+Research question
+\vspace{-1mm}
+
+* Rapid symptom relief is crucial for individuals with emotional disorders. 
+* Does a mindfulness-based self-help (MBSH) intervention provide rapid improvement?
+
+\vspace{-1mm}
+Methods
+\vspace{-1mm}
+
+* A randomized controlled trial was conducted on a sample of n = 302 patients from four centers. 
+* Participants were randomly assigned to either MBSH+TAU (n = 152) or TAU-only (n = 150). 
+* Assessments were conducted at baseline, week 3, week 5, after intervention and at 3-month follow-up. 
+* Primary outcomes included self-reported and clinician-reported anxiety and depression symptoms. 
+
+\vspace{-1mm}
+Results 
+\vspace{-1mm}
+
+* The MBSH+TAU group achieved significantly greater improvements in all primary 
+  outcome measures as compared with TAU-only immediately after intervention (Cohen’s d = 0.19–0.51). 
+
+\vspace{-1mm}
+Conclusion 
+\vspace{-1mm}
+
+* MBSH offers a scalable and effective adjunctive treatment option for patients with emotional disorders.
+
+# Motivation
+\small
+Die Datenanalyse von Multizentrenstudien ist ein aktives Forschungsfeld
+
+\footnotesize
+@localio2001
+\vspace{-1mm}
+
+* An overview of dataanalytical adjustments for center in multicenter studies
+* Disadvantages e.g. underpowered study designs, incorrect p-values
+
+\vspace{-1mm}
+@tangri2010
+\vspace{-1mm}
+
+* @localio2001 and others have advocated controlling for center effects
+*  Only $\approx 20$ \% of reviewed multicenter studies adjust for center effects
+
+\vspace{-1mm}
+@brown2015
+\vspace{-1mm}
+
+* Center effect control by means of fixed center effects or fixed center-treatment interactions
+* Center effect control by means of random center effects or random center-treatment interactions
+
+\vspace{-1mm}
+@kahan2012
+\vspace{-1mm}
+
+* Comparison of fixed vs. random center effects (not center-treatment interactions)
+* Simulation of a wide variety of scenarios, random effects control generally superior 
+
+\vspace{-1mm}
+@edgar2021
+\vspace{-1mm}
+
+* Reanalysis of the CRASH-22 multicenter study using random center effects models
+* Increase in power and decrease in bias in mean and standard error estimates
+
+
+# 
+\setstretch{2.7}
+\large
+\vfill
+Motivation
+
+**Multizentren-Parallelgruppendesigns**
+
+Multizentren-Regressionsdesigns
+
+Ein Multizentren-Simpson's Paradox-Beispiel
+
+Selbstkontrollfragen
+\vfill
+
+
+# Multizentren-Parallelgruppendesigns
+Überblick
+\small
+\setstretch{1.6}
+
+Treatmentgruppe und Kontrollgruppe in jedem Zentrum
+
+\noindent (1) Random-Center-Effect-Modell
+
+* Der Treatmenteffekt wird als Fixed-Effect modelliert
+* Der Zentreneffekt wird als additiver Random-Effect modelliert
+* $\Rightarrow$ Treatment- und Kontrollgruppe können einen Zentren-spezifischen Intercept haben
+* $\Rightarrow$ Der Treatmenteffekt wird in jedem Zentrum als identisch angenommen
+
+\noindent (2) Random-Center-by-Treatment-Interaction-Modell
+
+* Der Treatmenteffekt wird als Fixed-Effect modelliert
+* Der Zentreneffekt wird als additiver Random-Effect modelliert
+* Der Zentreneffekt wird zusätzlich als zentren-spezifischer Treatmenteffekt modelliert
+* $\Rightarrow$ Treatment- und Kontrollgruppe haben einen Zentren-spezifischen Intercept
+* $\Rightarrow$ Treatment- und Kontrollgruppe haben einen Zentren-spezifischen Unterschied
+
+# Multizentren-Parallelgruppendesigns
+\setstretch{1.5}
+\noindent (1) Random-Center-Effect-Modell
+
+\footnotesize
+Strukturelle Form
+
+Für Zentren $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+\begin{equation}
+y_{ij} = \beta_0 + \beta_1x_{ij} + b_{0i} + \eps_{ij}
+\end{equation}
+mit
+
+* $x_{ij} := 0$ für Proband:in $j$ in Zentrum $i$ in Kontrollgruppe
+* $x_{ij} := 1$ für Proband:in $j$ in Zentrum $i$ in Treatmentgruppe
+* $\eps_{ij} \sim N(0,\sigma_\eps^2)$    
+* $b_{0i} \sim N(0,\sigma_b^2)$ 
+
+Parameterbedeutungen
+\begin{tabular}{ll}
+$\beta_0$           & Erwartungswert der Kontrollgruppe über Zentren                        \\
+$\beta_1$           & Ewartungswertunterschied zwischen Kontrollgruppe und Treatmentgruppe  \\
+$b_{0i}$            & Erwartungswertunterschiede der Kontrollgruppen über Zentren           \\
+$\sigma_\eps^2$     & Varianz zwischen Proband:innen                                        \\
+$\sigma_b^2$        & Varianz zwischen Zentren
+\end{tabular}
+
+# Multizentren-Parallelgruppendesigns
+\noindent (1) Random-Center-Effect-Modell
+
+\small
+Designmatrixform  
+\vspace{2mm}
+
+\footnotesize
+Beispielszenario
+
+$k = 3$ Zentren, $n_{1} = n_{2} = n_{3} = 4$ Proband:innen pro Zentrum
+
+$m = \frac{1}{2}n_{i} = 2$ Proband:innen pro Zentrum für $i = 1,2,3$
+\begin{align}
+\begin{split}
+y  = X\beta + Zb + \eps 
+\Leftrightarrow
+\begin{pmatrix}
+y_{11}  \\
+y_{12}  \\
+y_{13}  \\ 
+y_{14}  \\
+y_{21}  \\
+y_{22}  \\
+y_{23}  \\
+y_{24}  \\
+y_{31}  \\
+y_{32}  \\
+y_{33}  \\
+y_{34}  \\
+\end{pmatrix}
+ =
+\begin{pmatrix}
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_0 \\
+\beta_1
+\end{pmatrix} +
+\begin{pmatrix}
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+0 & 0 & 1 \\
+0 & 0 & 1 \\
+0 & 0 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+b_{01}  \\
+b_{02}  \\
+b_{03}  \\
+\end{pmatrix} + 
+\begin{pmatrix}
+\eps_{11}  \\
+\eps_{12}  \\
+\eps_{13}  \\ 
+\eps_{14}  \\
+\eps_{21}  \\
+\eps_{22}  \\
+\eps_{23}  \\
+\eps_{24}  \\
+\eps_{31}  \\
+\eps_{32}  \\
+\eps_{33}  \\
+\eps_{34}  \\
+\end{pmatrix}
+\end{split}
+\end{align}  
+mit
+\begin{equation}
+\eps \sim N\left(0_{12}, \sigma_\eps^2 I_{12}\right) 
+\mbox{ und } 
+b    \sim N\left(0_3 , \sigma_b^2 I_3      \right) 
+\end{equation}
+
+# Multizentren-Parallelgruppendesigns
+\noindent (1) Random-Center-Effect-Modell
+
+\small
+Datengeneration für ein Szenario mit $k = 4, m = 5$ und $n_i = 10$ für $i = 1,...,k$  
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(MASS)                                                               # Normalverteilung
+set.seed(0)                                                                 # Zufallszahlengeneratorzustand
+k       = 4                                                                 # Anzahl Zentren 
+m       = 5                                                                 # Patient:innen pro Zentrum und Bedingung
+n_i     = 2*m                                                               # Anzahl Patient:inne pro Zentrum
+n       = k*2*m                                                             # Gesamtanzahl an Patient:innen
+X_i     = kronecker(matrix(c(1,1,0,1), ncol = 2), rep(1,m))                 # Treatment-Control Designmatrix
+X       = kronecker(rep(1,k), X_i)                                          # Fixed-Effects-Designmatrix
+Z       = kronecker(diag(k), rep(1,n_i))                                    # Random-Effects-Designmatrix    
+beta    = matrix(c(5,2), nrow = 2)                                          # Fixed-Effects-Parameter
+b       = matrix(c(0,2,-2,0), nrow = k)                                     # Random-Effects-Parameter (E(b) = 0!)
+s_eps   = 1                                                                 # Varianzkomponente
+eps     = mvrnorm(1, rep(0,n), s_eps*diag(n))                               # Fehlervektor
+y       = X %*% beta + Z %*% b + eps                                        # Datengeneration   
+TRM     = kronecker(rep(1,k), kronecker(c(1:2), rep(1,m)))                  # Treatmentfaktor    
+CTR     = kronecker(c(1:k), rep(1,n_i))                                     # Centerfaktor
+D       = data.frame(TRM = as.factor(TRM), CTR = as.factor(CTR), OUT = y)   # Dataframe
+write.csv(D, "./4_Daten/mz-parallelgruppendesign-1.csv", row.names = FALSE) # Speichern
+```
+
+# Multizentren-Parallelgruppendesigns
+\noindent (1) Random-Center-Effect-Modell
+
+\small
+Deskriptivstatistik für ein Szenario mit $k = 4, m = 5$ und $n_i = 10$ für $i = 1,...,k$  
+\vspace{2mm}
+
+```{r, eval = F}
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_parallelgruppendesign_1.pdf",
+width       = 7,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Datenreformatierung für barplot
+D           = read.csv("./4_Daten/mz-parallelgruppendesign-1.csv", head = T)     
+DS          = D %>% group_by(TRM, CTR) %>%  summarise(av = mean(OUT, na.rm = TRUE),  
+                                              sd = sd(OUT, na.rm = TRUE),    
+                                             .groups = "drop")               
+av_m        = with(DS, tapply(av, list(TRM, CTR), identity))
+sd_m        = with(DS, tapply(sd, list(TRM, CTR), identity))
+
+# Barplot mit Fehlerbalken
+x           = barplot(
+av_m, 
+beside      = TRUE, 
+col         = c("lightgray", "darkgray"),
+ylim        = c(0, 12),
+xlim        = c(0, 13),
+xlab        = "Center",
+ylab        = "Primary Outcome")
+arrows(
+x0          = x, 
+y0          = av_m,
+x1          = x, 
+y1          = av_m + sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+arrows(
+x0          = x,
+y0          = av_m,
+x1          = x, 
+y1          = av_m - sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+abline(h    = 0)
+legend(
+"topright", 
+legend      = c("Kontrollgruppe", "Treatmentgruppe"),
+fill        = c("lightgray", "darkgray"),
+bty         = "n")
+dev.off()
+```
+
+```{r, echo = FALSE, out.width="80%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_parallelgruppendesign_1.pdf")
+```
+
+# Multizentren-Parallelgruppendesigns
+\noindent (1) Random-Center-Effect-Modell
+
+\small
+Parameterschätzung für ein Szenario mit $k = 4, m = 5$ und $n_i = 10$ für $i = 1,...,k$  
+\vspace{3mm}
+
+\tiny
+```{r, echo = T}
+library(nlme)                                                                   # nlme R Paket
+D           = read.csv("./4_Daten/mz-parallelgruppendesign-1.csv", head = T)    # Dataframe
+D$TRM       = as.factor(D$TRM)                                                  # R Faktor Kodierung
+D$CTR       = as.factor(D$CTR)                                                  # R Faktor Kodierung    
+M           = lme(OUT ~ TRM, data = D, random = ~ 1 | CTR)                      # LMM Schätzung
+X           = model.matrix(M,D)                                                 # Fixed-Effects-Designmatrix
+Z           = model.matrix(~ M$groups[[1]] - 1)                                 # Random-Effects-Designmatrix
+beta_hat    = M$coefficients$fixed                                              # Fixed-Effects-Parameterschätzer
+b_hat       = M$coefficients$random$CTR                                         # Random-Effects-Parameterschätzer
+s_eps_hat   = M$sigma**2                                                        # Varianzkomponentenschätzer
+s_b_hat     = diag(getVarCov(M))                                                # Varianzkomponentenschätzer
+```
+
+```{r, echo = F}
+cat("beta_hat         :", round(beta_hat,2), 
+    "\nb_hat            :", round(b_hat,2),
+    "\nsigsqr_b_hat     :", round(s_b_hat,2),
+    "\nsigsqr_eps_hat   :", round(s_eps_hat,2)) 
+print(intervals(M, level = 0.95, which = "fixed"), digits = 3)                  # nlme Konfidenzintervalle
+```
+
+
+# Multizentren-Parallelgruppendesigns
+\noindent (2) Random-Center-by-Treatment-Interaction-Modell
+
+\footnotesize
+Strukturelle Form
+
+Für Zentren $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+\begin{equation}
+y_{ij} = \beta_0 + \beta_1x_{ij} + b_{0i} + b_{1i}x_{ij} +  \eps_{ij}
+\end{equation}
+mit
+
+* $x_{ij} := 0$ für Proband:in $j$ in Zentrum $i$ in Kontrollgruppe
+* $x_{ij} := 1$ für Proband:in $j$ in Zentrum $i$ in Treatmentgruppe
+* $\eps_{ij} \sim N(0,\sigma_\eps^2)$ 
+* $b_{0i} \sim N(0,\sigma_b^2)$
+
+Parameterbedeutungen
+\center
+\begin{tabular}{ll}
+$\beta_0$           & Mittlerer Erwartungswert der Kontrollgruppe über Zentren                                          \\
+$\beta_1$           & Ewartungswertunterschied zwischen Kontrollgruppe und Treatmentgruppe                              \\
+$b_{0i}$            & Erwartungswertunterschied der Kontrollgruppen über Zentren                                        \\
+$b_{1i}$            & Erwartungswertunterschiedunterschied zwischen Kontrollgruppe und Treatmentgruppe zwischen Zentren \\
+$\sigma_\eps^2$     & Varianz zwischen Proband:innen                                                                    \\
+$\sigma_b^2$        & Varianz zwischen Zentren                                                                          \\
+\end{tabular}
+
+# Multizentren-Parallelgruppendesigns
+\vspace{1mm}
+\noindent (2) Random-Center-by-Treatment-Interaction-Modell
+
+\small
+Designmatrixform 
+\vspace{1mm}
+
+\footnotesize
+Beispielszenario
+
+* $k = 3$ Zentren, $n_{1} = n_{2} = n_{3} = 4$ Proband:innen pro Zentrum
+* $m = \frac{1}{2}n_i = 2$ Proband:innen pro Zentrum für $i = 1,2,3$
+\begin{align}
+\begin{split}
+y & = X\beta + Zb + \eps \\
+\begin{pmatrix}
+y_{11}  \\
+y_{12}  \\
+y_{13}  \\ 
+y_{14}  \\
+y_{21}  \\
+y_{22}  \\
+y_{23}  \\
+y_{24}  \\
+y_{31}  \\
+y_{32}  \\
+y_{33}  \\
+y_{34}  \\
+\end{pmatrix}
+& =
+\begin{pmatrix}
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_0 \\
+\beta_1
+\end{pmatrix} +
+\begin{pmatrix}
+1 & 0 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 1 & 1 \\
+0 & 0 & 0 & 0 & 1 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+b_{01}  \\
+b_{11}  \\
+b_{02}  \\
+b_{12}  \\
+b_{03}  \\
+b_{13}  \\
+\end{pmatrix} + 
+\begin{pmatrix}
+\eps_{11}  \\
+\eps_{12}  \\
+\eps_{13}  \\ 
+\eps_{14}  \\
+\eps_{21}  \\
+\eps_{22}  \\
+\eps_{23}  \\
+\eps_{24}  \\
+\eps_{31}  \\
+\eps_{32}  \\
+\eps_{33}  \\
+\eps_{34}  \\
+\end{pmatrix}
+\end{split}
+\end{align}  
+mit
+\begin{equation}
+\eps \sim N\left(0_{12}, \sigma_\eps^2 I_{12}\right) 
+\mbox{ und } 
+b    \sim N\left(0_3 , \Sigma_b     \right) 
+\end{equation}
+
+# Multizentren-Parallelgruppendesigns
+\noindent (2) Random-Center-by-Treatment-Interaction-Modell
+
+\small
+Datengeneration für ein Szenario mit $k = 4, m = 5$ und $n_i = 10$ für $i = 1,...,k$
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(MASS)                                                               # multivariate Normalverteilung
+set.seed(0)                                                                 # Zufallszahlengeneratorzustand
+k       = 4                                                                 # Anzahl Zentren 
+m       = 5                                                                 # Patient:innen pro Zentrum und Bedingung
+n_i     = 2*m                                                               # Anzahl Patient:innen pro Zentrum
+n       = k*n_i                                                             # Gesamtanzahl an Patient:innen
+X_i     = kronecker(matrix(c(1,1,0,1), ncol = 2), rep(1,m))                 # Treatment-Control Designmatrix
+X       = kronecker(rep(1,k), X_i)                                          # Fixed-Effects-Designmatrix
+Z       = kronecker(diag(k), X_i)                                           # Random-Effects-Designmatrix    
+beta    = matrix(c(5,1), nrow = 2)                                          # Fixed-Effects-Parameter
+b       = matrix(c(0,2,-1,0,0,-2,1,0), nrow = 2*k)                          # Random-Effects-Parameter (E(b) = 0!)
+s_eps   = 1                                                                 # Varianzkomponente
+eps     = mvrnorm(1, rep(0,n), s_eps*diag(n))                               # Fehlervektor
+y       = X %*% beta + Z %*% b + eps                                        # Datengeneration   
+TRM     = kronecker(rep(1,k), kronecker(c(1:2), rep(1,m)))                  # Treatmentfaktor    
+CTR     = kronecker(c(1:k), rep(1,2*m))                                     # Zentrumfaktor
+D       = data.frame(TRM = as.factor(TRM), CTR = as.factor(CTR), OUT = y)   # Dataframe
+write.csv(D, "./4_Daten/mz-parallelgruppendesign-2.csv", row.names = FALSE) # Speichern
+```
+
+
+# Multizentren-Parallelgruppendesigns
+\noindent (2) Random-Center-by-Treatment-Interaction-Modell
+
+\small
+Deskriptivstatistik für ein Szenario mit $k = 4, m = 5$ und $n_i = 10$ für $i = 1,...,k$
+\vspace{2mm}
+
+```{r, eval = F}
+
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_parallelgruppendesign_2.pdf",
+width       = 7,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Datenreformatierung für barplot
+D           = read.csv("./4_Daten/mz-parallelgruppendesign-2.csv", head = T)     
+DS          = D %>% group_by(TRM, CTR) %>%  summarise(av = mean(OUT, na.rm = TRUE),  
+                                              sd = sd(OUT, na.rm = TRUE),    
+                                             .groups = "drop")               
+av_m        = with(DS, tapply(av, list(TRM, CTR), identity))
+sd_m        = with(DS, tapply(sd, list(TRM, CTR), identity))
+
+# Barplot mit Fehlerbalken
+x           = barplot(
+av_m, 
+beside      = TRUE, 
+col         = c("lightgray", "darkgray"),
+ylim        = c(0, 11),
+xlim        = c(0, 13),
+xlab        = "Center",
+ylab        = "Primary Outcome")
+arrows(
+x0          = x, 
+y0          = av_m,
+x1          = x, 
+y1          = av_m + sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+arrows(
+x0          = x,
+y0          = av_m,
+x1          = x, 
+y1          = av_m - sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+abline(h    = 0)
+legend(
+"topright", 
+legend      = c("Kontrollgruppe", "Treatmentgruppe"),
+fill        = c("lightgray", "darkgray"),
+bty         = "n")
+dev.off()
+```
+
+```{r, echo = FALSE, out.width="80%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_parallelgruppendesign_2.pdf")
+```
+
+
+# Multizentren-Parallelgruppendesigns
+\noindent (2) Random-Center-by-Treatment-Interaction-Modell
+
+\small
+Parameterschätzung für ein Szenario mit $k = 4, m = 5$ und $n_i = 10$ für $i = 1,...,k$
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(nlme)                                                                   # nlme R Paket
+ctrl        = lmeControl(opt = "optim", maxIter = 200)                          # Anzahl an ReML Iterationen
+D           = read.csv("./4_Daten/mz-parallelgruppendesign-2.csv", head = T)    # Dataframe
+D$TRM       = as.factor(D$TRM)                                                  # R Faktor Kodierung
+D$CTR       = as.factor(D$CTR)                                                  # R Faktor Kodierung    
+M           = lme(OUT ~ TRM, data = D, random = ~ TRM | CTR, control = ctrl)    # LMM Schätzung
+X           = model.matrix(M,D)                                                 # Fixed-Effects-Designmatrix
+Z           = model.matrix(~ M$groups[[1]] - 1)                                 # Random-Effects-Designmatrix
+beta_hat    = M$coefficients$fixed                                              # Fixed-Effects-Parameterschätzer
+b_hat       = M$coefficients$random$CTR                                         # Random-Effects-Parameterschätzer
+s_eps_hat   = M$sigma**2                                                        # Varianzkomponentenschätzer
+s_b_hat     = diag(getVarCov(M))                                                # Varianzkomponentenschätzer
+```
+
+```{r, echo = F}
+cat("beta_hat         :", round(beta_hat,2), 
+    "\nb_hat            :", round(b_hat[c(1,5,2,6,3,7,4,8)],2),
+    "\nsigsqr_b_hat     :", round(s_b_hat,2),
+    "\nsigsqr_eps_hat   :", round(s_eps_hat,2)) 
+print(intervals(M, level = 0.95, which = "fixed"), digits = 3)      # nlme Konfidenzintervalle
+```
+
+# Multizentren-Parallelgruppendesigns
+\footnotesize
+\begin{theorem}[Populationsparameterdarstellung eines Linear Mixed Models]
+\justifying
+\normalfont
+Gegeben sei ein Linear Mixed Model der Form
+\begin{equation}\label{eq:lmm-gen}
+y = X\beta + Zb + \eps.
+\end{equation}
+Wenn es eine Matrix $A\in \mathbb{R}^{q \times p}$ gibt, so dass 
+\begin{equation}\label{eq:lmm-pop}
+y = Zu + \eps \mbox{ mit } u := A\beta + b, X := ZA \mbox{ und } u \sim N(A\beta, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n,\Sigma_\eps)
+\end{equation}
+gilt, dann nennt man \eqref{eq:lmm-pop} die \textit{Populationsparameterdarstellung des Linear Mixed Models} 
+\label{eq:lmm-gen} mit dem \textit{Populationsparametern} $\beta \in \mathbb{R}^p$ und $\Sigma_b \in \mathbb{R}^{q \times q}$.
+\end{theorem}
+Bemerkungen
+
+* In \eqref{eq:lmm-pop} denkt man sich $u$ aus einer Population mit Erwartungswert $X\beta$ realisiert.
+* Der Fixed-Effects-Pameter $\beta$ parameterisiert dabei explizit den Erwartungswert dieser Population.
+* Fixed-Effects-Parameter können also in diesem Fall als Populationserwartungswerte interpretiert werden.
+* Random-Effects-Parameter dagegen entsprechen Abweichungen vom Populationserwartungswert.
+* Die Fixed-Effects-Designmatrix ist hier eine Linearkombination der Random-Effects-Designmatrix. 
+* Das ganze funktioniert (nur), wenn es zu jedem Fixed-Effect auch einen Random-Effect gibt.
+* @demidenko2013, Kapitel 4.1 bezeichnet Modelle der Form \eqref{eq:lmm-pop} als Linear-Growth-Curve Modelle
+* Wir setzen auch hier die Unabhängigkeit von $u$ und $\eps$ implizit voraus.
+
+# Multizentren-Parallelgruppendesigns
+\footnotesize
+\underline{Beweis}
+
+Wir nehmen an, dass es eine Matrix $A \in \mathbb{R}^{q\times p}$ gibt, so dass $X = ZA$.
+Mit dem Theorem zur linearen Transformation normalverteilter Zufallsvektoren gilt dann
+\begin{align}
+\begin{split}
+y & = X\beta + Zb   + \eps  \,\,\,               \mbox{ mit } b \sim N(0_q, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n,\Sigma_\eps)      \\
+y & = ZA\beta + Zb  + \eps                       \mbox{ mit } b \sim N(0_q, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n,\Sigma_\eps)      \\
+y & = Z(A\beta + b) + \eps                       \mbox{ mit } b \sim N(0_q, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n,\Sigma_\eps)      \\
+y & = Zu            + \eps \quad\quad\quad\,\,   \mbox{ mit } u \sim N(A\beta, \Sigma_{b}) \mbox{ und } \eps \sim N(0_n,\Sigma_\eps) 
+\end{split}
+\end{align}
+wobei die letzte Aussage bezüglich $u$ analog zur Aussage 
+\begin{equation}
+y = X\beta + \eps \mbox{ mit } \eps \sim N(0_n,\sigma^2I_n)
+\Leftrightarrow
+y \sim N(X\beta, \sigma^2I_n)
+\end{equation}
+bezüglich $y$ und ihrer Begründung ist.
+
+
+# Multizentren-Parallelgruppendesigns
+Random-Center-by-Treatment-Interaction-Modell in Populationsparameterform
+
+\small
+Designmatrixform 
+\vspace{2mm}
+
+\footnotesize
+Beispielszenario
+
+* $k = 3$ Zentren, $n_{1} = n_{2} = n_{3} = 4$ Proband:innen pro Zentrum
+* $\frac{1}{2}n_i$ Proband:innen pro Zentrum für $i = 1,2,3$
+
+Für $A := 1_{k} \otimes  I_2 \in \mathbb{R}^{2k \times 2}$ gilt
+\begin{align}
+\begin{split}
+X & = ZA \\
+\begin{pmatrix}
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\ 
+1 & 1 \\
+\end{pmatrix}
+& =
+\begin{pmatrix}
+1 & 0 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 1 & 1 \\
+0 & 0 & 0 & 0 & 1 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 \\
+0 & 1 \\
+1 & 0 \\ 
+0 & 1 \\
+1 & 0 \\
+0 & 1 \\
+\end{pmatrix}
+\end{split}
+\end{align}
+
+# Multizentren-Parallelgruppendesigns
+Random-Center-by-Treatment-Interaction-Modell in Populationsparameterform
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(MASS)                                                               # multivariate Normalverteilung
+set.seed(0)                                                                 # Zufallszahlengeneratorzustand
+k       = 4                                                                 # Anzahl Zentren 
+m       = 5                                                                 # Patient:innen pro Zentrum und Bedingung
+n       = k*2*m                                                             # Gesamtanzahl an Patient:innen
+X_i     = kronecker(matrix(c(1,1,0,1), ncol = 2), rep(1,m))                 # Treatment-Control Designmatrix
+X       = kronecker(rep(1,k), X_i)                                          # Fixed-Effects-Designmatrix
+Z       = kronecker(diag(k), X_i)                                           # Random-Effects-Designmatrix    
+A       = kronecker(rep(1,k),diag(2))                                       # Random-2-Fixed-Matrix     
+beta    = matrix(c(5,1), nrow = 2)                                          # Populationsparameter  
+s_b     = 1                                                                 # Populationsparameter    
+u       = mvrnorm(1, A %*% beta, s_b*diag(k*2))                             # Zentrenspezifische Effekte
+s_eps   = 1                                                                 # Varianzkomponente
+eps     = mvrnorm(1, rep(0,n), s_eps*diag(n))                               # Fehlervektor
+y       = Z %*% u    + eps                                                  # Datengeneration   
+TRM     = kronecker(rep(1,k), kronecker(c(1:2), rep(1,m)))                  # Treatmentfaktor    
+CTR     = kronecker(c(1:k), rep(1,2*m))                                     # Centerfaktor
+D       = data.frame(TRM = TRM, CTR = CTR, OUT = y)                         # Dataframe
+write.csv(D, "./4_Daten/mz-parallelgruppendesign-3.csv", row.names = FALSE) # Speichern
+```
+
+
+# Multizentren-Parallelgruppendesigns
+Random-Center-by-Treatment-Interaction-Modell in Populationsparameterform
+
+\small
+Deskriptivstatistik für ein Szenario mit $k = 4, m = 2$ und $n_i = 10$ für $i = 1,...,k$
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(dplyr)                                                                  # dplyr für einfache Datengruppierug     
+D   = read.csv("./4_Daten/mz-parallelgruppendesign-3.csv")                      # Dateneinlesen
+DS  = D %>% group_by(CTR, TRM) %>%  summarise(av = mean(OUT, na.rm = TRUE),     # Group mean
+                                              sd = sd(OUT, na.rm = TRUE),       # Group standard deviation
+                                             .groups = "drop")                  # Gruppierungsaufhebung
+print(DS)                                                                       # Ausgabe
+```
+
+# Multizentren-Parallelgruppendesigns
+Random-Center-by-Treatment-Interaction-Modell in Populationsparameterform
+
+\small
+Deskriptivstatistik für ein Szenario mit $k = 4, m = 2$ und $n_i = 10$ für $i = 1,...,k$
+\vspace{2mm}
+
+```{r, eval = F}
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_parallelgruppendesign_3.pdf",
+width       = 7,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Datenreformatierung für barplot
+av_m        = with(DS, tapply(av, list(TRM, CTR), identity))
+sd_m        = with(DS, tapply(sd, list(TRM, CTR), identity))
+
+# Barplot mit Fehlerbalken
+x           = barplot(
+av_m, 
+beside      = TRUE, 
+col         = c("lightgray", "darkgray"),
+ylim        = c(0, 11),
+xlim        = c(0, 13),
+xlab        = "Center",
+ylab        = "Primary Outcome")
+arrows(
+x0          = x, 
+y0          = av_m,
+x1          = x, 
+y1          = av_m + sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+arrows(
+x0          = x,
+y0          = av_m,
+x1          = x, 
+y1          = av_m - sd_m,
+angle       = 90, 
+code        = 2, 
+length      = 0.05)
+abline(h    = 0)
+legend(
+"topright", 
+legend      = c("Kontrollgruppe", "Treatmentgruppe"),
+fill        = c("lightgray", "darkgray"),
+bty         = "n")
+dev.off()
+```
+
+```{r, echo = FALSE, out.width="80%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_parallelgruppendesign_3.pdf")
+```  
+
+# 
+\setstretch{2.7}
+\large
+\vfill
+Motivation
+
+Multizentren-Parallelgruppendesigns
+
+**Multizentren-Regressionsdesigns**
+
+Ein Multizentren-Simpson's Paradox-Beispiel
+
+Selbstkontrollfragen
+\vfill  
+
+# Multizentren-Regressionsdesigns
+\setstretch{1.8}
+Anwendungsbeispiel
+\small
+
+* Nachweis einer Dosis-Wirkungs-Beziehung in der Depressionstherapie 
+* $k = 4$ vier Zentren (Hochschulambulanzen)
+* $n_i = 10$ Proband:innen pro Zentrum $i = 1,2,3,4$
+* 24 Stunden Kognitive Verhaltenstherapie pro Patient:in in jedem Zentrum
+* 1 bis 10 ACT Therapiekomponenten pro Patient:in als unabhängige Variable (UV)
+* BDI-II-Reduktion als Primary Outcome / abhängige Variable (AV)
+
+Bemerkungen 
+
+* Die unabhängige Variable modelliert hier explizit *keine* zeitabhängige Variable
+* Zur Regression bei zeitabhängigen Variablen, siehe (5) Longitudinaldesigns
+
+# Multizentren-Regressionsdesigns
+
+Datengeneration
+\vspace{2mm}
+
+\tiny
+```{r, echo = T}
+library(MASS)                                                       # multivariate Normalverteilung
+library(Matrix)                                                     # Blockdiagonalmatrizen
+set.seed(0)                                                         # Zufallszahlengeneratorzustand
+k       = 4                                                         # Anzahl Zentren 
+n_i     = 5                                                       # Patient:innen pro Zentrum 
+n       = k*n_i                                                     # Gesamtanzahl an Patient:innen    
+x       = 1:5                                                      # Anzahl ACT Komponenten
+Xi      = matrix(c(rep(1,n_i), x), ncol = 2)                        # Zentrenspezifische Regressionsmatrizenarray
+X       = kronecker(rep(1,k), Xi)                                   # Fixed Effects Designmatrix              
+beta    = matrix(c(2,1), nrow = 2)                                  # Fixed-Effects-Parameter
+Z       = kronecker(diag(k), Xi)                                    # Random-Effects-Designmatrix
+s_b     = 2                                                         # Random Effects Varianzparameter
+b       = c(6,-1,-2,0.5,-2,1,-4,2)                                  # Random-Effects Parameter
+s_eps   = 3                                                         # Varianzkomponente
+eps     = mvrnorm(1, rep(0,n), s_eps*diag(n))                       # Fehlervektor
+y       = X %*% beta + Z %*% b + eps                                # Datengeneration   
+HSA     = kronecker(c(1:k), rep(1,n_i))                             # Hochschulambulanzfaktor
+ACT     = X[,2]                                                     # ACT-Anzahl-Regressor   
+D       = data.frame(HSA = HSA, ACT = ACT, BDI = y)                 # Dataframe
+write.csv(D, "./4_Daten/mz-regression-1.csv", row.names = FALSE)    # Speichern
+``` 
+
+# Multizentren-Regressionsdesigns
+```{r, eval = F}
+D           = read.csv("./4_Daten/mz-regression-1.csv", head = T)           
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_1_datensatz.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+graylevels  = gray.colors(length(unique(D$HSA)))
+colors      = graylevels[as.factor(D$HSA)]
+plot(
+D$ACT, 
+D$BDI, 
+col         = colors, 
+pch         = 19,
+xlab        = "Anzahl ACT Komponenten", 
+ylab        = "BDI-II-Reduktion",
+xpd         = T,
+xlim        = c(0,6),
+ylim        = c(-2,18),
+xaxt        = "n")  
+axis(1, at = 1:10)     
+legend(
+"topleft", 
+xpd         = TRUE, 
+bty         = "n",
+legend      = paste("HSA", sort(unique(D$HSA))),,
+col         = graylevels, 
+pch         = 19)
+dev.off()
+```
+
+```{r, echo = FALSE, out.width="70%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_1_datensatz.pdf")
+```
+
+
+# Multizentren-Regressionsdesigns
+\setstretch{1.8}
+Überblick
+
+\small
+
+Alle Multizentren-Regressionsmodelle modellieren Intercept und Slope als Fixed Effects
+
+\noindent (1) Random-Intercept-Only-Modell
+
+* Zusätztlich wird nur ein zufälliger zentrenspezifischer Intercept modelliert 
+
+\noindent (2) Random-Slope-Only-Modell
+
+* Zusätztlich wird nur eine zufällige zentrenspezifischer Slope modelliert 
+
+\noindent (3) Random-Intercept-and-Slope-Modell
+
+* Es werden zusätzlich zufällige zentrenspezifische Intercept und Slopes modelliert
+* Es ergibt sich eine Populationsparameterinterpretation für die Fixed-Effects
+
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (1) Random-Intercept-Only-Modell
+
+\vspace{2mm}
+\footnotesize
+Strukturelle Form
+
+Für Zentren $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+\begin{equation}
+y_{ij} = \beta_0 + \beta_{1}x_{ij} + b_{0i} + \eps_{ij} 
+\end{equation}
+mit
+
+* $x_{ij} :=$ Wert der unabhängiven Variable für Proband:in $j$ in Zentrum $i$
+* $\eps_{ij} \sim N(0,\sigma^2_\eps)$  
+* $b_{0i} \sim N(0,\sigma_{b}^2)$ 
+
+Parameterbedeutungen
+
+\begin{tabular}{ll}
+$\beta_0$               & Erwartungswert der AV bei Wert der UV gleich 0                    \\
+$\beta_1$               & Erwartungswert der Änderung der AV pro UV Änderung um 1 Einheit   \\
+$b_{0i}$                & Zentren-spezfische Abweichung der AV bei Wert der UV gleich 0     \\
+$\sigma^2_b$            & Varianz der $b_{0i}$ zwischen Zentren                             \\
+$\sigma^2_{\eps}$       & Varianz der Datenpunkte innerhalb der Zentren                     \\
+\end{tabular}   
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (1) Random-Intercept-Only-Modell
+\footnotesize
+
+Designmatrixform für ein Szenario mit $k = 4$
+\begin{align}
+\begin{split}
+y & = X\beta + Zb + \eps \\
+\Leftrightarrow
+\begin{pmatrix}
+y_{11}      \\
+\vdots      \\
+y_{1n_1}    \\
+y_{21}      \\
+\vdots      \\
+y_{2n_2}    \\
+y_{31}      \\
+\vdots      \\
+y_{3n_3}    \\
+y_{41}      \\
+\vdots      \\
+y_{4n_4}    \\
+\end{pmatrix} 
+& = 
+\begin{pmatrix}
+1       & x_{11}    \\
+\vdots  & \vdots    \\
+1       & x_{1n_1}  \\
+1       & x_{21}    \\
+\vdots  & \vdots    \\
+1       & x_{2n_2}  \\
+1       & x_{31}    \\
+\vdots  & \vdots    \\
+1       & x_{3n_3}  \\
+1       & x_{41}    \\
+\vdots  & \vdots    \\
+1       & x_{4n_4}  \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{0}  \\
+\beta_{1}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+1       & 0         &  0        & 0         \\
+\vdots  & \vdots    &  \vdots   & \vdots    \\
+1       & 0         &  0        & 0         \\
+0       & 1         &  0        & 0         \\
+\vdots  & \vdots    &  \vdots   & \vdots    \\
+0       & 1         &  0        & 0         \\
+0       & 0         &  1        & 0         \\
+\vdots  & \vdots    &  \vdots   & \vdots    \\
+0       & 0         &  1        & 0         \\
+0       & 0         &  0        & 1         \\
+\vdots  & \vdots    &  \vdots   & \vdots    \\
+0       & 0         &  0        & 1         \\
+\end{pmatrix} 
+\begin{pmatrix}
+b_{01}  \\
+b_{02}  \\
+b_{03}  \\
+b_{04}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{11}    \\
+\vdots       \\
+\eps_{1n_1}  \\
+\eps_{21}    \\
+\vdots       \\
+\eps_{2n_2}  \\
+\eps_{31}    \\
+\vdots       \\
+\eps_{3n_3}  \\
+\eps_{41}    \\
+\vdots       \\
+\eps_{4n_4}  \\
+\end{pmatrix}
+\end{split}
+\end{align}
+mit 
+\begin{equation}
+b \sim N(0_4,\Sigma_b) \mbox{ und } \sim N(0_{20},\sigma^2_\eps I_{20})
+\end{equation}
+
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (1) Random-Intercept-Only-Modell
+
+\vspace{3mm}
+\tiny
+```{r, echo = T}
+library(nlme)                                               # R Paket
+D               = read.csv("./4_Daten/mz-regression-1.csv") # Einlesen des Datensatzes
+D$HSA           = as.factor(D$HSA)                          # Umwandlung numerischer Werte in R factor
+M               = lme(BDI ~ ACT, D, random = ~ 1 | HSA)     # Random-Intercept-Only LMM 
+X               = model.matrix(M, D)                        # Fixed-Effects-Designmatrix
+Z               = model.matrix(~ M$groups[[1]] - 1)         # Random-Effects-Designmatrix
+beta_hat        = M$coefficients$fixed                      # Fixed-Effects-Parameterschätzer
+b_hat           = M$coefficients$random$HSA                 # Random-Effects-Parameterschätzer
+s_eps_hat       = M$sigma**2                                # Varianzkomponentenschätzer
+s_b_hat         = diag(getVarCov(M))                        # Varianzkomponentenschätzer
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (1) Random-Intercept-Only-Modell
+
+\vspace{1mm}
+
+\footnotesize
+Fixed-Effects-Designmatrix
+
+\setstretch{1}
+```{r}
+print(X)
+```
+
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (1) Random-Intercept-Only-Modell
+
+\footnotesize
+Random-Effects-Designmatrix
+
+\setstretch{1}
+\tiny
+```{r}
+print(Z)
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (1) Random-Intercept-Only-Modell
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+D           = read.csv("./4_Daten/mz-regression-1.csv")
+y_hat       = X %*% beta_hat + Z %*% b_hat
+idxs        = list(1:5,6:10,11:15,16:20)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_1_random_intercept.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(0,6),
+ylim        = c(-2,18))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col     = cols[i],
+    pch     = 19)
+    lines(
+    X[idxs[[i]],2] ,
+    y_hat[idxs[[i]]] ,
+    col     = cols[i],
+    lty     = 1)
+}
+legend(
+"topleft",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4"),
+pch         = c(16,16,16,16),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = .8,
+x.intersp   = 1)
+dev.off() 
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_1_random_intercept.pdf")
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (1) Random-Intercept-Only-Modell
+
+\small 
+\vspace{2mm}
+```{r}
+cat("beta_hat        : ", round(beta_hat,2), 
+    "\nsigsqr_eps_hat  : ", round(s_eps_hat,2),
+    "\nsigsqr_b_hat    : ", round(s_b_hat,2)) 
+```
+```{r}
+cat("b_hat:")
+print(b_hat)
+```
+
+Variables Intercept $\hat{\beta}_0 + \hat{b}_{0i}$ der Ausgleichsgerade über Zentren 
+
+Identische Steigung $\hat{\beta}_1$ der Ausgleichsgerade über Zentren  
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (2) Random-Slope-Only-Modell
+
+\vspace{2mm}
+\footnotesize
+Strukturelle Form
+
+Für Zentren $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+\begin{equation}
+y_{ij} = \beta_0 + \beta_{1}x_{ij} + b_{1i}x_{ij} + \eps_{ij} 
+\end{equation}
+mit
+
+* $x_{ij} :=$ Wert der unabhängiven Variable für Proband:in $j$ in Zentrum $i$
+* $\eps_{ij} \sim N(0,\sigma^2_\eps)$  
+* $b_{1i} \sim N(0,\sigma_{b}^2)$ 
+
+Parameterbedeutungen
+
+\begin{tabular}{ll}
+$\beta_0$               & Erwartungswert der AV bei Wert der UV gleich 0                                                \\
+$\beta_1$               & Erwartungswert der Änderung der AV pro UV Änderung um 1 Einheit                               \\
+$b_{1i}$                & Zentren-spezfische Abweichung der erwarteten Änderung der AV pro UV Änderung um 1 Einheit     \\
+$\sigma^2_b$            & Varianz der $b_{1i}$ zwischen Zentren                                                         \\
+$\sigma^2_{\eps}$       & Varianz der Datenpunkte innerhalb der Zentren                                                 \\
+\end{tabular}   
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (2) Random-Slope-Only-Modell
+\footnotesize
+
+Designmatrixform für ein Szenario mit $k = 4$
+\begin{align}
+\begin{split}
+y & = X\beta + Zb + \eps \Leftrightarrow \\
+\begin{pmatrix}
+y_{11}      \\
+\vdots      \\
+y_{1n_1}    \\
+y_{21}      \\
+\vdots      \\
+y_{2n_2}    \\
+y_{31}      \\
+\vdots      \\
+y_{3n_3}    \\
+y_{41}      \\
+\vdots      \\
+y_{4n_4}    \\
+\end{pmatrix} 
+& = 
+\begin{pmatrix}
+1       & x_{11}    \\
+\vdots  & \vdots    \\
+1       & x_{1n_1}  \\
+1       & x_{21}    \\
+\vdots  & \vdots    \\
+1       & x_{2n_2}  \\
+1       & x_{31}    \\
+\vdots  & \vdots    \\
+1       & x_{3n_3}  \\
+1       & x_{41}    \\
+\vdots  & \vdots    \\
+1       & x_{4n_4}  \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{0}  \\
+\beta_{1}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+x_{11}      & 0         &  0        & 0         \\
+\vdots      & \vdots    &  \vdots   & \vdots    \\
+x_{1n_1}    & 0         &  0        & 0         \\
+0           & x_{21}    &  0        & 0         \\
+\vdots      & \vdots    &  \vdots   & \vdots    \\
+0           & x_{2n_2}  &  0        & 0         \\
+0           & 0         &  x_{31}   & 0         \\
+\vdots      & \vdots    &  \vdots   & \vdots    \\
+0           & 0         &  x_{3n_3} & 0         \\
+0           & 0         &  0        & x_{41}    \\
+\vdots      & \vdots    &  \vdots   & \vdots    \\
+0           & 0         &  0        & x_{4n_4}  \\
+\end{pmatrix} 
+\begin{pmatrix}
+b_{11}  \\
+b_{12}  \\
+b_{13}  \\
+b_{14}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{11}    \\
+\vdots       \\
+\eps_{1n_1}  \\
+\eps_{21}    \\
+\vdots       \\
+\eps_{2n_2}  \\
+\eps_{31}    \\
+\vdots       \\
+\eps_{3n_3}  \\
+\eps_{41}    \\
+\vdots       \\
+\eps_{4n_4}  \\
+\end{pmatrix}
+\end{split}
+\end{align}
+mit
+\begin{equation}
+b \sim N(0_4,\Sigma_b) \mbox{ und } \eps \sim N(0_{20},\sigma^2_\eps I_{20})
+\end{equation} 
+
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (2) Random-Slope-Only-Modell
+\vspace{3mm}
+\tiny
+```{r, echo = T}
+library(nlme)                                                   # R Paket
+D               = read.csv("./4_Daten/mz-regression-1.csv")     # Einlesen des Datensatzes
+D$HSA           = as.factor(D$HSA)                              # Umwandlung numerischer Werte in R factor
+M               = lme(BDI ~ ACT, D, random = ~ ACT - 1 | HSA)   # Random-Slope-Only-LMM
+X               = model.matrix(M, D)                            # Fixed-Effects-Designmatrix
+Z               = kronecker(diag(k), matrix(c(1:5), nrow = 5))  # Random-Effects-Designmatrix
+beta_hat        = M$coefficients$fixed                          # Fixed-Effects-Parameterschätzer
+b_hat           = M$coefficients$random$HSA                     # Random-Effects-Parameterschätzer
+s_eps_hat       = M$sigma**2                                    # Varianzkomponentenschätzer
+s_b_hat         = diag(getVarCov(M))                            # Varianzkomponentenschätzer
+```
+
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (2) Random-Slope-Only-Modell
+\vspace{1mm}
+
+\footnotesize
+Fixed-Effects-Designmatrix
+
+\setstretch{1}
+```{r}
+print(X)
+```
+
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (2) Random-Slope-Only-Modell
+
+
+\footnotesize
+Random-Effects-Designmatrix
+
+\setstretch{1}
+\tiny
+```{r}
+print(Z)
+```
+
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (2) Random-Slope-Only-Modell
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+D           = read.csv("./4_Daten/mz-regression-1.csv")
+y_hat       = X %*% beta_hat + Z %*% b_hat
+idxs        = list(1:5,6:10,11:15,16:20)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_1_random_slope.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(0,6),
+ylim        = c(-2,18))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col     = cols[i],
+    pch     = 19)
+    lines(
+    X[idxs[[i]],2] ,
+    y_hat[idxs[[i]]] ,
+    col     = cols[i],
+    lty     = 1)
+}
+legend(
+"topleft",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4"),
+pch         = c(16,16,16,16),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = .8,
+x.intersp   = 1)
+dev.off() 
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_1_random_slope.pdf")
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (2) Random-Slope-Only-Modell
+
+\small 
+\vspace{2mm}
+```{r}
+cat("beta_hat        : ", round(beta_hat,2), 
+    "\nsigsqr_eps_hat  : ", round(s_eps_hat,2),
+    "\nsigsqr_b_hat    : ", round(s_b_hat,2)) 
+```
+```{r}
+cat("b_hat:")
+print(b_hat)
+```
+
+Identisches Intercept $\hat{\beta}_0$ der Ausgleichsgerade über Zentren
+
+Variable Steigung $\hat{\beta}_1 + \hat{b}_{1i}$ der Ausgleichsgerade über Zentren -->
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (3) Random-Intercept-and-Slope-Modell
+
+\vspace{2mm}
+\footnotesize
+Strukturelle Form
+
+Für Zentren $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+\begin{equation}
+y_{ij} = \beta_0 + \beta_{1}x_{ij} + b_{0i} + b_{1i}x_{ij} + \eps_{ij} 
+\end{equation}
+mit
+
+* $x_{ij} :=$ Wert der unabhängiven Variable für Proband:in $j$ in Zentrum $i$
+* $\eps_{ij} \sim N(0,\sigma^2_\eps)$  
+* $b_{0i} \sim N(0,\sigma_{b_0}^2)$ 
+* $b_{1i} \sim N(0,\sigma_{b_1}^2)$ 
+
+Parameterbedeutungen
+
+\begin{tabular}{ll}
+$\beta_0$               & Erwartungswert der AV bei Wert der UV gleich 0                                                \\
+$\beta_1$               & Erwartungswert der Änderung der AV pro UV Änderung um 1 Einheit                               \\
+$b_{0i}$                & Zentren-spezfische Abweichung der AV bei Wert der UV gleich 0                                 \\
+$b_{1i}$                & Zentren-spezfische Abweichung der erwarteten Änderung der AV pro UV Änderung um 1 Einheit     \\
+$\sigma^2_{b_0}$        & Varianz der $b_{0i}$ zwischen Zentren                                                         \\
+$\sigma^2_{b_1}$        & Varianz der $b_{1i}$ zwischen Zentren                                                         \\
+$\sigma^2_{\eps}$       & Varianz der Datenpunkte innerhalb der Zentren                                                 \\
+\end{tabular}   
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (3) Random-Intercept-and-Slope-Modell
+\footnotesize
+
+Designmatrixform für ein Szenario mit $k = 4$
+\begin{align}
+\begin{split}
+y & = X\beta + Zb + \eps \Leftrightarrow \\
+\begin{pmatrix}
+y_{11}      \\
+\vdots      \\
+y_{1n_1}    \\
+y_{21}      \\
+\vdots      \\
+y_{2n_2}    \\
+y_{31}      \\
+\vdots      \\
+y_{3n_3}    \\
+y_{41}      \\
+\vdots      \\
+y_{4n_4}    \\
+\end{pmatrix} 
+& = 
+\begin{pmatrix}
+1       & x_{11}    \\
+\vdots  & \vdots    \\
+1       & x_{1n_1}  \\
+1       & x_{21}    \\
+\vdots  & \vdots    \\
+1       & x_{2n_2}  \\
+1       & x_{31}    \\
+\vdots  & \vdots    \\
+1       & x_{3n_3}  \\
+1       & x_{41}    \\
+\vdots  & \vdots    \\
+1       & x_{4n_4}  \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{0}  \\
+\beta_{1}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+1       & x_{11}    & 0         &  0        & 0         & 0         & 0         & 0         \\
+\vdots  & \vdots    & \vdots    &  \vdots   & \vdots    & \vdots    & \vdots    & \vdots    \\
+1       & x_{1n_1}  & 0         &  0        & 0         & 0         & 0         & 0         \\
+0       & 0         & 1         &  x_{21}   & 0         & 0         & 0         & 0         \\
+\vdots  & \vdots    & \vdots    &  \vdots   & \vdots    & \vdots    & \vdots    & \vdots    \\
+0       & 0         & 1         &  x_{2n_2} & 0         & 0         & 0         & 0         \\
+0       & 0         & 0         &  0        & 1         & x_{31}    & 0         & 0         \\
+\vdots  & \vdots    & \vdots    &  \vdots   & \vdots    & \vdots    & \vdots    & \vdots    \\
+0       & 0         & 0         &  0        & 1         & x_{3n_3}  & 0         & 0         \\
+0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{41}    \\
+\vdots  & \vdots    & \vdots    &  \vdots   & \vdots    & \vdots    & \vdots    & \vdots    \\
+0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{4n_4}  \\
+\end{pmatrix} 
+\begin{pmatrix}
+b_{01}  \\
+b_{11}  \\
+b_{02}  \\
+b_{12}  \\
+b_{03}  \\
+b_{13}  \\
+b_{04}  \\
+b_{14}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{11}    \\
+\vdots       \\
+\eps_{1n_1}  \\
+\eps_{21}    \\
+\vdots       \\
+\eps_{2n_2}  \\
+\eps_{31}    \\
+\vdots       \\
+\eps_{3n_3}  \\
+\eps_{41}    \\
+\vdots       \\
+\eps_{4n_4}  \\
+\end{pmatrix}
+\end{split}
+\end{align}
+mit 
+\begin{equation}
+b \sim N(0_8,\Sigma_b) \mbox{ und } \sim N(0_n,\sigma^2_\eps I_n)
+\end{equation}
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (3) Random-Intercept-and-Slope-Modell
+
+\vspace{3mm}
+\tiny
+```{r, echo = T}
+library(nlme)                                                           # R Paket
+D           = read.csv("./4_Daten/mz-regression-1.csv")                 # Einlesen des Datensatzes
+D$HSA       = as.factor(D$HSA)                                          # Umwandlung numerischer Werte in R factor
+M           = lme(BDI ~ ACT, D, random = ~ ACT | HSA)                   # Random-Intercept-and-Slope LMM 
+X           = model.matrix(M, D)                                        # Fixed-Effects-Designmatrix
+Z           = kronecker(diag(k), matrix(c(rep(1,5), c(1:5)), nrow = 5)) # Random-Effects-Designmatrix
+beta_hat    = M$coefficients$fixed                                      # Fixed-Effects-Parameterschätzer
+b_hat       = M$coefficients$random$HSA                                 # Random-Effects-Parameterschätzer
+s_eps_hat   = M$sigma**2                                                # Varianzkomponentenschätzer
+s_b_hat     = diag(getVarCov(M))                                        # Varianzkomponentenschätzer
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (3) Random-Intercept-and-Slope-Modell
+
+\vspace{1mm}
+
+\footnotesize
+Fixed-Effects-Designmatrix
+
+\setstretch{1}
+```{r}
+print(X)
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (3) Random-Intercept-and-Slope-Modell
+
+\footnotesize
+Random-Effects-Designmatrix
+
+\setstretch{1}
+\tiny
+```{r}
+print(Z)
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (3) Random-Intercept-and-Slope-Modell
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+D           = read.csv("./4_Daten/mz-regression-1.csv")
+b_hat       = as.vector(t(b_hat))
+y_hat       = X %*% beta_hat + Z %*% b_hat
+idxs        = list(1:5,6:10,11:15,16:20)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_1_random_intercept_and_slope.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(0,6),
+ylim        = c(-2,18))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col     = cols[i],
+    pch     = 19)
+    lines(
+    X[idxs[[i]],2] ,
+    y_hat[idxs[[i]]] ,
+    col     = cols[i],
+    lty     = 1)
+}
+legend(
+"topleft",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4"),
+pch         = c(16,16,16,16),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = .8,
+x.intersp   = 1)
+dev.off() 
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_1_random_intercept_and_slope.pdf")
+```
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent  (3) Random-Intercept-and-Slope-Modell
+
+\small 
+\vspace{2mm}
+```{r}
+cat("beta_hat        : ", round(beta_hat,2), 
+    "\nsigsqr_eps_hat  : ", round(s_eps_hat,2),
+    "\nsigsqr_b_hat    : ", round(s_b_hat,2)) 
+```
+```{r}
+cat("b_hat:")
+print(M$coefficients$random$HSA)
+```
+
+Variables Intercept $\hat{\beta}_0 + \hat{b}_{0i}$ der Ausgleichsgerade über Zentren 
+
+Variable Steigung $\hat{\beta}_1 + \hat{b}_{1i}$ der Ausgleichsgerade über Zentren  
+
+Aber: Populationsparameterschätzung von $\beta_0$ und $\beta_1$
+
+# 
+\setstretch{2.7}
+\large
+\vfill
+Motivation
+
+Multizentren-Parallelgruppendesigns
+
+Multizentren-Regressionsdesigns
+
+**Ein Multizentren-Simpson's Paradox-Beispiel**
+
+Selbstkontrollfragen
+\vfill
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\setstretch{2.8}
+Anwendungsbeispiel
+\small
+
+* Dosis-Wirkungs-Studie zum Effekt von ACT Komponentenanzahl auf Depressionssymptomatik
+* Multizentrendesign mit $k = 4$ Hochschulambulanzen mit jeweils $n_i = 5$ Patient:innen
+* Zufällige Zusammentstellung der ACT Komponentenanzahl in jeder Hochschulambulanz
+* Pre-Post-BDI-II Differenz `BDI` als primäres Ergebnismaß  (Positive Werte = Reduktion)
+* `HSA`: Hochschulambulanz, `ACT`: ACT Komponentenanzahl, `BDI`: Pre-Post-BDI-II Differenz
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+Datengeneration
+\vspace{2mm}
+\tiny
+\setstretch{1.2}
+```{r, echo = T}
+# Datengeneration
+library(MASS)                                                       # mMltivariate Normalverteilung
+library(Matrix)                                                     # Blockdiagonalmatrizen
+set.seed(0)                                                         # Zufallszahlengeneratorzustand
+k           = 4                                                     # Anzahl Zentren 
+n_i         = 5                                                     # Anzahl Patient:innen pro Zentrum
+n           = k*n_i                                                 # Gesamtanzahl an Patient:innen
+x           = matrix(rep(NaN,n), ncol = k)                          # Anzahl ACT Komponenten Array
+x[,1]       = round(runif(n_i, min = 10, max = 20))                 # Anzahl ACT Komponenten HSA 1
+x[,2]       = round(runif(n_i, min = 15, max = 25))                 # Anzahl ACT Komponenten HSA 2
+x[,3]       = round(runif(n_i, min = 20, max = 30))                 # Anzahl ACT Komponenten HSA 3
+x[,4]       = round(runif(n_i, min = 25, max = 35))                 # Anzahl ACT Komponenten HSA 4
+Xi          = array(rep(NaN,n*2), dim = c (n_i,2,k))                # Zentrenspezifische Regressionsmatrizenarray
+for(i in 1:k){                                                      # Zentreniterationen        
+    Xi[,,i] = matrix(c(rep(1,n_i),x[,i]), ncol = 2)}                # Zentrumspezifische Regressionmatrix             
+X           = rbind(Xi[,,1],Xi[,,2],Xi[,,3],Xi[,,4])                # Fixed-Effects-Designmatrix
+beta        = matrix(c(5,1), nrow = 2)                              # Fixed-Effects-Parameter
+Z           = as.matrix(bdiag(Xi[,,1],Xi[,,2],Xi[,,3],Xi[,,4]))     # Random-Effects-Designmatrix
+b           = matrix(c(15,0,5,0,-5,0,-15,0))                        # Random-Effects-Parameter
+s_eps       = 15                                                    # Varianzkomponente
+eps         = mvrnorm(1,rep(0,n), s_eps*diag(n))                    # Fehlervektor
+y           = X %*% beta + Z %*% b + eps                            # Datengeneration    
+HSA         = kronecker(c(1,2,3,4), rep(1,n_i))                     # Hochschulambulanzfaktor
+D           = data.frame(HSA = HSA, ACT = X[,2], BDI = y)           # Dataframe
+write.csv(D, "./4_Daten/mz-regression-2.csv", row.names = FALSE)    # Speichern
+```
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+Datensatz
+\setstretch{1.2}
+\footnotesize
+```{r, echo = F}
+fname = "./4_Daten/mz-regression-2.csv"
+D     = read.table(fname, sep = ",", header = T)
+knitr::kable(D, "pipe", align = "rr", digits = 0)
+```
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+Datendeskription
+\vspace{-1mm}
+
+```{r, echo = F, eval = F}
+D           = read.csv("./4_Daten/mz-regression-2.csv")
+library(latex2exp)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_2_datensatz.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(8,37),
+ylim        = c(10,45))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col     = cols[i], 
+    pch     = 19)
+}
+legend(
+"topright",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4"),
+pch         = c(16,16,16,16),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = 1,
+x.intersp   = 1)
+dev.off() 
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_2_datensatz.pdf")
+```
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\setstretch{2}
+\small
+
+Wir wenden auf diesen Datensatz nacheinander folgende Modelle an
+
+(1) Einfache lineare Regression für den ACT Effekt
+(2) Einfaktorielle Varianzanalyse für den HSA Effekt
+(3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
+(4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+(5) Multizentren-Regressionsmodell mit Random-Intercept-and-Slope
+
+Insbesondere das erste und das letzte Modell bieten unterschiedliche Interpretationen
+
+Dieser inhärente Widerspruch ist ein Beispiel für das Simpson's Paradox (@blyth1972)
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\setstretch{1.6}
+\noindent (1) Einfache lineare Regression für den ACT Effekt
+
+\footnotesize
+Wir vernachlässigen zunächst die Gruppenstruktur (Hochschulambulanzvariation) des Datensatzes.
+
+Strukturelle Form
+
+Für Proband:innen $i = 1,...,n$
+\begin{equation}
+y_i = \beta_0 + \beta_1x_i + \eps_i
+\end{equation} 
+mit
+
+* $x_i :=$ Anzahl der ACT Komponenten in der Therapie von Proband:in $i$
+* $\eps_i \sim N(0,\sigma^2)$
+
+Parameterbedeutungen 
+\begin{tabular}{ll}
+$\beta_0$    & Erwartungswert der BDI-II-Reduktion bei 0 ACT Komponenten    \\
+$\beta_1$    & Erwartungswert der BDI-II-Reduktion pro 1 ACT Komponente     \\
+$\sigma^2$   & Varianz zwischen Proband:innen über Zentren                \\ 
+\end{tabular}
+ 
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (1) Einfache lineare Regression für den ACT Effekt
+
+\small
+Designmatrixform
+
+\footnotesize
+
+\begin{equation}
+y = X\beta + \eps  
+\Leftrightarrow
+\begin{pmatrix}
+y_1     \\ 
+y_2     \\ 
+y_3     \\ 
+y_4     \\ 
+y_5     \\ 
+y_6     \\ 
+y_7     \\ 
+y_8     \\ 
+y_9     \\ 
+y_{10}  \\ 
+y_{11}  \\ 
+y_{12}  \\ 
+y_{13}  \\ 
+y_{14}  \\ 
+y_{15}  \\ 
+y_{16}  \\ 
+y_{17}  \\ 
+y_{18}  \\ 
+y_{19}  \\ 
+y_{20}  \\ 
+\end{pmatrix}
+= 
+\begin{pmatrix}
+1   & x_1       \\ 
+1   & x_2       \\ 
+1   & x_3       \\ 
+1   & x_4       \\ 
+1   & x_5       \\ 
+1   & x_6       \\ 
+1   & x_7       \\ 
+1   & x_8       \\ 
+1   & x_9       \\ 
+1   & x_{10}    \\ 
+1   & x_{11}    \\ 
+1   & x_{12}    \\ 
+1   & x_{13}    \\ 
+1   & x_{14}    \\ 
+1   & x_{15}    \\ 
+1   & x_{16}    \\ 
+1   & x_{17}    \\ 
+1   & x_{18}    \\ 
+1   & x_{19}    \\
+1   & x_{20}    \\  
+\end{pmatrix}
+\begin{pmatrix}
+\beta_0 \\ \beta_1
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_1       \\ 
+\eps_2       \\ 
+\eps_3       \\ 
+\eps_4       \\ 
+\eps_5       \\ 
+\eps_6       \\ 
+\eps_7       \\ 
+\eps_8       \\ 
+\eps_9       \\ 
+\eps_{10}    \\ 
+\eps_{11}    \\ 
+\eps_{12}    \\ 
+\eps_{13}    \\ 
+\eps_{14}    \\ 
+\eps_{15}    \\ 
+\eps_{16}    \\ 
+\eps_{17}    \\ 
+\eps_{18}    \\ 
+\eps_{19}    \\ 
+\eps_{20}    \\ 
+\end{pmatrix}
+\mbox{ mit } \eps \sim N(0_{20},\sigma^2I_{20})
+\end{equation}
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\noindent (1) Einfache lineare Regression für den ACT Effekt
+\small
+\vspace{2mm}
+\tiny
+\setstretch{1}
+```{r, echo = T}
+D           = read.csv("./4_Daten/mz-regression-2.csv")     # Einlesen des Datensatzes
+M           = lm(BDI ~ ACT, D)                              # Einfache lineare Regression
+S           = summary(M)                                    # Modellschätzungsresultate
+X           = model.matrix(M)                               # Designmatrix
+beta_hat    = as.matrix(M$coefficients)                     # Betaparameterschätzer
+sigsqr_hat  = S$sigma**2                                    # Varianzparameterschätzer
+```
+Designmatrix
+\setstretch{1}
+```{r}
+print(X)
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\noindent (1) Einfache lineare Regression für den ACT Effekt
+\small
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_2_elr.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80", "Black")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(8,37),
+ylim        = c(10,45))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col      = cols[i],
+    pch     = 19)}
+lines(
+X[,2],
+X %*% beta_hat,
+lty     = 1,
+col     = cols[5])
+legend(
+"topright",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4", TeX("X\\hat{\\beta}")),
+lty         = c(NaN,NaN,NaN,NaN,  1),
+pch         = c(16 ,16 ,16 ,16 ,NaN),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = 1,
+x.intersp   = 1)
+dev.off() 
+```
+\vspace{-2mm}
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_2_elr.pdf")
+```
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+
+\setstretch{1.8}
+\noindent (1) Einfache lineare Regression für den ACT Effekt
+\vspace{2mm}
+
+\small
+
+```{r}
+cat("beta_hat   : ", round(beta_hat,2),
+    "\nsigsqr_hat : ", round(sigsqr_hat,2))
+```
+\vspace{2mm}
+
+Keine Berücksichtigung der Gruppenstruktur (Hochschulambulanzvariation)
+
+$\hat{\beta}_1$ legt eine Abnahme der BDI-II-Reduktion mit ACT Komponentenanzahl nahe
+
+Daten zeigen aber einen Anstieg der BDI-II-Reduktion mit ACT Komponentenanzahl für jede HSA
+
+Das Modell ist für den betrachteten Anwendungsfall sicherlich nicht ideal
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (2) Einfaktorielle Varianzanalyse für den HSA Effekt
+
+\footnotesize
+Wir vernachlässigen den Effekt der Therapiedauer und betrachten lediglich den Effekt der Hochschulambulanz
+
+Strukturelle Form
+
+Für Hochschulambulanzen $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+\begin{equation}
+y_{1j} = \mu_0 + \eps_{1j} \mbox{ und  } y_{ij} = \mu_0 + \alpha_i + \eps_{ij} \mbox{ für } i = 2,3,4 
+\end{equation}
+mit
+
+* $\eps_{ij} \sim N(0,\sigma^2)$  
+
+Parameterbedeutungen
+\begin{tabular}{ll}
+$\mu_0$       &  Erwartungswert für die BDI-II-Reduktion in der Referenzgruppe HSA 1             \\
+$\alpha_2$    &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 2 und HSA 1      \\
+$\alpha_3$    &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 3 und HSA 1      \\
+$\alpha_4$    &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 4 und HSA 1     \\
+$\sigma^2$    &  Varianz zwischen Proband:innen                                                 \\ 
+\end{tabular}
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent(2) Einfaktorielle Varianzanalyse für den HSA Effekt
+
+\footnotesize
+Designmatrixform
+\begin{equation}
+y = X\beta + \eps
+\Leftrightarrow
+\begin{pmatrix}
+y_{11} \\
+y_{12} \\
+y_{13} \\
+y_{14} \\
+y_{15} \\
+y_{21} \\
+y_{22} \\
+y_{23} \\
+y_{24} \\
+y_{25} \\
+y_{31} \\
+y_{32} \\
+y_{33} \\
+y_{34} \\
+y_{35} \\
+y_{41} \\
+y_{42} \\
+y_{43} \\
+y_{44} \\
+y_{45} \\
+\end{pmatrix} = 
+\begin{pmatrix}
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+1       & 1         &  0        & 0         \\
+1       & 1         &  0        & 0         \\
+1       & 1         &  0        & 0         \\
+1       & 1         &  0        & 0         \\
+1       & 1         &  0        & 0         \\
+1       & 0         &  1        & 0         \\
+1       & 0         &  1        & 0         \\
+1       & 0         &  1        & 0         \\
+1       & 0         &  1        & 0         \\
+1       & 0         &  1        & 0         \\
+1       & 0         &  0        & 1        \\
+1       & 0         &  0        & 1        \\
+1       & 0         &  0        & 1        \\
+1       & 0         &  0        & 1        \\
+1       & 0         &  0        & 1         \\
+\end{pmatrix} 
+\begin{pmatrix}
+\mu_0       \\
+\alpha_2    \\
+\alpha_3    \\
+\alpha_4 \\
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{11}    \\
+\eps_{12}    \\
+\eps_{13}    \\
+\eps_{14}    \\
+\eps_{15}    \\
+\eps_{21}    \\
+\eps_{22}    \\
+\eps_{23}    \\
+\eps_{24}    \\
+\eps_{25}    \\
+\eps_{31}    \\
+\eps_{32}    \\
+\eps_{33}    \\
+\eps_{34}    \\
+\eps_{35}    \\
+\eps_{41}    \\
+\eps_{42}    \\
+\eps_{43}    \\
+\eps_{44}    \\
+\eps_{45}    \\
+\end{pmatrix}
+ \mbox{ mit } \eps \sim N(0_{20},\sigma^2I_{20})
+\end{equation}
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\setstretch{1}
+\noindent (2) Einfaktorielle Varianzanalyse für den HSA Effekt
+\vspace{1mm}
+
+\tiny
+```{r, echo = T}
+D           = read.csv("./4_Daten/mz-regression-2.csv")     # Einlesen des Datensatzes
+D$HSA       = as.factor(D$HSA)                              # Umwandlung numerischer Werte in R factor
+M           = lm(BDI ~ HSA, D)                              # Einfache lineare Regression
+S           = summary(M)                                    # Modellschätzungsresultate
+X           = model.matrix(M)                               # Designmatrix
+beta_hat    = as.matrix(M$coefficients)                     # Betaparameterschätzer
+sigsqr_hat  = S$sigma**2                                    # Varianzparameterschätzer
+```
+
+Designmatrix
+\setstretch{1}
+
+```{r}
+print(X)
+```
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\setstretch{1.2}
+\noindent (2) Einfaktorielle Varianzanalyse für den HSA Effekt
+
+```{r, echo = F, eval = F}
+D           = read.csv("./4_Daten/mz-regression-2.csv")
+library(latex2exp)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_2_anova.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Hochschulambulanz (HSA)",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(0,5),
+xaxt        = "n",
+ylim        = c(15,45))
+for (i in 1:4){
+    points(
+    rep(i,5), 
+    D$BDI[D$HSA == i],
+    col     = cols[i],
+    pch     = 19)}
+points(
+D$HSA, 
+X %*% beta_hat,
+col     = cols,
+pch     = 8)
+axis(1, at = 1:4, labels = c("HSA 1", "HSA 2", "HSA 3", "HSA 4"))
+dev.off() 
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_2_anova.pdf")
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (2)  Einfaktorielle Varianzanalyse für den HSA Effekt
+
+\small
+\setstretch{2}
+```{r}
+cat("beta_hat   : ", round(beta_hat,2),
+    "\nsigsqr_hat : ", round(sigsqr_hat,2))
+```
+
+\vspace{2mm}
+
+Keine Berücksichtigung der Anzahl an ACT Komponenten
+
+Das Modell ist vor dem Hintergrund der Forschungsfrage nicht sinnvoll
+
+HSA 2, HSA 3 und HSA 4 haben einer geringere Symptomereduktionserwartung als HSA 1
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel 
+\vspace{2mm}
+\noindent (3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
+
+\footnotesize
+Wir betrachten jede der Hochschulambulanzen einzeln.
+
+Strukturelle Form
+
+Für Hochschulambulanzen $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+
+\begin{equation}
+y_{i_j} = \beta_{i_0} + \beta_{i_1}x_{i_j} + \eps_{i_j}  
+\end{equation}
+mit
+
+* $x_{i_j} :=$ Anzahl der ACT Komponenten in der Therapie von Proband:in $j$ in Hochschulambulanz $i$
+* $\eps_{i_j} \sim N(0,\sigma_i^2)$
+
+
+Parameterbedeutungen für $i = 1,...,k$ 
+
+\begin{tabular}{ll}
+$\beta_{i_0}$     & Erwartungswert der BDI-II-Reduktion bei 0 ACT Komponenten in Hochschulambulanz $i$    \\
+$\beta_{i_1}$     & Erwartungswert der BDI-II-Reduktion pro 1 ACT Komponente  in Hochschulambulanz $i$    \\
+$\sigma^2_{i}$    & Varianz zwischen Proband:innen in Hochschulambulanz $i$                               \\
+\end{tabular} 
+
+# Ein Multizentren-Simpson's Paradox-Beispiel 
+\vspace{2mm}
+\noindent (3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
+
+\footnotesize
+Designmatrixform
+\setstretch{1.1}
+\begin{equation}
+y_1 = X_1\beta_1 + \eps_1  
+\Leftrightarrow
+\begin{pmatrix}
+y_{1_1}                 \\ 
+y_{1_2}                 \\ 
+y_{1_3}                 \\ 
+y_{1_4}                 \\ 
+y_{1_5}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+1       & x_{1_1}       \\ 
+1       & x_{1_2}       \\ 
+1       & x_{1_3}       \\ 
+1       & x_{1_4}       \\ 
+1       & x_{1_5}       \\ 
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{1_0} \\ \beta_{1_1}
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{1_1}              \\ 
+\eps_{1_2}              \\ 
+\eps_{1_3}              \\ 
+\eps_{1_4}              \\ 
+\eps_{1_5}              \\ 
+\end{pmatrix}
+\mbox{ mit } \eps_1 \sim N(0_{5},\sigma^2_1I_{5})
+\end{equation}
+\begin{equation}
+y_2 = X_2\beta_2 + \eps_2  
+\Leftrightarrow
+\begin{pmatrix}
+y_{2_1}                 \\ 
+y_{2_2}                 \\ 
+y_{2_3}                 \\ 
+y_{2_4}                 \\ 
+y_{2_5}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+1       & x_{2_1}       \\ 
+1       & x_{2_2}       \\ 
+1       & x_{2_3}       \\ 
+1       & x_{2_4}       \\ 
+1       & x_{2_5}       \\ 
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{2_0} \\ \beta_{2_1}
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{2_1}              \\ 
+\eps_{2_2}              \\ 
+\eps_{2_3}              \\ 
+\eps_{2_4}              \\ 
+\eps_{2_5}              \\ 
+\end{pmatrix}
+\mbox{ mit } \eps_2 \sim N(0_{5},\sigma^2_2I_{5})
+\end{equation}
+\begin{equation}
+y_3 = X_3\beta_3 + \eps_3  
+\Leftrightarrow
+\begin{pmatrix}
+y_{3_1}                 \\ 
+y_{3_2}                 \\ 
+y_{3_3}                 \\ 
+y_{3_4}                 \\ 
+y_{3_5}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+1       & x_{3_1}       \\ 
+1       & x_{3_2}       \\ 
+1       & x_{3_3}       \\ 
+1       & x_{3_4}       \\ 
+1       & x_{3_5}       \\ 
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{3_0} \\ \beta_{3_1}
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{3_1}              \\ 
+\eps_{3_2}              \\ 
+\eps_{3_3}              \\ 
+\eps_{3_4}              \\ 
+\eps_{3_5}              \\ 
+\end{pmatrix}
+\mbox{ mit } \eps_3 \sim N(0_{5},\sigma^2_3I_{5})
+\end{equation}
+
+\begin{equation}
+y_4 = X_4\beta_4 + \eps_4  
+\Leftrightarrow
+\begin{pmatrix}
+y_{4_1}                 \\ 
+y_{4_2}                 \\ 
+y_{4_3}                 \\ 
+y_{4_4}                 \\ 
+y_{4_5}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+1       & x_{4_1}       \\ 
+1       & x_{4_2}       \\ 
+1       & x_{4_3}       \\ 
+1       & x_{4_4}       \\ 
+1       & x_{4_5}       \\ 
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{4_0} \\ \beta_{4_1}
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{4_1}              \\ 
+\eps_{4_2}              \\ 
+\eps_{4_3}              \\ 
+\eps_{4_4}              \\ 
+\eps_{4_5}              \\ 
+\end{pmatrix}
+\mbox{ mit } \eps_4 \sim N(0_{5},\sigma^2_4I_{5})
+\end{equation}
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
+\vspace{3mm}
+\tiny 
+```{r, echo = T}
+library(nlme)
+D           = read.csv("./4_Daten/mz-regression-2.csv")     # Einlesen des Datensatzes
+M           = lmList(BDI ~ ACT | HSA, D)                    # gruppenspezifische ELRs
+S           = list()                                        # Liste für Modelschätzungsresultate
+X           = list()                                        # Liste für Designmatrizen
+beta_hat    = list()                                        # Liste für beta_hat
+sigsqr_hat  = list()                                        # Liste für Varianzparameterschätzer
+for(i in 1:length(M)){                                      # Gruppeniterationen
+    S[[i]]              = summary(M[[i]])                   # Modellschätzungsresultate
+    X[[i]]              = model.matrix(M[[i]])              # Designmatrix
+    beta_hat[[i]]       = as.matrix(M[[i]]$coefficients)    # Betaparameterschätzer
+    sigsqr_hat[[i]]     = S[[i]]$sigma**2}                  # Varianzparameterschätzer
+```
+\vspace{3mm}
+
+\footnotesize
+`BDI ~ ACT | HSA` ist eine erweiterte R Formel, die `BDI` und `ACT` anhand der Level des Faktors `HSA` partitioniert!
+
+# Multizentren-Regressionsdesigns
+\vspace{2mm}
+\noindent (3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
+
+\footnotesize
+Designmatrizen
+
+\vspace{1mm}
+\tiny
+\setstretch{1}
+```{r}
+for(i in 1:length(M)){
+print(X[[i]])
+}
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
+
+```{r, echo = F, eval = F}
+D           = read.csv("./4_Daten/mz-regression-2.csv")
+library(latex2exp)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_2_elrs.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(8,37),
+ylim        = c(10,45))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col     = cols[i],
+    pch     = 19)
+    lines(
+    X[[i]][,2],
+    X[[i]] %*% beta_hat[[i]],
+    lty     = 1,
+    col     = cols[i])
+}
+legend(
+"topright",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4"),
+pch         = c(16,16,16,16),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = 1,
+x.intersp   = 1)
+dev.off() 
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_2_elrs.pdf")
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
+\setstretch{1.6}
+
+\small
+
+```{r}
+for(i in 1:length(M)){
+cat("\n HSA", i, "beta_hat    : ", round(beta_hat[[i]],2),
+    "   sigsqr_hat: ",  round(sigsqr_hat[[i]],2))}
+```
+
+
+\vspace{2mm}
+
+Die BDI-II-Reduktion in jeder HSA mit steigender ACT Komponentenanzahl wird deutlich
+
+Dies entspricht der Intuition bei HSA-spezifischer Dateninspektion.
+
+Es wird kein HSA-übergreifender Therapiestundenanzahleffekt bestimmt.
+
+Es wird kein Maß für die Varianz der Effekt zwischen den Hochschulambulanzen bestimmt.
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+
+\footnotesize
+Strukturelle Form
+
+Für Hochschulambulanzen $i = 1,2,3,4$ und Proband:innen $j = 1,2,3,4,5$
+\begin{equation}
+y_{ij} = \beta_0 + \beta_{1}x_{ij} + b_{0i} + \eps_{ij} 
+\end{equation}
+mit
+
+* $x_{ij} :=$ Anzahl ACT Komponenten für Proband:in $j$ und Hochschulambulanz $i$
+* $\eps_{ij} \sim N(0,\sigma^2_\eps)$  
+* $b_{0i} \sim N(0,\sigma_{b}^2)$ 
+
+Parameterbedeutungen
+
+\begin{tabular}{ll}
+$\beta_0$               & Erwartungswert der BDI-II-Reduktion bei 0 ACT Komponenten                             \\
+$\beta_1$               & Erwartungswert der BDI-II-Reduktion pro 1 ACT Komponente                              \\
+$b_{0i}$                & Hochschulambulanz-spezifische Abweichung der BDI-II-Reduktion bei 0 ACT Komponenten   \\
+$\sigma^2_b$            & Varianz der $b_{0i}$ zwischen Hochschulambulanzen                                     \\
+$\sigma^2_{\eps}$       & Varianz der Datenpunkte innerhalb der Hochschulambulanzen  
+\end{tabular}   
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+\footnotesize
+
+Designmatrixform
+\begin{align}
+\begin{split}
+y & = X\beta + Zb + \eps \\
+\Leftrightarrow
+\begin{pmatrix}
+y_{11} \\
+y_{12} \\
+y_{13} \\
+y_{14} \\
+y_{15} \\
+y_{21} \\
+y_{22} \\
+y_{23} \\
+y_{24} \\
+y_{25} \\
+y_{31} \\
+y_{32} \\
+y_{33} \\
+y_{34} \\
+y_{35} \\
+y_{41} \\
+y_{42} \\
+y_{43} \\
+y_{44} \\
+y_{45} \\
+\end{pmatrix} 
+& = 
+\begin{pmatrix}
+1   & x_{11}    \\
+1   & x_{11}    \\
+1   & x_{13}    \\
+1   & x_{14}    \\
+1   & x_{15}    \\
+1   & x_{21}    \\
+1   & x_{22}    \\
+1   & x_{23}    \\
+1   & x_{24}    \\
+1   & x_{25}    \\
+1   & x_{31}    \\
+1   & x_{32}    \\
+1   & x_{33}    \\
+1   & x_{34}    \\
+1   & x_{35}    \\
+1   & x_{41}    \\
+1   & x_{42}    \\
+1   & x_{43}    \\
+1   & x_{44}    \\
+1   & x_{45}    \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{0}  \\
+\beta_{1}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+1       & 0         &  0        & 0         \\
+0       & 1         &  0        & 0         \\
+0       & 1         &  0        & 0         \\
+0       & 1         &  0        & 0         \\
+0       & 1         &  0        & 0         \\
+0       & 1         &  0        & 0         \\
+0       & 0         &  1        & 0         \\
+0       & 0         &  1        & 0         \\
+0       & 0         &  1        & 0         \\
+0       & 0         &  1        & 0         \\
+0       & 0         &  1        & 0         \\
+0       & 0         &  0        & 1         \\
+0       & 0         &  0        & 1         \\
+0       & 0         &  0        & 1         \\
+0       & 0         &  0        & 1         \\
+0       & 0         &  0        & 1         \\
+\end{pmatrix} 
+\begin{pmatrix}
+\beta_{01}  \\
+\beta_{02}  \\
+\beta_{03}   \\
+\beta_{04   }\\
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{11}    \\
+\eps_{12}    \\
+\eps_{13}    \\
+\eps_{14}    \\
+\eps_{15}    \\
+\eps_{21}    \\
+\eps_{22}    \\
+\eps_{23}    \\
+\eps_{24}    \\
+\eps_{25}    \\
+\eps_{31}    \\
+\eps_{32}    \\
+\eps_{33}    \\
+\eps_{34}    \\
+\eps_{35}    \\
+\eps_{41}    \\
+\eps_{42}    \\
+\eps_{43}    \\
+\eps_{44}    \\
+\eps_{45}    \\
+\end{pmatrix}
+\mbox{ mit }
+\begin{array}{l}
+b     \sim N(0_4,\Sigma_b)               \\
+\eps  \sim N(0_{20},\sigma^2_\eps I_{20})
+\end{array} 
+\end{split}
+\end{align}
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+
+\vspace{3mm}
+\tiny
+\setstretch{1.2}
+```{r, echo = T}
+library(nlme)                                               # R Paket
+D               = read.csv("./4_Daten/mz-regression-2.csv") # Einlesen des Datensatzes
+D$HSA           = as.factor(D$HSA)                          # Umwandlung numerischer Werte in R factor
+M               = lme(BDI ~ ACT, D, random = ~ 1 | HSA)     # LMM vom Einfache Lineare Regressionstyp 
+X               = model.matrix(M, D)                        # Fixed-Effects-Designmatrix
+Z               = model.matrix(~ M$groups[[1]] - 1)         # Random-Effects-Designmatrix
+beta_hat        = M$coefficients$fixed                      # Fixed-Effects-Parameterschätzer
+b_hat           = M$coefficients$random$HSA                 # Random-Effects-Parameterschätzer
+s_eps_hat       = M$sigma**2                                # Varianzkomponentenschätzer
+s_b_hat         = diag(getVarCov(M))                        # Varianzkomponentenschätzer
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+\vspace{1mm}
+
+\footnotesize
+Fixed-Effects-Designmatrix
+
+\setstretch{1}
+\tiny
+```{r}
+print(X)
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+
+\footnotesize
+Random-Effects-Designmatrix
+
+\setstretch{.9}
+\tiny
+```{r}
+print(Z)
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{1mm}
+\noindent (4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+D           = read.csv("./4_Daten/mz-regression-2.csv")
+y_hat       = X %*% beta_hat + Z %*% b_hat
+idxs        = list(1:5,6:10,11:15,16:20)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_2_lmm_1.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(8,37),
+ylim        = c(10,45))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col     = cols[i],
+    pch     = 19)
+    lines(
+    X[idxs[[i]],2] ,
+    y_hat[idxs[[i]]] ,
+    col     = cols[i],
+    lty     = 1)
+}
+legend(
+"topright",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4"),
+pch         = c(16,16,16,16),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = .8,
+x.intersp   = 1)
+dev.off() 
+```
+
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_2_lmm_1.pdf")
+```
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{1mm}
+\noindent (4) Multizentren-Regressionsmodell mit Random-Intercept-Only
+
+\small 
+\vspace{2mm}
+```{r}
+cat("beta_hat        : ", round(beta_hat,2), 
+    "\nsigsqr_eps_hat  : ", round(s_eps_hat,2),
+    "\nsigsqr_b_hat    : ", round(s_b_hat,2)) 
+```
+```{r}
+cat("b_hat:")
+print(b_hat)
+```
+
+Die Zunahme der BDI-II Reduktion über HSAs mit steigender ACT Komponentenanzahl wird deutlich
+
+Die Annahme, dass die BDI-II Reduktionsrate über HSAs gleich ist, mag etwas stark sein 
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (5) Multizentren-Regressionsmodell mit Random-Intercept-and-Slope
+\footnotesize
+
+Strukturelle Form
+
+Für Hochschulambulanzen $i = 1,2,3,4$ und Proband:innen $i = 1,2,3,4,5$ 
+\begin{equation}
+y_{ij} = \beta_0 + \beta_{1}x_{ij} + \beta_{0i} + \beta_{1i}x_{ij} + \eps_{ij} 
+\end{equation}
+mit
+
+* $x_{ij} :=$ Anzahl der ACT Komponenten in der Therapie von Proband:in $j$ in Hochschulambulanz $i$ 
+* $\beta_{0i} \sim N(0,\sigma_{b_0}^2)$ und $\beta_{1i} \sim N(0,\sigma_{b_1}^2)$  
+* $\eps_{ij} \sim N(0,\sigma_\eps^2)$
+
+Parameterbedeutungen
+\begin{tabular}{ll}
+$\beta_0$           & Erwartungswert der BDI-II-Reduktion bei 0 ACT Komponenten                             \\
+$\beta_1$           & Erwartungswert der BDI-II-Reduktion pro 1 ACT Komponente                              \\
+$b_{0i}$            & Hochschulambulanz-spezifische Abweichung der BDI-II-Reduktion bei 0 ACT Komponenten   \\
+$b_{1i}$            & Hochschulambulanz-spezifische Abweichung der BDI-II-Reduktion pro 1 ACT Komponente    \\
+$\sigma^2_{b_0}$    & Varianz der $b_{0i}$ zwischen Hochschulambulanzen                                     \\ 
+$\sigma^2_{b_1}$    & Varianz der $b_{1i}$ wischen Hochschulambulanzen                                      \\ 
+$\sigma^2_\eps$     & Varianz der Datenpunkte innerhalb der Hochschulambulanzen                             \\
+\end{tabular}   
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (5) Multizentren-Regressionsmodell mit Random-Intercept-and-Slope
+\vspace{1mm}
+
+\footnotesize
+Designmatrixform 
+\tiny
+\begin{equation}
+y = X\beta + Zb + \eps \Leftrightarrow
+\end{equation}
+\begin{equation}
+\begin{pmatrix}
+y_{11} \\
+y_{12} \\
+y_{13} \\
+y_{14} \\
+y_{15} \\
+y_{21} \\
+y_{22} \\
+y_{23} \\
+y_{24} \\
+y_{25} \\
+y_{31} \\
+y_{32} \\
+y_{33} \\
+y_{34} \\
+y_{35} \\
+y_{41} \\
+y_{42} \\
+y_{43} \\
+y_{44} \\
+y_{45} \\
+\end{pmatrix} = 
+\begin{pmatrix}
+1   & x_{11}    \\
+1   & x_{12}    \\
+1   & x_{13}    \\
+1   & x_{14}    \\
+1   & x_{15}    \\
+1   & x_{21}    \\
+1   & x_{22}    \\
+1   & x_{23}    \\
+1   & x_{24}    \\
+1   & x_{25}    \\
+1   & x_{31}    \\
+1   & x_{32}    \\
+1   & x_{33}    \\
+1   & x_{34}    \\
+1   & x_{35}    \\
+1   & x_{41}    \\
+1   & x_{42}    \\
+1   & x_{43}    \\
+1   & x_{44}    \\
+1   & x_{45}    \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_{0}  \\
+\beta_{1}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+1       & x_{11}    & 0         &  0        & 0         & 0         & 0         & 0         \\
+1       & x_{12}    & 0         &  0        & 0         & 0         & 0         & 0         \\
+1       & x_{13}    & 0         &  0        & 0         & 0         & 0         & 0         \\
+1       & x_{14}    & 0         &  0        & 0         & 0         & 0         & 0         \\
+1       & x_{15}    & 0         &  0        & 0         & 0         & 0         & 0         \\
+0       & 0         & 1         &  x_{21}   & 0         & 0         & 0         & 0         \\
+0       & 0         & 1         &  x_{22}   & 0         & 0         & 0         & 0         \\
+0       & 0         & 1         &  x_{23}   & 0         & 0         & 0         & 0         \\
+0       & 0         & 1         &  x_{24}   & 0         & 0         & 0         & 0         \\
+0       & 0         & 1         &  x_{25}   & 0         & 0         & 0         & 0         \\
+0       & 0         & 0         &  0        & 1         & x_{31}    & 0         & 0         \\
+0       & 0         & 0         &  0        & 1         & x_{32}    & 0         & 0         \\
+0       & 0         & 0         &  0        & 1         & x_{33}    & 0         & 0         \\
+0       & 0         & 0         &  0        & 1         & x_{34}    & 0         & 0         \\
+0       & 0         & 0         &  0        & 1         & x_{35}    & 0         & 0         \\
+0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{41}    \\
+0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{42}    \\
+0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{43}    \\
+0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{44}    \\
+0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{45}    \\
+\end{pmatrix} 
+\begin{pmatrix}
+\beta_{01}  \\
+\beta_{11}  \\
+\beta_{02}  \\
+\beta_{12}  \\
+\beta_{03}  \\
+\beta_{13}  \\
+\beta_{04}  \\
+\beta_{14}  \\
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{11}    \\
+\eps_{12}    \\
+\eps_{13}    \\
+\eps_{14}    \\
+\eps_{15}    \\
+\eps_{21}    \\
+\eps_{22}    \\
+\eps_{23}    \\
+\eps_{24}    \\
+\eps_{25}    \\
+\eps_{31}    \\
+\eps_{32}    \\
+\eps_{33}    \\
+\eps_{34}    \\
+\eps_{35}    \\
+\eps_{41}    \\
+\eps_{42}    \\
+\eps_{43}    \\
+\eps_{44}    \\
+\eps_{45}    \\
+\end{pmatrix}
+\end{equation}
+mit
+\begin{equation}
+b \sim N\left(0_8, \Sigma_b \right)
+\mbox{ und }
+\eps \sim N(0_{20},\sigma^2I_{20})
+\end{equation}
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+\noindent (5) Multizentren-Regressionsmodell mit Random-Intercept-and-Slope
+
+\vspace{3mm}
+\tiny
+```{r, echo = T}
+library(nlme)                                                             # R Paket 
+ctrl            = lmeControl(opt = "optim", maxIter = 100)                # Anzahl an ReML Iterationen
+D               = read.csv("./4_Daten/mz-regression-2.csv")               # Einlesen des Datensatzes
+D$HSA           = as.factor(D$HSA)                                        # Umwandlung numerischer Werte in R factor
+M               = lme(BDI ~ ACT, D, random = ~ ACT | HSA, control = ctrl) # LMM vom Einfache Lineare Regressionstyp 
+X               = model.matrix(M,D)                                       # Fixed-Effects-Designmatrix
+beta_hat        = M$coefficients$fixed                                    # Fixed-Effects-Parameterschätzer
+b_hat           = M$coefficients$random                                   # Random-Effects-Parameterschätzer
+s_eps_hat       = M$sigma**2                                              # Varianzkomponentenschätzer
+s_b_hat         = diag(getVarCov(M))                                      # Varianzkomponentenschätzer
+```
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+```{r, echo = F, eval = F}
+library(latex2exp)
+D           = read.csv("./4_Daten/mz-regression-2.csv")
+idxs        = list(1:5,6:10,11:15,16:20)
+pdf(
+file        = "./4_Abbildungen/ptf_4_mz_regression_2_lmm_2.pdf",
+width       = 5,
+height      = 5)
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+cols        = c("Gray20", "Gray40", "Gray60", "Gray80")
+plot(
+NaN,
+NaN,
+xlab        = "Anzahl ACT Komponenten",
+ylab        = "BDI-II-Reduktion",
+xlim        = c(8,37),
+ylim        = c(10,45))
+for (i in 1:4){
+    points(
+    D$ACT[D$HSA == i],
+    D$BDI[D$HSA == i],
+    col     = cols[i],
+    pch     = 19)
+    lines(
+    X[idxs[[i]],2] ,
+    X[idxs[[i]], ] %*% beta_hat + X[idxs[[i]], ] %*%  b_hat$HSA[i,],
+    col     = cols[i],
+    lty     = 1)
+}
+legend(
+"topright",
+c("HSA 1", "HSA 2", "HSA 3","HSA 4"),
+pch         = c(16,16,16,16),
+bg          = cols,
+col         = cols,
+bty         = "n",
+cex         = .8,
+x.intersp   = 1)
+dev.off() 
+```
+
+\vspace{2mm}
+\noindent (5) Multizentren-Regressionsmodell mit Random-Intercept-and-Slope
+ 
+```{r, echo = FALSE, out.width="60%", fig.align = "center"}
+knitr::include_graphics("4_Abbildungen/ptf_4_mz_regression_2_lmm_2.pdf")
+```
+
+
+# Ein Multizentren-Simpson's Paradox-Beispiel
+\vspace{2mm}
+Multizentren-Regressionsmodell mit Random-Intercept-and-Slope
+
+\small
+
+```{r}
+cat("beta_hat       : ", round(beta_hat,2), 
+    "\nsigsqr_b_hat   : ", round(s_b_hat,2),
+    "\nsigsqr_eps_hat : ", round(s_eps_hat,2))
+```
+
+```{r}
+cat("b_hat")
+print(b_hat)
+```
+
+Die BDI-II-Reduktion über HSAs mit steigender ACT Komponentenanzahl wird deutlich 
+
+Die BDI-II-Reduktionsraten varriieren nicht unabhängig über HSAs 
+
+
+# 
+\setstretch{2.7}
+\large
+\vfill
+Motivation
+
+Multizentren-Parallelgruppendesigns
+
+Multizentren-Regressionsdesigns
+
+Ein Multizentren-Simpson's Paradox-Beispiel
+
+**Selbstkontrollfragen**
+\vfill
+
+# Selbstkontrollfragen
+
+# Referenzen {.allowframebreaks}
+\footnotesize   

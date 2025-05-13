@@ -1,0 +1,250 @@
+---
+fontsize: 8pt
+format:
+    beamer:
+        include-in-header: "7_Header.tex"
+bibliography: 7_Referenzen.bib
+---
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%", fig.align = "center"}
+knitr::include_graphics("7_Abbildungen/eva_7_otto.png")
+```
+
+\huge
+Evaluation und Metaanalyse
+\vspace{4mm}
+
+\large
+MSc Klinische Psychologie und Psychotherapie   
+
+SoSe 2024
+
+\vspace{4mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\vfill
+\center
+\huge
+\textcolor{black}{(7) Linear Mixed Models in R}
+\vfill
+
+
+# 
+\vfill
+\setstretch{3}
+\large
+Linear Models mit `lm()` und `gls()`
+
+Linear Mixed Models mit `nlme`
+
+Linear Mixed Models mit `lme4.0`
+
+Selbstkontrollfragen
+\vfill
+
+# 
+\vfill
+\setstretch{3}
+\large
+**Linear Models mit `lm()` und `gls()`**
+
+Linear Mixed Models mit `nlme`
+
+Linear Mixed Models mit `lme4.0`
+
+Selbstkontrollfragen
+\vfill
+
+# Linear Models mit `lm()` und `gls()`
+\small
+R formulas
+
+\footnotesize
+Modelle der Form $y = X\beta + \varepsilon$ mit $\varepsilon \sim N(0_n,\sigma^2 I_n)$ werden in R symbolisch durch `formulas` dargestellt
+
+\vspace{2mm}
+```{r, eval = F, error = F, echo = T}
+Daten ~ Term 1 + Term 2 + ... + Term k
+```
+
+* Der `~` Operator trennt die linke Seite und rechte Seite einer `formula` 
+* `Daten` wird zur Identifikation der abhängigen Variable $y$ genutzt 
+* `Term 1 + Term 2 + ... + Term k` dient der Spezifikation der Spalten der Designmatrix $X$ 
+* Die `formulas` Syntax geht zurück auf @wilkinson1973 (vgl. @chambers1992)
+
+Terme können numerische Prädiktoren oder kategoriale Faktoren (R `factors`) sein
+
+Die `formula` Syntax ist symbolisch, zur Laufzeit müssen die Prädiktoren und Faktoren nicht spezifiziert sein
+
+Essentielle Operatoren in `formulas` sind `+` und `:`
+
+* `+` fügt der Designmatrix Prädiktoren hinzu, `:` dient der Spezifikation von Interaktionen
+
+Nichtessentielle Operatoren in `formulas` sind `*`, `/`, `%in%`, `-` und `^`
+
+* Für zwei Faktoren `f1` und `f2` gilt beispielsweise `f1*f2 = f1 + f2 + f1:f2`
+
+# Linear Models mit `lm()` und `gls()`
+\small
+R formulas
+
+\footnotesize 
+Beispiele mit `x1` als numerischer Vektor und `f1`, `f2` als R Faktoren
+\vspace{2mm}
+
+\tiny
+```{r, echo = T, eval = F}
+formula(y ~ x1)         # Spezifikation einer einfachen linearen Regresssion mithilfe der formula() Funktion              
+y ~ x1                  # Aufruf der formula() Funktion ist aber nicht nötig, R erkennt formulas auch so 
+y ~ 1 + x1              # Explizite Interzeptdefinition bei einfacher linearer Regression, nicht nötig
+y ~ 0 + x1              # Verzicht auf Interzeptdefinition bei einfacher lineare Regression#
+y ~ f1                  # Einfaktorielles ANOVA Design 
+y ~ f1 + f2             # Additives zweifaktorielles ANOVA Design 
+y ~ f1 + f2 + f1:f2     # Zweifaktorielles ANOVA Design mit Interaktion
+y ~ f1*f2               # Zweifaktorielles ANOVA Design mit Interaktion
+y ~ f1 + x1             # Additives einfaktorielles ANCOVA Design mit einer Kovariate 
+y ~ f1 + x1 + f1:x1     # Einfaktorielles ANCOVA Design mit einer Kovariate und Interaktionp
+```
+
+\footnotesize
+Wir betrachten die durch diese `formulas` erzeugten Designmatrizen im Folgenden
+
+# Linear Models mit `lm()` und `gls()`
+\small
+Die `terms` Klasse
+
+\footnotesize
+Die `terms()` Konstruktionsfunktion wandelt `formulas` in Objekte zur Konstruktion von Designmatrizen um
+
+Wir betrachten das Beispiel eines Zweifaktoriellen ANOVA Designs mit Interaktion
+
+\vspace{2mm}
+\tiny
+\setstretch{1}
+```{r, echo = T}
+t   = terms(y ~ f1*f2)      # Anwendung der terms() Konstruktionsfunktion auf eine formula
+names(attributes(t))        # Attributnamen des terms Objekts
+labels(t)                   # Terme der formula
+attr(t, "order")            # Interaktionsordnung der Terme
+attr(t, "intercept")        # Interzeptinklusion
+attr(t, "variables")        # Variablennamen
+```
+
+
+# Linear Models mit `lm()` und `gls()`
+\small
+Die `model.frame()` Funktion
+
+\footnotesize
+Die `model.frame()` Funktion kombiniert ein `terms` mit einem `data.frame` Objekt
+
+Ein `model.frame` Objekt dient als Präkursor einer Designmatrix. 
+
+
+
+
+# Linear Models mit `lm()` und `gls()`
+\small
+Die `model.matrix()` Funktion
+
+# 
+\vfill
+\setstretch{3}
+\large
+Linear Models mit `lm()` und `gls()`
+
+**Linear Mixed Models mit `nlme`**
+
+Linear Mixed Models mit `lme4.0`
+
+Selbstkontrollfragen
+\vfill
+
+# Linear Mixed Models mit `nlme`
+\small 
+\vspace{2mm}
+Die `pdMat` Klasse 
+
+\footnotesize
+Konstruktion positiv-definiter Matrizen für die Random-Effects-Kovarianzmatrix
+
+```{r, echo = T, eval = F}
+library(nlme)
+?pdClasses
+```
+
+| Funktion     | Zweck                                                                                  |
+|--------------|----------------------------------------------------------------------------------------| 
+| `pdIdenit`   | Konstruktion sphärischer Kovarianzmatrizen                                             |   
+| `pdDiag`     | Konstruktion von Diagonalkovarianzmatrizen                                             |   
+| `pdCompSymm` | Konstruktion von Kovarianzmatrizen mit Compound Symmetry                               | 
+| `pdLogChol`  | Konstruktion von Kovarianzmatrizen mithilfe der Log-Cholesky-Parameterisierung         | 
+| `pdSymm`     | Konstruktion von Kovarianzmatrizen mithilfe einer SVD-Parameterisierung                | 
+| `pdNatural`  | Konstruktion von Kovarianzmatrizen mithilfe von Standardabweichungen und Korrelationen |
+| `pdBlocked`  | Konstruktion von Blockdiagonalkovarianzmatrizen mithilfe obiger Funktionen             |
+
+\vspace{-3mm}
+Generelle Argumente der Konstruktionsfunktionen sind `value`, `form`, `data` und `nam`
+
+* `value` erlaubt die Spezifikation mithilfe selbst gewählter Werte
+* `form` und `data` erlauben eine R `formula` basierte Konstruktion
+* `nam` wird zur Benennung von Zeilen und Spalten der Kovarianzmatrix genutzt 
+
+\vspace{-2mm}
+`methods(class = "pdMat")` gibt Funktionen zur Inspektion und Manipulation von `pdMat` Objekten an
+\vspace{-1mm}
+
+* `summary()` gibt einen Überblick
+
+
+# Linear Mixed Models mit `nlme`
+\small 
+Die `pdMat` Klasse 
+\vspace{2mm}
+\tiny
+```{r, echo = T}
+# Konstruktion einer sphärischen Kovarianzmatrix 
+library(nlme)                                               # nlme Paket
+n   = 5                                                     # Dimension
+I   = pdIdent(diag(n))                                      # value-basierte Spezifikation        
+pdMatrix(I)                                                 # konstruierte Matrix 
+Dim(I)                                                      # Dimension der Matrix 
+summary(I)                                                  # Zusammenfassung
+```
+# Linear Mixed Models mit `nlme`
+\small 
+Die `pdMat` Klasse 
+\vspace{2mm}
+\tiny
+```{r, echo = T}
+# Konstruktion einer Diagonalkovarianzmatrix
+library(nlme)                                               # nlme Paket
+D   = pdDiag(diag(1:5))                                     # value-basierte Spezifikation        
+pdMatrix(D)                                                 # konstruierte Matrix 
+Dim(D)                                                      # Dimension der Matrix 
+summary(D)                                                  # Zusammenfassung
+```
+
+# Linear Mixed Models mit `nlme`
+\small 
+Die `reStruct` Klasse 
+
+\footnotesize
+Spezifikation der Random-Effects-Designmatrix und der Random-Effects-Kovarianzmatrix
+
+# Linear Mixed Models mit `nlme`
+\small 
+Die `lmeStruct` Klasse 
+
+\footnotesize
+Spezifikation der Random-Effects Aspekte eines Linear Mixed Models
+
+# Linear Mixed Models mit `nlme`
+\small 
+`lme()` für Modellformulierung und Modellschätzung 
+
+\footnotesize

@@ -1,0 +1,520 @@
+---
+fontsize: 8pt
+bibliography: 5_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: 5_header.tex
+---
+
+
+```{r, include = F}
+source("5_R_common.R")
+fdir        = file.path(getwd(), "5_Abbildungen")                               # Abbildungsverzeichnis
+```
+
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("5_Abbildungen/alm_5_otto.png")
+```
+
+\vspace{2mm}
+
+\huge
+Allgemeines Lineares Modell
+\vspace{6mm}
+
+\large
+BSc Psychologie SoSe 2023
+
+\vspace{6mm}
+\normalsize
+Prof. Dr. Dirk Ostwald
+
+#  {.plain}
+\center
+\huge
+\vfill
+\noindent (5) Modellformulierung 
+\vfill
+
+
+# Überblick
+\vspace{1mm}
+\textcolor{darkblue}{Modul B2 Inferenzstatistik | Allgemeines Lineares Modell}
+\small
+\center
+\footnotesize
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{lll}
+Datum       & Einheit                       & Thema					                            \\\hline
+13.04.2023  & Grundlagen                    & (1) Regression  				                  \\
+20.04.2023  & Grundlagen                    & (2) Korrelation               	          \\
+27.04.2023  & Grundlagen                    & (3) Matrizen                              \\
+04.05.2023  & Grundlagen                    & (4) Normalverteilungen                    \\
+11.05.2023  & Theorie                       & (5) Modellformulierung                    \\
+\textcolor{gray}{18.05.2023}                &  \textcolor{gray}{Feiertag} &             \\  
+25.05.2023  & Theorie                       & (6) Modellschätzung                       \\
+01.06.2023  & Theorie                       & (7) T-Statistiken                         \\
+08.06.2021  & Theorie                       & (8) F-Statistiken                         \\
+15.06.2021  & Anwendung                     & (9) T-Tests                               \\
+22.06.2021  & Anwendung                     & (10) Einfaktorielle Varianzanalyse        \\
+29.06.2023  & Anwendung                     & (11) Zweifaktorielle Varianzanalyse       \\
+06.07.2023  & Anwendung                     & (12) Multiple Regression                  \\
+13.07.2023  & Anwendung                     & (13) Kovarianzanalyse                     \\\hline
+20.07.2023  & Klausurtermin                 &                                           \\
+März 2024   & Klausurwiederholungstermin    &
+\end{tabular}
+
+
+#
+\large
+
+Naturwissenschaft \vspace{7mm}
+
+```{r, echo = FALSE, out.width = "90%"}
+knitr::include_graphics("5_Abbildungen/alm_5_wissenschaft.pdf")
+```
+
+#
+\vspace{1mm}
+\normalsize
+Modellformulierung
+\vspace{1mm}
+\small
+\begin{equation}
+\upsilon = X\beta + \varepsilon, \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+\vspace{5mm}
+
+\normalsize
+Modellschätzung
+\small
+\begin{equation}
+\hat{\beta} = (X^TX)^{-1} X^T\upsilon,  \hat{\sigma}^2 = \frac{(\upsilon-X\hat{\beta})^T(\upsilon-X\hat{\beta})}{n-p}
+\end{equation}
+\vspace{4mm}
+
+\normalsize
+Modellevaluation
+\small
+\begin{equation}
+T = \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}},
+F = \frac{(\hat{\varepsilon}_0^T\hat{\varepsilon}_0 - \hat{\varepsilon}^T\hat{\varepsilon})/p_1}{\hat{\varepsilon}^T\hat{\varepsilon}/(n-p)}
+\end{equation}
+
+#
+Standardprobleme Frequentistischer Inferenz
+
+\small
+\vspace{2mm}
+\noindent (1) Parameterschätzung
+
+Ziel der Parameterschätzung ist es, einen möglichst guten Tipp für wahre, aber unbekannte,
+Parameterwerte oder Funktionen dieser abzugeben, typischerweise mithilfe von Daten.
+
+\vspace{2mm}
+\noindent (2) Konfidenzintervalle
+
+Ziel der Bestimmung von Konfidenzintervallen ist es, basierend auf der angenommenen
+Verteilung der Daten eine quantitative Aussage über die mit Schätzwerten assoziierte
+Unsicherheit zu treffen.
+
+\vspace{2mm}
+\noindent (3) Hypothesentests
+
+Ziel des Hypothesentestens ist es, basierend auf der angenommenen
+Verteilung der Daten in einer möglichst zuverlässigen Form zu entscheiden, ob ein
+wahrer, aber unbekannter Parameterwert in einer von zwei sich gegenseitig
+ausschließenden Untermengen des Parameterraumes liegt.
+
+#
+\center
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("5_Abbildungen/alm_5_frequentistische_inferenz.pdf")
+```
+\center
+\footnotesize
+$\theta := (\beta,\sigma^2)$,
+$\Theta := \mathbb{R}^p \times \mathbb{R}_{>0}$
+$\mathbb{P}_\theta(\upsilon) := \mathbb{P}_{\beta,\sigma^2}(\upsilon)$ mit WDF $p_{\beta,\sigma^2}(y) := N(y;X\beta,\sigma^2I_n)$
+
+#
+\small
+Standardannahmen Frequentistischer Inferenz
+
+\footnotesize
+\setstretch{1.2}
+Gegeben sei das Allgemeine Lineare Modell. Es wird angenommen, dass ein
+vorliegender Datensatz eine der möglichen Realisierungen der Daten des Modells ist.
+Aus Frequentistischer Sicht kann man unendlich oft Datensätze basierend auf einem
+Modell generieren und zu jedem Datensatz Schätzer oder Statistiken auswerten, z.B.
+den Betaparameterschätzer
+\vspace{1mm}
+
+\begin{itemize}
+\item[] Datensatz (1) : $y^{(1)} = \left(y_1^{(1)}, y_2^{(1)}, ...,y_n^{(1)}\right)^T$ 	mit $\hat{\beta}^{(1)} = (X^TX)^{-1}X^Ty^{(1)}$
+\item[] Datensatz (2) : $y^{(2)} = \left(y_1^{(2)}, y_2^{(2)}, ...,y_n^{(2)}\right)^T$ 	mit $\hat{\beta}^{(2)} = (X^TX)^{-1}X^Ty^{(2)}$
+\item[] Datensatz (3) : $y^{(3)} = \left(y_1^{(3)}, y_2^{(3)}, ...,y_n^{(3)}\right)^T$ 	mit $\hat{\beta}^{(3)} = (X^TX)^{-1}X^Ty^{(3)}$
+\item[] Datensatz (4) : $y^{(4)} = \left(y_1^{(4)}, y_2^{(4)}, ...,y_n^{(4)}\right)^T$ 	mit $\hat{\beta}^{(4)} = (X^TX)^{-1}X^Ty^{(4)}$
+\item[] Datensatz (5) : $y^{(5)} = ...$
+\end{itemize}
+
+\vspace{1mm}
+Um die Qualität statistischer Methoden zu beurteilen betrachtet die Frequentistische
+Statistik die Wahrscheinlichkeitsverteilungen von Schätzern und Statistiken
+unter Annahme der Datenverteilung. Was zum Beispiel ist die Verteilung von
+$\hat{\beta}^{(1)}$, $\hat{\beta}^{(2)}$, $\hat{\beta}^{(3)}$, $\hat{\beta}^{(4)}$, ... also die
+Verteilung der Zufallsvariable $\hat{\beta} := (X^TX)^{-1}X^T\upsilon$? Wenn eine statistische
+Methode im Sinne der Frequentistischen Standardannahmen "gut" ist, dann heißt das
+also, dass sie bei häufiger Anwendung "im Mittel gut" ist. Im Einzelfall, also
+im Normalfall nur eines vorliegenden Datensatzes, kann sie auch "schlecht" sein.
+
+# Überblick
+\setstretch{2}
+Anwendungsbeispiele Einheiten (5) - (8)
+
+* Unabhängig und identisch normalverteilte Zufallsvariablen | Einstichproben-T-Test
+* Einfache lineare Regression
+
+Anwendungsbeispiele Einheiten (9) - (13)
+
+* Zweistichproben-T-Tests
+* Einfaktorielle Varianzanalyse
+* Zweifaktorielle Varianzanalyse
+* Multiple Regression
+* Kovarianzanalyse
+
+#
+\large
+\setstretch{3}
+\vfill
+
+Allgemeine Theorie
+
+Unabhängige und identisch normalverteilte Zufallsvariablen
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+#
+\large
+\setstretch{3}
+\vfill
+
+**Allgemeine Theorie**
+
+Unabhängige und identisch normalverteilte Zufallsvariablen
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+# Allgemeine Theorie
+\small
+\begin{definition}[Allgemeines Lineares Modell]
+Es sei
+\begin{equation}\label{eq:alm}
+\upsilon = X\beta + \varepsilon, 
+\end{equation}
+wobei
+\begin{itemize}
+\item $\upsilon$ ein $n$-dimensionaler beobachtbarer Zufallsvektor ist, der \textit{Daten} genannt wird,
+\item $X \in \mathbb{R}^{n \times p}$ mit $n>p$ eine vorgegebene Matrix ist, die \textit{Designmatrix} genannt wird,
+\item $\beta \in \mathbb{R}^p$ ein unbekannter Parametervektor ist, der \textit{Betaparametervektor} genannt wird, 
+\item $\varepsilon$ ein $n$-dimensionaler nicht-beobachtbarer Zufallsvektor ist, der \textit{Zufallsfehler} genannt wird und für den angenommen wird, dass
+mit einem unbekannten Varianzparameter $\sigma^2>0$ gilt, dass
+\begin{equation}
+\varepsilon \sim N\left(0_n, \sigma^2I_n\right).
+\end{equation}
+\end{itemize}
+Dann heißt \eqref{eq:alm} \textit{Allgemeines Lineares Modell (ALM)}.
+\end{definition}
+
+
+# Allgemeine Theorie
+\footnotesize
+Bemerkungen
+\setstretch{1.8}
+
+* \justifying Wir nehmen durchgängig an, dass $X \in \mathbb{R}^{n \times p}$ vollen Spaltenrang hat, also dass $\mbox{rg}(X)=p$.
+* $\upsilon$ ist ein Zufallsvektor, weil er aus der Addition des Zufallsvektors $\varepsilon$ zu dem Vektor $X\beta \in \mathbb{R}^n$ resultiert.
+* Wir nennen $X\beta \in \mathbb{R}^n$ den \textit{deterministischen Modellaspekt} und $\varepsilon$ den \textit{probabilistischen Modellaspekt}.
+* $n \in \mathbb{N}$ bezeichnet durchgängig die Anzahl an Datenpunkten.
+* $p \in \mathbb{N}$ bezeichnet durchgängig die Anzahl an Betaparametern.
+* Die Gesamtzahl an Parametern des ALMs ist $p + 1$ ($p$ Betaparameterkomponenten und $1$ Varianzparameter).
+* Der Betaparametervektor wird auch \textit{Gewichtsvektor} oder \textit{Effektvektor} genannt.
+* Weil der Kovarianzmatrixparameter von $\varepsilon$ als sphärisch angenommen wird, 
+sind die $\varepsilon_1,...,\varepsilon_n$ unabhängige normalverteilte
+Zufallsvariablen mit identischem Varianzparameter; weil zusätzlich der 
+Erwartungswertparameter von $\varepsilon$ als $0_n$ angenommen wird, sind die
+$\varepsilon_1,...,\varepsilon_n$ auch identisch normalverteilte Zufallsvariablen.
+* Für jede Komponente $\upsilon_i, i = 1,...,n$ von $\upsilon$ impliziert \eqref{eq:alm} nach Definition des Matrixprodukts, dass
+\begin{equation}
+\upsilon_i = x_{i1}\beta_1 + x_{i2}\beta_2 + \cdots +  x_{ip}\beta_p + \varepsilon_i \mbox{ mit } \varepsilon_i \sim N\left(0,\sigma^2\right),
+\end{equation}
+wobei $x_{ij} \in \mathbb{R}$ das $ij$te Element der Designmatrix $X$ bezeichnet.
+
+# Allgemeine Theorie 
+\footnotesize
+\begin{theorem}[Datenverteilung des Allgemeinen Linearen Modells]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Dann gilt
+\begin{equation}
+\upsilon \sim N(\mu,\sigma^2I_n) \mbox{ mit } \mu := X\beta \in \mathbb{R}^n.
+\end{equation}
+\end{theorem}
+
+\underline{Beweis}
+
+Mit dem Theorem zur linear-affinen Transformation multivariater Normalverteilungen
+gilt für $\varepsilon \sim N(0_n,\sigma^2I_n)$ und $\upsilon := I_n\varepsilon + X\beta$, dass
+\begin{equation}
+\upsilon \sim N\left(I_n0_n + X\beta, I_n (\sigma^2 I_n) I_n^T\right) = N(X\beta, \sigma^2 I_n) = N(\mu,\sigma^2I_n) \mbox{ mit } \mu := X\beta \in \mathbb{R}^n.
+\end{equation}
+Bemerkungen
+
+* \justifying Im ALM sind die Daten $\upsilon$ also ein $n$-dimensionaler normalverteilter
+Zufallsvektor mit Erwartungswertparameter $\mu = X\beta \in \mathbb{R}^n$ und 
+Kovarianzmatrixparameter $\sigma^2I_n \in \mathbb{R}^{n \times n}$. 
+* Die Komponenten $\upsilon_1,...,\upsilon_n$ von $\upsilon$, also die Datenpunkte, sind damit 
+unabhängige, aber im Allgemeinen nicht identisch verteilte, normalverteilte 
+Zufallsvariablen der Form $\upsilon_i \sim N\left(\mu_i,\sigma^2\right)$ für $i = 1,...,n$.
+
+#
+\large
+\setstretch{3}
+\vfill
+
+Allgemeine Theorie
+
+**Unabhängige und identisch normalverteilte Zufallsvariablen**
+
+Einfache lineare Regression
+
+Selbstkontrollfragen
+\vfill
+
+# Unabhängige und identisch normalverteilte Zufallsvariablen
+\small
+Wir betrachten das Szenario von $n$ unabhängigen und identisch normalverteilten
+Zufallsvariablen mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter
+$\sigma^2$, 
+\begin{equation}\label{eq:iid}
+\upsilon_i \sim N(\mu,\sigma^2) \mbox{ für } i = 1,...,n.
+\end{equation}
+Dann gilt, dass \eqref{eq:iid} äquivalent ist zu
+\begin{equation}
+\upsilon_i = \mu + \varepsilon_i, \varepsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n \mbox{ mit unabhängigen } \varepsilon_i.
+\end{equation}
+In Matrixschreibweise ist dies wiederum äquivalent zu
+\begin{equation}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n\in \mathbb{R}^{n \times 1}, \beta := \mu \in \mathbb{R}^1, \sigma^2>0.
+\end{equation}
+
+\justifying
+Bemerkungen
+
+* \justifying Wir kennen dieses Modell bereits aus Einheit (9) Grundbegriffe Frequentistischer Inferenz 
+in  Wahrscheinlichkeitstheorie und Frequentistsche Inferenz, dort haben wir es 
+geschrieben als 
+\begin{equation}
+\upsilon_1,...,\upsilon_n \sim N(\mu,\sigma^2) \mbox{ mit } (\mu,\sigma^2) \in \mathbb{R} \times \mathbb{R}_{>0}.
+\end{equation}
+
+
+# Unabhängige und identisch normalverteilte Zufallsvariablen
+\footnotesize
+
+```{r}
+# Modellformulierung
+library(MASS)                                # Multivariate Normalverteilung
+n      = 12                                  # Anzahl von Datenpunkten
+p      = 1                                   # Anzahl von Betaparameter
+X      = matrix(rep(1,n), nrow = n)          # Designmatrix
+I_n    = diag(n)                             # n x n Einheitsmatrix
+beta   = 2                                   # wahrer, aber unbekannter, Betaparameter
+sigsqr = 1                                   # wahrer, aber unbekannter, Varianzparameter
+
+# Datenrealisierung
+y      = mvrnorm(1, X %*% beta, sigsqr*I_n)  # eine Realisierung eines n-dimensionalen ZVs
+print(y)
+```
+
+
+#
+\large
+\setstretch{3}
+\vfill
+
+Allgemeine Theorie
+
+Unabhängige und identisch normalverteilte Zufallsvariablen
+
+**Einfache lineare Regression**
+
+Selbstkontrollfragen
+\vfill
+
+# Einfache lineare Regression
+\small
+
+Wir betrachten das Modell der einfachen linearen Regression aus Einheit (1) Regression,
+\begin{equation}\label{eq:slr}
+\upsilon_i = \beta_0 + \beta_1x_i + \varepsilon_i, \varepsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n,
+\end{equation}
+
+Wir haben bereits gesehen, dass dieses Modell folgende Datenverteilung besitzt:
+\begin{equation}
+\upsilon_i \sim N(\mu_i,\sigma^2) \mbox{ mit } \mu_i := \beta_0 + \beta_1x_i \mbox{ für } i = 1,...,n.
+\end{equation}
+
+In Matrixschreibweise ist dies wiederrum äquivalent zu
+\begin{equation}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit }
+X :=
+\begin{pmatrix}
+1      & x_1        \\
+1      & x_2        \\
+\vdots & \vdots     \\
+1      & x_n
+\end{pmatrix}
+\in \mathbb{R}^{n \times 2},
+\beta :=
+\begin{pmatrix}
+\beta_0 \\
+\beta_1
+\end{pmatrix}
+\in \mathbb{R}^2,
+\sigma^2 > 0.
+\end{equation}
+
+
+# Einfache lineare Regression
+\footnotesize
+```{r}
+# Modellformulierung
+library(MASS)                                # Multivariate Normalverteilung
+n      = 10                                  # Anzahl von Datenpunkten
+p      = 2                                   # Anzahl von Betaparametern
+x      = 1:n                                 # Prädiktorwerte
+X      = matrix(c(rep(1,n),x), nrow = n)     # Designmatrix
+I_n    = diag(n)                             # n x n Einheitsmatrix
+beta   = matrix(c(0,1), nrow = p)            # wahrer, aber unbekannter, Betaparameter
+sigsqr = 1                                   # wahrer, aber unbekannter, Varianzparameter
+
+# Datenrealisierung
+y      = mvrnorm(1, X %*% beta, sigsqr*I_n)  # eine Realisierung eines n-dimensionalen ZVs
+print(y)
+```
+
+# Einfache lineare Regression
+```{r, eval = F, echo = F}
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+xlimits     = c(0,11)
+ylimits     = c(-3,13)
+plot(
+x,
+X %*% beta,
+type        = "b",
+lty         = 2,
+pch         = 16,
+col         = "grey",
+xlab        = "x",
+ylab        = "y",
+xlim        = xlimits,
+ylim        = ylimits)
+
+# Regressorwerte
+points(
+x,
+rep(ylimits[1], n),
+col = "blue",
+pch = 16)
+
+# Datenwerte
+points(
+x,
+y,
+col = "black",
+pch = 16)
+
+# Speichern
+dev.copy2pdf(
+file        = file.path("./5_Abbildungen/alm_5_elr.pdf"),
+width       = 5,
+height      = 4)
+```
+\vspace{3mm}
+\normalsize
+\center
+\textcolor{blue}{$\bullet$} $x_i$
+\hspace{2mm}
+\textcolor{grey}{$\bullet$} $X\beta$ \mbox{ für } $\beta_0 := 0$, $\beta_1 := 1$
+\hspace{2mm}
+\hspace{2mm}
+\textcolor{black}{$\bullet$} $(x_i,y_i)$
+\vspace{-2mm}
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("5_Abbildungen/alm_5_elr.pdf")
+```
+
+
+#
+\large
+\setstretch{3}
+\vfill
+
+Allgemeine Theorie
+
+Unabhängige und identisch normalverteilte Zufallsvariablen
+
+Einfache lineare Regression
+
+**Selbstkontrollfragen**
+\vfill
+
+# Selbstkontrollfragen
+\footnotesize
+\setstretch{2.5}
+1. Erläutern Sie das naturwissenschaftliche Paradigma.
+1. Erläutern Sie die Standardprobleme der Frequentistischen Inferenz.
+1. Geben Sie die Definition des Allgemeinen Linearen Modells wieder.
+1. Erläutern Sie die deterministischen und probabilistischen Aspekte des ALMs.
+1. Wieviele skalare Parameter hat das ALM mit sphärischer Kovarianzmatrix?
+1. Warum sind die Komponenten des ALM Zufallsfehlers unabhängig und identisch verteilt?
+1. Geben Sie das Theorem zur Datenverteilung des Allgemeinen Linearen Modells wieder.
+1. Sind die Komponenten des ALM Datenvektors immer unabhängig und identisch verteilt?
+1. Schreiben Sie das Szenario von $n$ unabhängig und identisch normalverteilten Zufallsvariablen in ALM Form.
+1. Schreiben Sie das Szenario der einfachen linearen Regression in ALM Form.
+
+
+
+
