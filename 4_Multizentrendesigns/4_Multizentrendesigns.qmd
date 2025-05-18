@@ -481,7 +481,7 @@ mit
 Parameterbedeutungen
 \center
 \begin{tabular}{ll}
-$\beta_0$           & Mittlerer Erwartungswert der Kontrollgruppe über Zentren                                          \\
+$\beta_0$           & Erwartungswert der Kontrollgruppe über Zentren                                                    \\
 $\beta_1$           & Ewartungswertunterschied zwischen Kontrollgruppe und Treatmentgruppe                              \\
 $b_{0i}$            & Erwartungswertunterschied der Kontrollgruppen über Zentren                                        \\
 $b_{1i}$            & Erwartungswertunterschiedunterschied zwischen Kontrollgruppe und Treatmentgruppe zwischen Zentren \\
@@ -580,7 +580,7 @@ mit
 \begin{equation}
 \eps \sim N\left(0_{12}, \sigma_\eps^2 I_{12}\right) 
 \mbox{ und } 
-b    \sim N\left(0_3 , \Sigma_b     \right) 
+b    \sim N\left(0_6 , \Sigma_b     \right) 
 \end{equation}
 
 # Multizentren-Parallelgruppendesigns
