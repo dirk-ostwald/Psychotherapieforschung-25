@@ -3202,6 +3202,17 @@ Ein Multizentren-Simpson's Paradox-Beispiel
 \vfill
 
 # Selbstkontrollfragen
+\footnotesize
+\setstretch{3}
+
+1. Erläutern Sie die Definition, die Motivation und die Herausforderungen einer Multizentrenstudie.
+1. Erläutern Sie das Random-Center-Effect-Modell für Multizentren-Parallelgruppendesigns
+1. Erläutern Sie das Random-Center-by-Treatment-Interaction-Modell für Multizentren-Parallelgruppendesigns.
+1. Geben Sie das Theorem zur Populationsparameterdarstellung eines LLMs wieder.
+1. Erläutern Sie die Bedeutung des Theorems zur Populationsparameterdarstellung eines LMMs wieder.
+1. Erläutern Sie das Random-Intercept-Only-Modell für Multizentren-Regressionsdesigns.
+1. Erläutern Sie das Random-Slope-Only-Modell für Multizentren-Regressionsdesigns.
+1. Erläutern Sie das Random-Intercept-and-Slope-Modell für Multizentren-Regressionsdesigns.
 
 # Referenzen {.allowframebreaks}
 \footnotesize   
