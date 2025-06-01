@@ -1,0 +1,1198 @@
+
+
+
+
+# Mixed-Model-Analyse
+\small
+Strukturelle Form
+\footnotesize
+
+Für Proband:innen $i = 1,...,n$
+\begin{align}
+\begin{split}
+y_{i0} & = \beta_0 + \beta_1x_i + \quad\quad\quad\quad\quad  +\, b_{0i} + \eps_{i0}  \quad \mbox{ (Pre) }        \\
+y_{i1} & = \beta_0 + \beta_1x_i + \beta_{2} + \beta_{3}x_{i} +   b_{0i} + \eps_{i1}  \quad \mbox{ (Post) }       \\
+\end{split}
+\end{align}
+mit
+
+* $x_{i} := 0$ für Proband:in $i$ in Kontrollgruppe
+* $x_{i} := 1$ für Proband:in $i$ in Treatmentgruppe
+* $b_{0i} \sim N\left(0, \sigma_b^2\right)$, $\eps_{i0} \sim N\left(0,\sigma^2_\eps\right)$ und $\eps_{i1} \sim N\left(0,\sigma^2_\eps\right)$ u.v. 
+
+Parameterbedeutungen
+
+\begin{tabular}{ll}
+$\beta_0$       & Gruppenunabhängiger Erwartungswert der Pre-Messung                                    \\
+$\beta_1$       & Erwartungswertunterschied zwischen Gruppen über Messungen                             \\
+$\beta_2$       & Gruppenunabhängiger Erwartungswertunterschied zwischen Post- und Pre-Messung          \\
+$\beta_3$       & Erwartungswertunterschiedunterschied zwischen Post- und Pre-Messung zwischen Gruppen  \\
+$b_{0i}$        & Proband:inabhängiger Erwartungswertunterschied über Gruppen und Messungen             \\
+$\sigma_b^2$    & Variabilität zwischen Proband:innen                                                   \\
+$\sigma_\eps^2$ & Variabilität zwischen Proband:innen und Messungen
+\end{tabular}   
+
+# Mixed-Model-Analyse
+\small
+Parallelgruppen-Pre-Post-Design-LMM - Designmatrixform
+
+\footnotesize
+$n = 6$ Proband:innen, Proband:innen $i = 1,2,3$ in Kontrollgruppe, Proband:innen $i = 4,5,6$ in Treatmentgruppe
+
+\begin{align}
+\begin{split}
+y & = X\beta + Zb + \eps \\ 
+\Leftrightarrow
+\begin{pmatrix}
+y_{10}  \\
+y_{20}  \\
+y_{30}  \\
+y_{11}  \\
+y_{21}  \\
+y_{31}  \\
+y_{40}  \\
+y_{50}  \\
+y_{60}  \\
+y_{41}  \\
+y_{51}  \\
+y_{61}  \\
+\end{pmatrix}
+& =
+\begin{pmatrix}
+1  &  0  &  0  &  0 \\
+1  &  0  &  0  &  0 \\
+1  &  0  &  0  &  0 \\
+1  &  0  &  1  &  0 \\
+1  &  0  &  1  &  0 \\
+1  &  0  &  1  &  0 \\
+1  &  1  &  0  &  0 \\
+1  &  1  &  0  &  0 \\
+1  &  1  &  0  &  0 \\
+1  &  1  &  1  &  1 \\
+1  &  1  &  1  &  1 \\
+1  &  1  &  1  &  1 \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_0 \\
+\beta_1 \\
+\beta_2 \\
+\beta_3 
+\end{pmatrix}
++
+\begin{pmatrix}
+1   &   0   &   0   &   0  &   0  &  0 \\
+0   &   1   &   0   &   0  &   0  &  0 \\
+0   &   0   &   1   &   0  &   0  &  0 \\
+1   &   0   &   0   &   0  &   0  &  0 \\
+0   &   1   &   0   &   0  &   0  &  0 \\
+0   &   0   &   1   &   0  &   0  &  0 \\
+0   &   0   &   0   &   1  &   0  &  0 \\
+0   &   0   &   0   &   0  &   1  &  0 \\
+0   &   0   &   0   &   0  &   0  &  1 \\
+0   &   0   &   0   &   1  &   0  &  0 \\
+0   &   0   &   0   &   0  &   1  &  0 \\
+0   &   0   &   0   &   0  &   0  &  1 \\
+\end{pmatrix}
+\begin{pmatrix}
+b_{01} \\
+b_{02} \\
+b_{03} \\
+b_{04} \\
+b_{05} \\
+b_{06} \\
+\end{pmatrix}
++
+\begin{pmatrix}
+\eps_{10}  \\
+\eps_{20}  \\
+\eps_{30}  \\
+\eps_{11}  \\
+\eps_{21}  \\
+\eps_{31}  \\
+\eps_{40}  \\
+\eps_{50}  \\
+\eps_{60}  \\
+\eps_{41}  \\
+\eps_{51}  \\
+\eps_{61}  \\
+\end{pmatrix}
+\end{split}
+\end{align}
+
+
+# Posttestdaten-Kovarianzanalyse mit Pretest-Kovariaten
+
+Adjustierte Gruppenmittelwerte
+
+\small
+Die Kovarianzanalyse erlaubt die Bestimmung adjustierter Gruppenmittelwerte 
+(adjusted marginal means). Die adjustierten Gruppenmittelwerte beantworten die 
+Frage nach dem Gruppenmittelwertsunterschied gegeben identische Kovariatenwerte. 
+Bei randomisierten Parallelgruppen-Pretest-Posttest-Designs gilt nach Voraussetzung 
+die Gleicheit der Gruppenerwartungswerte der Pretestdaten, dies ist gerade der Sinn 
+der randomisierten Gruppenzuteilung. rotzdem mag es zu leichten Imbalancen kommen, 
+die durch die Posttestdaten-Kovarianzanalyse mit Pretest-Kovariaten ausgeglichen 
+werden können. Bei nicht randomisierten, quasiexperimentellen Pretest-Posttest-Designs 
+die Bedeutung der ajdustierten Gruppenmittelwerte größer als bei randomisierten Designs.
+
+# Posttestdaten-Kovarianzanalyse mit Pretest-Kovariaten
+
+Adjustierte Gruppenmittelwerte
+
+\footnotesize 
+Strukturelle Form
+
+Es seien 
+
+* $\bar{y}_{01}$ und $\bar{y}_{11}$ die Mittelwerte der Pretest- bzw. Posttestdaten der Kontrollgruppe
+* $\bar{y}_{02}$ und $\bar{y}_{12}$ die Mittelwerte der Pretest- bzw. Posttestdaten der Treatmentgruppe 
+* $\bar{y}_{0}$ der marginalen  Mittelwerte der Pretestdaten über Gruppen 
+
+Dann gilt nach dem Posttestdaten-Kovarianzanalysemodell mit Pretest-Kovariaten, dass 
+\begin{equation}
+\bar{y}_{11} = \hat{\beta}_0 +\hat{\beta}_2\bar{y}_{01} \mbox{ und }
+\bar{y}_{12} = \hat{\beta}_0 + \hat{\beta}_1 + \hat{\beta}_2\bar{y}_{02}
+\end{equation}
+und 
+\begin{equation}
+\tilde{y}_{11} := \hat{\beta}_0 + \hat{\beta}_2\bar{y}_{0} \mbox{ und }
+\tilde{y}_{12} := \hat{\beta}_0 + \hat{\beta}_1 + \hat{\beta}_2\bar{y}_{0}
+\end{equation}
+werden *adjustierte Posttestgruppenmittelwerte* genannt. 
+
+Intuitiv spiegeln die adjustierten Posttestgruppenmittelwerte die hypothetischen
+Gruppenmittelwerte, die sich basierend auf der Schätzung der linear-affinen 
+Abhängigkeit von  Pretest- und Posttestdaten unter der Bedingung eines identischen
+mittleren Pretestwerts ergäben.
+
+# Posttestdaten-Kovarianzanalyse mit Pretest-Kovariaten
+
+Adjustierte Gruppenmittelwerte
+
+\hl{ABBILDUNGEN GEMÄSS MAXWELL ABBILDUNG 9.5 = GAUSSIAN MIXTURE MODELS}
+
+
+# 
+\vfill
+\setstretch{2.3}
+\large
+Motivation
+
+Posttestdaten-Varianzanalyse
+
+Posttestdaten-Kovarianzanalyse mit Pretest-Kovariaten
+
+**Change-Score-Varianzanalyse**
+
+Repeated-Measures Varianzanalyse
+
+Linear-Mixed-Model Analyse
+
+Selbstkontrollfragen
+\vfill 
+
+
+
+
+
+# 
+\vfill
+\setstretch{2.3}
+\large
+Motivation
+
+Posttestdaten-Varianzanalyse
+
+Posttestdaten-Kovarianzanalyse mit Pretest-Kovariaten
+
+Change-Score-Varianzanalyse
+
+**Repeated-Measures Varianzanalyse**
+
+Linear-Mixed-Model Analyse
+
+Selbstkontrollfragen
+\vfill 
+
+
+# 
+\vfill
+\setstretch{2.3}
+\large
+Motivation
+
+Posttestdaten-Varianzanalyse
+
+Posttestdaten-Kovarianzanalyse mit Pretest-Kovariaten
+
+Change-Score-Varianzanalyse
+
+Repeated-Measures Varianzanalyse
+
+**Linear Mixed Model Analyse**
+
+Selbstkontrollfragen
+\vfill
+
+# Linear Mixed Model Analyse
+
+
+
+
+
+# Linear Mixed Model Analyse
+\small
+Parallelgruppen-Pre-Post-Design-Test-Modell - Strukturelle Form
+\footnotesize
+
+Für Proband:innen $i = 1,...,n$
+\begin{align}
+\begin{split}
+y_{i0} & = \beta_0 + \beta_1x_i + \quad\quad\quad\quad\quad  +\, b_{0i} + \eps_{i0}  \quad \mbox{ (Pre) }        \\
+y_{i1} & = \beta_0 + \beta_1x_i + \beta_{2} + \beta_{3}x_{i} +   b_{0i} + \eps_{i1}  \quad \mbox{ (Post) }       \\
+\end{split}
+\end{align}
+mit
+
+* $x_{i} := 0$ für Proband:in $i$ in Kontrollgruppe
+* $x_{i} := 1$ für Proband:in $i$ in Treatmentgruppe
+* $b_{0i} \sim N\left(0, \sigma_b^2\right)$, $\eps_{i0} \sim N\left(0,\sigma^2_\eps\right)$ und $\eps_{i1} \sim N\left(0,\sigma^2_\eps\right)$ u.v. 
+
+Parameterbedeutungen
+
+\begin{tabular}{ll}
+$\beta_0$       & Gruppenunabhängiger Erwartungswert der Pre-Messung                                    \\
+$\beta_1$       & Erwartungswertunterschied zwischen Gruppen über Messungen                             \\
+$\beta_2$       & Gruppenunabhängiger Erwartungswertunterschied zwischen Post- und Pre-Messung          \\
+$\beta_3$       & Erwartungswertunterschiedunterschied zwischen Post- und Pre-Messung zwischen Gruppen  \\
+$b_{0i}$        & Proband:inabhängiger Erwartungswertunterschied über Gruppen und Messungen             \\
+$\sigma_b^2$    & Variabilität zwischen Proband:innen                                                   \\
+$\sigma_\eps^2$ & Variabilität zwischen Proband:innen und Messungen
+\end{tabular} -->
+
+# Linear Mixed Model Analyse
+\small
+Parallelgruppen-Pre-Post-Design-LMM - Designmatrixform
+
+\footnotesize
+$n = 6$ Proband:innen, Proband:innen $i = 1,2,3$ in Kontrollgruppe, Proband:innen $i = 4,5,6$ in Treatmentgruppe
+
+\begin{align}
+\begin{split}
+y & = X\beta + Zb + \eps \\ 
+\Leftrightarrow
+\begin{pmatrix}
+y_{10}  \\
+y_{20}  \\
+y_{30}  \\
+y_{11}  \\
+y_{21}  \\
+y_{31}  \\
+y_{40}  \\
+y_{50}  \\
+y_{60}  \\
+y_{41}  \\
+y_{51}  \\
+y_{61}  \\
+\end{pmatrix}
+& =
+\begin{pmatrix}
+1  &  0  &  0  &  0 \\
+1  &  0  &  0  &  0 \\
+1  &  0  &  0  &  0 \\
+1  &  0  &  1  &  0 \\
+1  &  0  &  1  &  0 \\
+1  &  0  &  1  &  0 \\
+1  &  1  &  0  &  0 \\
+1  &  1  &  0  &  0 \\
+1  &  1  &  0  &  0 \\
+1  &  1  &  1  &  1 \\
+1  &  1  &  1  &  1 \\
+1  &  1  &  1  &  1 \\
+\end{pmatrix}
+\begin{pmatrix}
+\beta_0 \\
+\beta_1 \\
+\beta_2 \\
+\beta_3 
+\end{pmatrix}
++
+\begin{pmatrix}
+1   &   0   &   0   &   0  &   0  &  0 \\
+0   &   1   &   0   &   0  &   0  &  0 \\
+0   &   0   &   1   &   0  &   0  &  0 \\
+1   &   0   &   0   &   0  &   0  &  0 \\
+0   &   1   &   0   &   0  &   0  &  0 \\
+0   &   0   &   1   &   0  &   0  &  0 \\
+0   &   0   &   0   &   1  &   0  &  0 \\
+0   &   0   &   0   &   0  &   1  &  0 \\
+0   &   0   &   0   &   0  &   0  &  1 \\
+0   &   0   &   0   &   1  &   0  &  0 \\
+0   &   0   &   0   &   0  &   1  &  0 \\
+0   &   0   &   0   &   0  &   0  &  1 \\
+\end{pmatrix}
+\begin{pmatrix}
+b_{01} \\
+b_{02} \\
+b_{03} \\
+b_{04} \\
+b_{05} \\
+b_{06} \\
+\end{pmatrix}
++
+\begin{pmatrix}
+\eps_{10}  \\
+\eps_{20}  \\
+\eps_{30}  \\
+\eps_{11}  \\
+\eps_{21}  \\
+\eps_{31}  \\
+\eps_{40}  \\
+\eps_{50}  \\
+\eps_{60}  \\
+\eps_{41}  \\
+\eps_{51}  \\
+\eps_{61}  \\
+\end{pmatrix}
+\end{split}
+\end{align}
+
+# Linear Mixed Model Analyse
+\small
+Parallelgruppen-Pre-Post-Design-LMM 
+
+\tiny
+\setstretch{1.2}
+```{r, echo = T}
+library(MASS)                                                                   # Multivariate Normalverteilung
+set.seed(3)                                                                     # Zufallszahlengenerator
+n_g     = 2                                                                     # Anzahl Gruppen
+n_i     = 3                                                                     # Anzahl Proband:innen/Gruppe
+n_m     = 2                                                                     # Anzahl Messpunkte
+n       = n_g*n_i                                                               # Proband:innen Gesamtzahl
+p       = 4                                                                     # Anzahl Fixed Effects  
+D       = matrix(c(1,0,0,0,                                                     # Pre-Messung Kontrollgruppe
+                   1,0,1,0,                                                     # Post-Messung Kontrollgrupe
+                   1,1,0,0,                                                     # Pre-Messung Treatmentgruppe
+                   1,1,1,1), nrow = p, byrow = TRUE)                            # Post-Messung Treatmentgruppe
+X       = kronecker(D,rep(1,n_i))                                               # Kroneckerprodukt Designmatrix
+Z       = kronecker(diag(n_g),kronecker(rep(1,n_m), diag(n_i)))                 # Random Effects Designmatrix
+id      = c(rep(1:n_i,2),rep((n_i+1):n,2))                                      # ID Faktor 
+treat   = ifelse(X[,2] == 0, "ctrl", "treat")                                   # Treatmentfaktor         
+time    = ifelse(X[,3] == 0, "pre" , "post")                                    # Messungsfaktor
+sig_eps = 1e-6                                                                  # Proband:innen & Messpunktvarianz
+sig_b   = 1                                                                     # Proband:innevarianz
+b       = mvrnorm(1, rep(0,n)  , sig_b*diag(n))                                 # Random Effects  
+eps     = mvrnorm(1, rep(0,2*n), sig_eps*diag(2*n))                             # Fehlervektor
+beta    = list(c(30,0,0,0), c(30,-5,0,0), c(30,0,-5,0), c(30,0,0,-5))           # Fixed-Effects
+nb      = length(beta)                                                          # Anzahl FFX Szenarien
+for(i in 1:nb){                                                                 # Betaszenarioiterationen    
+    y   =  X %*% beta[[i]] + Z %*% b + eps                                      # Gesamtdatensatz      
+    D   = data.frame(id = id, treat = treat, time = time, y = y)                # Dataframe
+    write.csv(D, paste0("./5_Daten/ld-pre-post-", i, ".csv"))                   # Speichern
+}
+```
+
+# Linear Mixed Model Analyse
+\footnotesize
+Datensatz im Long Format
+\tiny
+\vspace{1mm}
+\setstretch{1}
+```{r, echo = T}
+D   = read.csv(paste0("./5_Daten/ld-pre-post-1.csv"), row.names = 1)
+```
+
+```{r}
+print(D)
+```
+
+\footnotesize
+Datensatz im Wide Format
+\tiny
+\vspace{1mm}
+```{r, echo = T}
+library(tidyr)                                                                  # tidyr
+D  = pivot_wider(D, names_from = time, values_from = y)                         # Transformation          
+```
+
+```{r}
+print(D)
+```
+
+```{r, echo = F, eval = F}
+library(tidyr)
+trl = c("Kontrollgruppe", "Treatmentgruppe")  
+trs = c("ctrl", "treat")
+for(i in 1:nb){
+    D           = read.csv(paste0("./5_Daten/ld-pre-post-", i ,".csv"), row.names = 1)
+    D           = pivot_wider(D, names_from = time, values_from = y)
+    pdf(
+    file        = paste0("./5_Abbildungen/ptf-5-ld-pre-post-", i, ".pdf"),
+    width       = 9,
+    height      = 4.5)
+    par(
+    family      = "sans",
+    mfcol       = c(1,2),
+    pty         = "s",
+    bty         = "l",
+    lwd         = 1,
+    las         = 1,
+    mgp         = c(2,1,0),
+    xaxs        = "i",
+    yaxs        = "i",
+    font.main   = 1,
+    cex         = 1.1,
+    cex.main    = 1.2)  
+    for(t in 1:2){
+        matplot(
+        rbind(
+        matrix(D$pre[D$treat  == trs[t]], ncol = nrow(D)), 
+        matrix(D$post[D$treat == trs[t]], ncol = nrow(D))),
+        type        = "b", 
+        lty         = 1, 
+        pch         = 21, 
+        col         = "lightgrey",
+        bg          = "darkgrey",
+        xaxt        = "n", 
+        xlab        = "", 
+        ylab        = "", 
+        main        = trl[t],
+        xlim        = c(0.5,2.5),
+        ylim        = c(20,35))
+        axis(
+        1, 
+        at          = c(1, 2), 
+        labels      = c("Pre", "Post"))
+        pre_mean    = mean(D$pre[D$treat  == trs[t]])
+        pos_mean    = mean(D$post[D$treat == trs[t]])
+        points(
+        x          = c(1,2),
+        y          = c(pre_mean, pos_mean))
+        segments(
+        x0          = 1,
+        y0          = pre_mean,
+        x1          = 2,
+        y1          = pos_mean,
+        col         = "black",
+        pch         = 16)
+    }
+    dev.off()
+}
+```
+
+# Linear Mixed Model Analyse
+\vspace{1mm}
+\footnotesize
+\begin{equation}
+\beta := (30,0,0,0)^T, \sigma_b^2 := 1, \sigma_\eps^2 := 10^{-6}
+\end{equation}
+
+```{r, echo = FALSE, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-ld-pre-post-1.pdf")
+```
+
+\tiny
+\begin{tabular}{ll}             
+$\beta_0 = 30$   & Erwartungswert der Pre-Messung der Kontrollgruppe                                                   \\
+$\beta_1 =  0$   & Kein Unterschied in der Pre-Messung zwischen Kontroll- und Treatmentgruppe                          \\         
+$\beta_2 =  0$   & Kein Unterschied  zwischen Pre-Messung und Post-Messung in der Kontrollgruppe                       \\
+$\beta_3 =  0$   & Kein Unterschiedsunterschied zwischen Pre- und Post-Messung zwischen Kontroll- und Treatmentgruppe  \\ 
+\end{tabular}
+
+# Linear Mixed Model Analyse
+\vspace{1mm}
+\footnotesize
+\begin{equation}
+\beta := (30,-5,0,0)^T, \sigma_b^2 := 1, \sigma_\eps^2 := 10^{-6}
+\end{equation}
+
+```{r, echo = FALSE, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-ld-pre-post-2.pdf")
+```
+
+\tiny
+\begin{tabular}{ll}             
+$\beta_0 = 30$   & Erwartungswert der Pre-Messung der Kontrollgruppe                                                    \\
+$\beta_1 = -5$   & Unterschied in der Pre-Messung zwischen Kontroll- und Treatmentgruppe                                \\         
+$\beta_2 =  0$   & Kein Unterschied  zwischen Pre-Messung und Post-Messung in der Kontrollgruppe                        \\
+$\beta_3 =  0$   & Kein Unterschiedsunterschied zwischen Pre- und Post-Messung zwischen Kontroll- und Treatmentgruppe   \\ 
+\end{tabular}
+
+# Linear Mixed Model Analyse
+\vspace{1mm}
+\footnotesize
+\begin{equation}
+\beta := (30,0,-5,0)^T, \sigma_b^2 := 1, \sigma_\eps^2 := 10^{-6}
+\end{equation}
+
+```{r, echo = FALSE, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-ld-pre-post-3.pdf")
+```
+
+\tiny
+\begin{tabular}{ll}             
+$\beta_0 = 30$   & Erwartungswert der Pre-Messung der Kontrollgruppe                                                    \\
+$\beta_1 =  0$   & Kein Unterschied in der Pre-Messung zwischen Kontroll- und Treatmentgruppe                           \\         
+$\beta_2 = -5$   & Unterschied zwischen Pre-Messung und Post-Messung in der Kontrollgruppe                              \\
+$\beta_3 =  0$   & Kein Unterschiedsunterschied zwischen Pre- und Post-Messung zwischen Kontroll- und Treatmentgruppe   \\ 
+\end{tabular}
+
+# Linear Mixed Model Analyse
+\vspace{1mm}
+Parallelgruppen-Pre-Post-Design-LMM
+\vspace{1mm}
+\footnotesize
+\begin{equation}
+\beta := (30,0,0,-5)^T, \sigma_b^2 := 1, \sigma_\eps^2 := 10^{-6}
+\end{equation}
+
+```{r, echo = FALSE, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-ld-pre-post-4.pdf")
+```
+
+\tiny
+\begin{tabular}{ll}             
+$\beta_0 = 30$   & Erwartungswert der Pre-Messung der Kontrollgruppe                                               \\
+$\beta_1 =  0$   & Kein Unterschied in der Pre-Messung zwischen Kontroll- und Treatmentgruppe                      \\         
+$\beta_2 =  0$   & Kein Unterschied zwischen Pre-Messung und Post-Messung in der Kontrollgruppe                    \\
+$\beta_3 =  -5$  & Unterschiedsunterschied zwischen Pre- und Post-Messung zwischen Kontroll- und Treatmentgruppe   \\ 
+\end{tabular}
+
+
+# Linear Mixed Model Analyse
+Change-Score Analyse des Parallelgruppen-Pre-Post-Design-LMMs
+
+\footnotesize
+\begin{theorem}[ANOVA Äquivalenz]
+\begin{align}
+\begin{split}
+y_{i} := y_{i1} - y_{i0}
+\end{split}
+\end{align}
+\end{theorem}
+
+
+\footnotesize
+\underline{Beweis}
+\begin{align}
+\begin{split}
+y_i 
+& = y_{i1} - y_{i0}                                                                                                 \\
+& = \beta_0 + \beta_1x_i + \beta_2 + \beta_3x_i + b_{0i} + \eps_{i1} - \beta_0 - \beta_1x_i - b_{0i} - \eps_{i0}    \\
+& = \beta_2 + \beta_3x_i + \eps_{i1}-\eps_{i0}                                                                      \\ 
+& = \beta_2 + \beta_3x_i + \eps_i
+\end{split}
+\end{align}
+
+
+# Linear Mixed Model Analyse
+\small
+Change-Score Analyse des Parallelgruppen-Pre-Post-Design-LMMs
+\vspace{1mm}
+
+$\Leftrightarrow$ Zweistichproben-T-Test
+
+
+# Pretest-Posttest-Design Analyse
+\small
+Change-Score Analyse des Parallelgruppen-Pre-Post-Design-LMMs
+\vspace{1mm}
+
+\tiny
+\setstretch{1}
+```{r, echo = T}
+library(MASS)                                                                   # Multivariate Normalverteilung
+set.seed(3)                                                                     # Zufallszahlengenerator
+nsim    = 1e3                                                                   # Anzahl Modellrealisierungen
+n_g     = 2                                                                     # Anzahl Gruppen
+n_i     = 3                                                                     # Anzahl Proband:innen/Gruppe
+n_m     = 2                                                                     # Anzahl Messpunkte
+n       = n_g*n_i                                                               # Proband:innen Gesamtzahl
+p       = 4                                                                     # Anzahl Fixed Effects  
+D       = matrix(c(1,0,0,0,                                                     # Pre-Messung Kontrollgruppe
+                   1,0,1,0,                                                     # Post-Messung Kontrollgrupe
+                   1,1,0,0,                                                     # Pre-Messung Treatmentgruppe
+                   1,1,1,1), nrow = p, byrow = TRUE)                            # Post-Messung Treatmentgruppe
+X       = kronecker(D,rep(1,n_i))                                               # Kroneckerprodukt Designmatrix
+Z       = kronecker(diag(n_g),kronecker(rep(1,n_m), diag(n_i)))                 # Random Effects Designmatrix
+id      = c(rep(1:n_i,2),rep((n_i+1):n,2))                                      # ID Faktor 
+treat   = ifelse(X[,2] == 0, "ctrl", "treat")                                   # Treatmentfaktor         
+time    = ifelse(X[,3] == 0, "pre" , "post")                                    # Messungsfaktor
+beta    = c(30,-3,-2,-3)                                                        # Fixed-Effects 
+sig_eps = 1e-6                                                                  # Proband:innen & Messpunktvarianz
+sig_b   = 1                                                                     # Proband:innevarianz
+csc     = c()                                                                   # CS Kontrollgruppe
+cst     = c()                                                                   # CS Treatmentgruppe
+for(i in 1:nsim){                                                               # Simulationsiterationen
+    b   = mvrnorm(1, rep(0,n)  , sig_b*diag(n))                                 # Random Effects  
+    eps = mvrnorm(1, rep(0,2*n), sig_eps*diag(2*n))                             # Fehlervektor
+    y   = X %*% beta + Z %*% b + eps                                            # Gesamtdatensatz   
+    csc = c(csc, y[X[,3] == 1 & X[,2] == 0] - y[X[,3] == 0 & X[,2] == 0])       # CS Kontrollgruppe
+    cst = c(cst, y[X[,3] == 1 & X[,2] == 1] - y[X[,3] == 0 & X[,2] == 1])}      # CS Treatmentgruppe
+D       = data.frame(id = id, treat = treat, time = time, y = y)                # Dataframe
+write.csv(D, paste0("./5_Daten/ld-pre-post-cs.csv"))                            # Speichern
+```
+
+# Pretest-Posttest-Design Analyse
+Change-Score Analyse des Parallelgruppen-Pre-Post-Design-LMMs
+
+\footnotesize
+Datensatz im Long Format
+\tiny
+\vspace{1mm}
+\setstretch{1}
+```{r, echo = T}
+D   = read.csv(paste0("./5_Daten/ld-pre-post-cs.csv"), row.names = 1)
+```
+
+```{r}
+print(D)
+```
+
+\footnotesize
+Datensatz im Wide Format
+\tiny
+\vspace{1mm}
+```{r, echo = T}
+library(tidyr)                                                                  # tidyr
+D       = pivot_wider(D, names_from = time, values_from = y)                    # Transformation  
+D$cs    = D$post - D$pre                                                        # Change Scores  
+```
+
+```{r}
+print(D)
+```
+
+```{r, echo = F, eval = F}
+library(tidyr)
+trl = c("Kontrollgruppe", "Treatmentgruppe")  
+trs = c("ctrl", "treat")
+D           = read.csv(paste0("./5_Daten/ld-pre-post-cs.csv"), row.names = 1)
+D           = pivot_wider(D, names_from = time, values_from = y)
+pdf(
+file        = paste0("./5_Abbildungen/ptf-5-ld-pre-post-cs.pdf"),
+width       = 13,
+height      = 4.5)
+par(
+family      = "sans",
+mfcol       = c(1,3),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)  
+for(t in 1:2){
+    matplot(
+    rbind(
+    matrix(D$pre[D$treat  == trs[t]], ncol = nrow(D)), 
+    matrix(D$post[D$treat == trs[t]], ncol = nrow(D))),
+    type        = "b", 
+    lty         = 1, 
+    pch         = 21, 
+    col         = "lightgrey",
+    bg          = "darkgrey",
+    xaxt        = "n", 
+    xlab        = "", 
+    ylab        = "", 
+    main        = trl[t],
+    xlim        = c(0.5,2.5),
+    ylim        = c(20,35))
+    axis(
+    1, 
+    at          = c(1, 2), 
+    labels      = c("Pre", "Post"))
+    pre_mean    = mean(D$pre[D$treat  == trs[t]])
+    pos_mean    = mean(D$post[D$treat == trs[t]])
+    points(
+    x          = c(1,2),
+    y          = c(pre_mean, pos_mean))
+    segments(
+    x0          = 1,
+    y0          = pre_mean,
+    x1          = 2,
+    y1          = pos_mean,
+    col         = "black",
+    pch         = 16)
+}
+plot(
+D$id,
+D$post - D$pre,
+pch     = 19,
+col     = "grey",
+main    = "Change Scores",
+xaxt    = "n", 
+ylab    = "",
+xlim    = c(0,7),
+ylim    = c(-7,0),
+xlab    = "Proband:in")
+axis(
+1, 
+at          = 1:6,
+labels      = c(paste0(1:3, "K"), paste0(4:6, "T")))
+dev.off()
+```
+
+# Linear Mixed Model Analyse
+\vspace{1mm}
+Change-Score Analyse des Parallelgruppen-Pre-Post-Design-LMMs
+\vspace{1mm}
+\footnotesize
+\begin{equation}
+\beta := (30,-3,-2,-3)^T, \sigma_b^2 := 1, \sigma_\eps^2 := 10^{-6}
+\end{equation}
+
+```{r, echo = FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-ld-pre-post-cs.pdf")
+```
+
+\begin{tabular}{ll}             
+$\beta_0 = 30$  & Erwartungswert der Pre-Messung der Kontrollgruppe                                             \\
+$\beta_1 = -3$  & Unterschied in der Pre-Messung zwischen Kontroll- und Treatmentgruppe                        \\         
+$\beta_2 = -2$  & Unterschied zwischen Pre-Messung und Post-Messung in der Kontrollgruppe                      \\
+$\beta_3 = -3$  & Unterschiedsunterschied zwischen Pre- und Post-Messung zwischen Kontroll- und Treatmentgruppe \\ 
+\end{tabular}
+
+$\Rightarrow$ Change-Score-Analyse identifiziert $\beta_3$  E
+
+
+# Pretest-Posttest-Design Analyse
+```{r, echo = FALSE,eval = FALSE }
+library(latex2exp)
+pdf(
+file        = "./5_Abbildungen/ptf-5-ld-pre-post-cs-verteilung.pdf" ,
+width       = 8,
+height      = 4)
+par(
+family      = "sans",
+mfcol       = c(1,2),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex.main    = 1)
+
+# Kontrollgruppe
+hist(
+csc,
+breaks      = 20,
+col         = "gray90",
+prob        = TRUE,
+xlab        =  "",
+ylab        =  "",
+main        = TeX("$y_i = y_{i1} - y_{i0}$ | Kontrollgruppe"),
+ylim        = c(0,300),
+xlim        = c(-2.005, -1.995))
+y_min       = -2.005                                                                
+y_max       = -1.995                                                                 
+y_res       = 1e3                                                                 
+y_space     = seq(y_min, y_max, len = y_res)                                
+p_y         = dnorm(y_space, beta[3], sqrt(2*sig_eps))   
+lines(
+y_space,
+p_y,
+lwd         = 2,
+col         = "darkorange")
+
+# Treatmentgruppe
+hist(
+cst,
+breaks      = 20,
+col         = "gray90",
+prob        = TRUE,
+xlab        =  "",
+ylab        =  "",
+main        = TeX("$y_i = y_{i1} - y_{i0}$ | Treatmentgruppe"),
+ylim        = c(0,300),
+xlim        = c(-5.005, -4.995))
+y_min       = -5.0050                                                               
+y_max       = -4.995                                                                 
+y_res       = 1e3                                                                 
+y_space     = seq(y_min, y_max, len = y_res)                                
+p_y         = dnorm(y_space, beta[3] + beta[4], sqrt(2*sig_eps))                       
+lines(
+y_space,
+p_y,
+lwd         = 2,
+col         = "darkorange")
+dev.off()
+```
+
+```{r, echo = FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-ld-pre-post-cs-verteilung.pdf")
+```
+
+
+\textcolor{orange}{-} $y_i \sim N(\beta_2 + \beta_3x_i, 2\sigma^2_\eps)$
+
+* $x_{i} := 0$ für Proband:in $i$ in Kontrollgruppe
+* $x_{i} := 1$ für Proband:in $i$ in Treatmentgruppe -->
+
+# Pretest-Posttest-Design Analyse
+\footnotesize
+
+**Pre-Post-Linear-Mixed-Modell $\Rightarrow$ Bivariates Pre-Post-Normalverteilungsmodell**
+
+Wir betrachten für Gruppen $i = 1,2$ und 1 Proband:in nach @crager1987 und @chen2006
+\begin{align}
+\begin{split}
+y_{i1} & = \mu + \quad\,\, + b_{1} + \eps_{i1}   \mbox{ (Pre)}   \\
+y_{i2} & = \mu + \tau_i    + b_{1} + \eps_{i2}  \mbox{ (Pos)}
+\end{split}
+\end{align}
+mit
+\begin{equation}
+b_{1} \sim N(0,\sigma_b^2)         \mbox{ und } 
+\eps_{i1} \sim N(0,\sigma_{i1}^2)  \mbox{ und } 
+\eps_{i2} \sim N(0,\sigma_{i2}^2) 
+\end{equation}
+Dann gilt für $i = 1,2$
+\begin{equation}
+\begin{pmatrix}
+y_{i1} \\
+y_{i2}
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 & 0 \\
+1 & 1
+\end{pmatrix}
+\begin{pmatrix}
+\mu \\ \tau_i
+\end{pmatrix}
++ 
+\begin{pmatrix}
+1 \\ 1
+\end{pmatrix}
+\begin{pmatrix}
+b_1
+\end{pmatrix} +
+\begin{pmatrix}
+\eps_{i1} \\
+\eps_{i2}
+\end{pmatrix}
+\Leftrightarrow
+y = X\beta + Zb + \eps
+\end{equation}
+mit
+\begin{equation}
+b \sim N(0,\sigma_b^2) \mbox{ und }
+\eps 
+\sim N
+\left(
+\begin{pmatrix} 0 \\ 0 \end{pmatrix},
+\begin{pmatrix} 
+\sigma_{i1}^2 & 0 \\ 0 & \sigma_{i2}^2 
+\end{pmatrix} 
+\right)
+\end{equation}
+Nach dem Theorem zur marginalen Datenverteilung des Linear Mixed Models gilt damit $y\sim N(\mu_y, \Sigma_y)$ für
+\begin{equation}
+\mu_y = X\beta = \begin{pmatrix} \mu \\ \mu + \tau_i \end{pmatrix}
+\mbox{ und }
+\Sigma_y = 
+\sigma_b^2\begin{pmatrix} 1 \\ 1 \end{pmatrix} \begin{pmatrix} 1 & 1 \end{pmatrix} + 
+\begin{pmatrix} \sigma_{i1}^2 & 0 \\ 0 & \sigma_{i2}^2 \end{pmatrix} 
+= 
+\begin{pmatrix} 
+\sigma_b^2 + \sigma_{i1}^2  & \sigma_b^2                        \\ 
+\sigma_b^2                  & \sigma_b^2 + \sigma_{i2}^2 
+\end{pmatrix} 
+\end{equation}
+Also gilt durch Ablesen
+\begin{equation}
+\mathbb{C}(y_{i1},y_{i2}) = \sigma_b^2
+\end{equation}
+
+# Pretest-Posttest-Design Analyse
+\footnotesize
+**Pre-Post-Linear-Mixed-Modell $\Rightarrow$ Bivariates Pre-Post-Normalverteilungsmodell**
+
+Wir haben damit das Bivariate Normalverteilungsmodell nach @chen2006
+\begin{equation}
+\begin{pmatrix}
+y_{i1} \\
+y_{i2}
+\end{pmatrix}
+\sim 
+N\left(
+\begin{pmatrix}
+\mu \\
+\mu + \tau_i
+\end{pmatrix},
+\Sigma^{(i)}
+\right)
+\mbox{ mit }
+\Sigma^{(i)}
+=
+\begin{pmatrix}
+\sigma_{11}^{(i)}  & \sigma_{12}^{(i)} \\
+\sigma_{21}^{(i)}  & \sigma_{22}^{(i)}    
+\end{pmatrix}
+=
+\begin{pmatrix} 
+\sigma_b^2 + \sigma_{i0}^2  & \sigma_b^2                        \\ 
+\sigma_b^2                  & \sigma_b^2 + \sigma_{i1}^2 
+\end{pmatrix} 
+\end{equation}
+@chen2006 macht die weiterhin die Annahme, dass $\sigma_{11}^{(1)} = \sigma_{11}^{(2)} = \sigma_{11}$, also
+bezogen auf das LMM, dass $\sigma_{11}^2 = \sigma_{21}^2$
+
+**Bivariates Pre-Post-Normalverteilungsmodell $\Rightarrow$ Trivariates Pre-Post-Differenz-Normalverteilungsmodell**
+
+Für 
+\begin{equation}
+d_i := y_{i2} - y_{i1}
+\end{equation} 
+betrachten wir nun die gemeinsame Verteilung von $z := (y_{i1}, y_{i2}, d_{i})^T$. Mit
+dem Theorem zur linearen Transformation normalverteilter Zufallsvektoren gilt $z \sim N(\mu_z,\Sigma_z)$
+und speziell für die Transformationsmatrix
+\begin{equation}
+A := 
+\begin{pmatrix}
+1   &   0 \\
+0   &   1 \\
+-1  &   1
+\end{pmatrix},
+\end{equation}
+dass
+\begin{equation}
+\begin{pmatrix}
+y_{i1} \\
+y_{i2} \\
+d_{i}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+y_{i1} \\
+y_{i2} \\
+y_{i2} - y_{i1} 
+\end{pmatrix}
+= 
+A
+\begin{pmatrix}
+y_{i1} \\
+y_{i2} \\
+\end{pmatrix}
+\sim 
+N\left(
+A
+\begin{pmatrix}
+\mu \\
+\mu + \tau_i
+\end{pmatrix},
+A
+\begin{pmatrix}
+\sigma_{11}^{(i)}  & \sigma_{12}^{(i)} \\
+\sigma_{21}^{(i)}  & \sigma_{22}^{(i)}    
+\end{pmatrix}
+A^T
+\right)
+\end{equation}
+
+
+# Pretest-Posttest-Design Analyse
+\footnotesize
+**Bivariates Pre-Post-Normalverteilungsmodell $\Rightarrow$ Trivariates Pre-Post-Differenz-Normalverteilungsmodell**
+
+Also gilt
+\begin{equation}
+\mu_z
+= 
+\begin{pmatrix}
+1   &   0 \\
+0   &   1 \\
+-1  &   1
+\end{pmatrix}
+\begin{pmatrix}
+\mu \\
+\mu + \tau_i
+\end{pmatrix}
+= 
+\begin{pmatrix}
+\mu                 \\
+\mu + \tau_i        \\
+-\mu + \mu + \tau_i
+\end{pmatrix}
+=\begin{pmatrix}
+\mu                 \\
+\mu + \tau_i        \\
+\tau_i
+\end{pmatrix}
+\end{equation}
+sowie
+\begin{align}
+\begin{split}
+\Sigma_z
+& =
+\begin{pmatrix}
+1   &   0 \\
+0   &   1 \\
+-1  &   1
+\end{pmatrix}
+\begin{pmatrix}
+\sigma_{11}^{(i)}  & \sigma_{12}^{(i)} \\
+\sigma_{21}^{(i)}  & \sigma_{22}^{(i)}    
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 & -1  \\
+0 & 1 & 1
+\end{pmatrix} \\
+& =
+\begin{pmatrix}
+\sigma_{11}^{(i)}                       & \sigma_{12}^{(i)}                         \\
+\sigma_{21}^{(i)}                       & \sigma_{22}^{(i)}                         \\
+\sigma_{21}^{(i)} - \sigma_{11}^{(i)}   & \sigma_{22}^{(i)} - \sigma_{12}^{(i)} 
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 & -1  \\
+0 & 1 & 1
+\end{pmatrix} \\
+& =
+\begin{pmatrix}
+\sigma_{11}^{(i)} 
+& \sigma_{12}^{(i)} 
+& \sigma_{12}^{(i)} - \sigma_{11}^{(i)}   
+\\ 
+\sigma_{21}^{(i)}   
+& \sigma_{22}^{(i)} 
+& \sigma_{22}^{(i)} - \sigma_{21}^{(i)}    
+\\
+  \sigma_{21}^{(i)} - \sigma_{11}^{(i)}
+& \sigma_{22}^{(i)} - \sigma_{12}^{(i)}  
+& \sigma_{22}^{(i)} - \sigma_{12}^{(i)} - \left(\sigma_{21}^{(i)} - \sigma_{11}^{(i)}\right)
+\end{pmatrix}
+\\
+& =
+\begin{pmatrix}
+  \sigma_{11}^{(i)} 
+& \sigma_{12}^{(i)} 
+& \sigma_{12}^{(i)} - \sigma_{11}^{(i)}   
+\\ 
+  \sigma_{21}^{(i)}   
+& \sigma_{22}^{(i)} 
+& \sigma_{22}^{(i)} - \sigma_{21}^{(i)}    
+\\
+  \sigma_{12}^{(i)} - \sigma_{11}^{(i)}
+& \sigma_{22}^{(i)} - \sigma_{12}^{(i)}  
+& \sigma_{11}^{(i)} + \sigma_{22}^{(i)} - 2\sigma_{12}^{(i)}
+\end{pmatrix}
+\end{split}
+\end{align}
+
+
+# Pretest-Posttest-Design Analyse
+\footnotesize
+**Bivariates Pre-Post-Normalverteilungsmodell $\Rightarrow$ Trivariates Pre-Post-Differenz-Normalverteilungsmodell**
+
+Durch Ablesen sehen wir also, dass
+\begin{equation}
+\mathbb{V}(d_i) = \sigma_{11}^{2} + \sigma_{22}^{2} - 2\sigma_{12}^{2}
+\end{equation}
+sowie
+\begin{equation}
+\mathbb{C}(y_{i1}, d_i) = \mathbb{C}(d_i, y_{i1}) = \sigma_{12}^{(i)} - \sigma_{11}^{(i)}
+\end{equation}
+
+Insgesamt ergibt sich also zunächst für die marginale Verteilung der Pre-Post-Differenzen, dass
+\begin{equation}
+d_i \sim N(\tau_i, \sigma_{11}^{(i)} + \sigma_{22}^{(i)} - 2\sigma_{12}^{(i)}) \Leftrightarrow
+d_i = \tau_i + \eps_{d_i} \mbox{ mit } \eps_{d_i} \sim N(0,\sigma_{11}^{(i)} + \sigma_{22}^{(i)} - 2\sigma_{12}^{(i)})
+\end{equation}
+Dies entspricht dem ANOVA-Modell der Differenzen \hl{Differenzparameterisierung von Anfang an einbauen!}
+
+# Pretest-Posttest-Design Analyse
+\footnotesize
+**Trivariates Pre-Post-Differenz-Normalverteilungsmodell $\Rightarrow$ Bedingtes-Differenzmodel = ANCOVA-Modell** 
+
+Betrachten wir schließlich
+\begin{equation}
+d_i|y_{i1} \sim N\left(\mu_{d_i|y_{i1}}, \Sigma_{d_i|y_{i1}}\right)
+\end{equation}
+Mit dem Theorem zu Bedingten Normalverteilungen gilt mit $\beta^{(i)} := \sigma_{12}^{(i)}/\sigma_{11}^{(i)}$
+\begin{align}
+\begin{split}
+\mu_{d_i|y_{i1}}
+& = \mu_{d_i} + \mathbb{C}(d_i,y_{i1})\mathbb{V}(y_{i1})^{-1}\left(y_{i1} - \mu_{y_{1i}}\right)                                 \\
+& = \tau_i + \frac{\sigma_{12}^{(i)} - \sigma_{11}^{(i)}}{\sigma_{11}^{(i)}}\left(y_{i1} - \mu\right)                           \\
+& = \tau_i + \left(\frac{\sigma_{12}^{(i)}}{\sigma_{11}^{(i)}} - \frac{\sigma_{11}^{(i)}}{\sigma_{11}^{(i)}}\right)\left(y_{i1} - \mu\right)  \\
+& = \tau_i + \left(\beta^{(i)} - 1 \right)\left(y_{i1} - \mu\right)  \\
+& = \tau_i + \beta^{(i)} y_{i1} - y_{i1}  - \beta^{(i)} \mu + \mu \\
+& = \mu - \beta^{(i)} \mu + \tau_i + \beta^{(i)} y_{i1} - y_{i1}   \\
+& = \left(1 - \beta^{(i)}\right)\mu + \tau_i + \left(\beta^{(i)} - 1\right)y_{i1} \\
+\end{split}
+\end{align}
+
+# Pretest-Posttest-Design Analyse
+\footnotesize
+**Trivariates Pre-Post-Differenz-Normalverteilungsmodell $\Rightarrow$ Bedingtes-Differenzmodel = ANCOVA-Modell** 
+
+Weiterhin gilt
+\begin{align}
+\begin{split}
+\Sigma_{d_i|y_{i1}}
+& = \mathbb{V}(d_i) - \mathbb{C}(d_i, y_{i1})\mathbb{V}(y_{i1})^{-1}\mathbb{C}(y_{i1}, d_i) \\
+& = \mathbb{V}(d_i) - \mathbb{C}(d_i, y_{i1})\mathbb{V}(y_{i1})^{-1}\mathbb{C}(y_{i1}, d_i) \\
+& = \sigma_{11}^{(i)} + \sigma_{22}^{(i)} - 2\sigma_{12}^{(i)} - \frac{\left(\sigma_{12}^{(i)} - \sigma_{11}^{(i)}\right)^2}{\sigma_{11}^{(i)}} \\
+& = \frac{\sigma_{11}^{{(i)}^2} + \sigma_{22}^{(i)}\sigma_{11}^{(i)} - 2\sigma_{12}^{(i)}\sigma_{11}^{(i)}}{\sigma_{11}^{(i)}}
+    - \frac{\sigma_{12}^{(i)^2} - 2\sigma_{12}^{(i)}\sigma_{11}^{(i)} + \sigma_{11}^{(i)^{2}}}{\sigma_{11}^{(i)}}  \\
+& = \frac{\sigma_{11}^{{(i)}^2} + \sigma_{22}^{(i)}\sigma_{11}^{(i)} - 2\sigma_{12}^{(i)}\sigma_{11}^{(i)} - \sigma_{12}^{(i)^2} + 2\sigma_{12}^{(i)}\sigma_{11}^{(i)} -\sigma_{11}^{(i)^{2}}}{\sigma_{11}^{(i)}} \\
+& = \frac{\sigma_{22}^{(i)}\sigma_{11}^{(i)} - \sigma_{12}^{(i)^2}}{\sigma_{11}^{(i)}} \\
+& = \frac{\sigma_{22}^{(i)}\sigma_{11}^{(i)}}{\sigma_{11}^{(i)}} - \frac{\sigma_{12}^{(i)^2}}{\sigma_{11}^{(i)}} \\
+& = \sigma_{22}^{(i)} - \frac{\sigma_{12}^{(i)^2}}{\sigma_{11}^{(i)}} \\
+\end{split}
+\end{align}
+
+
+# Pretest-Posttest-Design Analyse
+\footnotesize
+**Trivariates Pre-Post-Differenz-Normalverteilungsmodell $\Rightarrow$ Bedingtes-Differenzmodel = ANCOVA-Modell** 
+
+
+Also gilt, wie bei @chen2006 S. 4163 oben, dass
+\begin{equation}
+y_{i2} - y_{i1} | y_{i1} 
+\sim 
+N\left(
+\left(1 - \beta^{(i)}\right)\mu + \tau_i + \left(\beta^{(i)} - 1\right)y_{i1},
+\sigma_{22}^{(i)} - \sigma_{12}^{(i)^2}/\sigma_{11}^{(i)} 
+\right)  
+\end{equation}
+bzw. äquivalent 
+\begin{equation}
+y_{i2} - y_{i1} | y_{i1}  
+= \left(1 - \beta^{(i)}\right)\mu + \tau_i + \left(\beta^{(i)} - 1\right)y_{i1} + \varepsilon_{i}
+\mbox{ mit }
+\varepsilon_{i} \sim N\left(0, \sigma_{22}^{(i)} - \sigma_{12}^{(i)^2}/\sigma_{11}^{(i)} \right)
+\end{equation}
+
+Wir haben also gesehen, dass ausgehend von einem Linear Mixed Model für ein 
+Parallelgruppen-Pre-Post-Design die Pre-Post-Differenzen **marginal (unconditional) anhand des ANOVA Modells**
+\begin{equation}
+y_{i2} - y_{i1} = \tau_i + \eps_{i} \mbox{ mit } \eps_{i} \sim N\left(0,\sigma_{11}^{(i)} + \sigma_{22}^{(i)} - 2\sigma_{12}^{(i)}\right)
+\end{equation}
+und **bedingt (conditional) auf den Pre-Scores anhand des ANCOVA Modells**
+\begin{equation}
+y_{i2} - y_{i1} | y_{i1}  
+= \left(1 - \beta^{(i)}\right)\mu + \tau_i + \left(\beta^{(i)} - 1\right)y_{i1} + \varepsilon_{i}
+\mbox{ mit }
+\varepsilon_{i} \sim N\left(0, \sigma_{22}^{(i)} - \sigma_{12}^{(i)^2}/\sigma_{11}^{(i)} \right)
+\end{equation}
+mit $\beta^{(i)} := \sigma_{12}^{(i)}/\sigma_{11}^{(i)}$ verteilt sind. In beiden Fällen 
+ist die Schätzung von $\tau_i$ möglich und sollte gleiche Ergebnisse geben, wobei dies
+vermutlich nur bei Randomisierung, also $\mu_1 = \mu_2 = \mu$ und $\sigma_{11}^{(1)} = \sigma_{11}^{(2)} = \sigma_{11}$ zutrifft,
+und die ganzen Paper von Futanaro etc. Abweichungen von den (und vielleicht noch schärferen) Annahmen von @crager1987 untersuchen.
+
+\hl{ADAPT FOR DIFFERENZ ENCODING WIE OBEN FÜR ANOVA ANALYSE DER DIFFERENZEN BZW. BEI CRAGER 1987}
+
+
+ -->

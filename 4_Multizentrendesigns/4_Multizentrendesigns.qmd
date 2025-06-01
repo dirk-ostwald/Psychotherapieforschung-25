@@ -210,6 +210,7 @@ Treatmentgruppe und Kontrollgruppe in jedem Zentrum
 * $\Rightarrow$ Treatment- und Kontrollgruppe haben einen Zentren-spezifischen Intercept
 * $\Rightarrow$ Treatment- und Kontrollgruppe haben einen Zentren-spezifischen Unterschied
 
+ 
 # Multizentren-Parallelgruppendesigns
 \setstretch{1.5}
 \noindent (1) Random-Center-Effect-Modell
@@ -249,7 +250,7 @@ Beispielszenario
 
 $k = 3$ Zentren, $n_{1} = n_{2} = n_{3} = 4$ Proband:innen pro Zentrum
 
-$m = \frac{1}{2}n_{i} = 2$ Proband:innen pro Zentrum für $i = 1,2,3$
+$m = \frac{1}{2}n_{i} = 2$ Proband:innen pro Gruppe für $i = 1,2,3$
 \begin{align}
 \begin{split}
 y  = X\beta + Zb + \eps 
@@ -329,6 +330,8 @@ mit
 b    \sim N\left(0_3 , \sigma_b^2 I_3      \right) 
 \end{equation}
 
+
+
 # Multizentren-Parallelgruppendesigns
 \noindent (1) Random-Center-Effect-Modell
 
@@ -357,6 +360,7 @@ CTR     = kronecker(c(1:k), rep(1,n_i))                                     # Ce
 D       = data.frame(TRM = as.factor(TRM), CTR = as.factor(CTR), OUT = y)   # Dataframe
 write.csv(D, "./4_Daten/mz-parallelgruppendesign-1.csv", row.names = FALSE) # Speichern
 ```
+
 
 # Multizentren-Parallelgruppendesigns
 \noindent (1) Random-Center-Effect-Modell
@@ -430,6 +434,7 @@ dev.off()
 knitr::include_graphics("4_Abbildungen/ptf_4_mz_parallelgruppendesign_1.pdf")
 ```
 
+
 # Multizentren-Parallelgruppendesigns
 \noindent (1) Random-Center-Effect-Modell
 
@@ -460,7 +465,6 @@ cat("beta_hat         :", round(beta_hat,2),
 print(intervals(M, level = 0.95, which = "fixed"), digits = 3)                  # nlme Konfidenzintervalle
 ```
 
-
 # Multizentren-Parallelgruppendesigns
 \noindent (2) Random-Center-by-Treatment-Interaction-Modell
 
@@ -488,6 +492,8 @@ $b_{1i}$            & Erwartungswertunterschiedunterschied zwischen Kontrollgrup
 $\sigma_\eps^2$     & Varianz zwischen Proband:innen                                                                    \\
 $\sigma_b^2$        & Varianz zwischen Zentren                                                                          \\
 \end{tabular}
+
+
 
 # Multizentren-Parallelgruppendesigns
 \vspace{1mm}
@@ -583,6 +589,8 @@ mit
 b    \sim N\left(0_6 , \Sigma_b     \right) 
 \end{equation}
 
+
+
 # Multizentren-Parallelgruppendesigns
 \noindent (2) Random-Center-by-Treatment-Interaction-Modell
 
@@ -621,7 +629,6 @@ Deskriptivstatistik für ein Szenario mit $k = 4, m = 5$ und $n_i = 10$ für $i 
 \vspace{2mm}
 
 ```{r, eval = F}
-
 pdf(
 file        = "./4_Abbildungen/ptf_4_mz_parallelgruppendesign_2.pdf",
 width       = 7,
@@ -718,6 +725,7 @@ cat("beta_hat         :", round(beta_hat,2),
 print(intervals(M, level = 0.95, which = "fixed"), digits = 3)      # nlme Konfidenzintervalle
 ```
 
+
 # Multizentren-Parallelgruppendesigns
 \footnotesize
 \begin{theorem}[Populationsparameterdarstellung eines Linear Mixed Models]
@@ -736,7 +744,7 @@ gilt, dann nennt man \eqref{eq:lmm-pop} die \textit{Populationsparameterdarstell
 \end{theorem}
 Bemerkungen
 
-* In \eqref{eq:lmm-pop} denkt man sich $u$ aus einer Population mit Erwartungswert $X\beta$ realisiert.
+* In \eqref{eq:lmm-pop} denkt man sich $u$ aus einer Population mit Erwartungswert $A\beta$ realisiert.
 * Der Fixed-Effects-Pameter $\beta$ parameterisiert dabei explizit den Erwartungswert dieser Population.
 * Fixed-Effects-Parameter können also in diesem Fall als Populationserwartungswerte interpretiert werden.
 * Random-Effects-Parameter dagegen entsprechen Abweichungen vom Populationserwartungswert.
@@ -938,6 +946,7 @@ dev.off()
 knitr::include_graphics("4_Abbildungen/ptf_4_mz_parallelgruppendesign_3.pdf")
 ```  
 
+
 # 
 \setstretch{2.7}
 \large
@@ -960,9 +969,9 @@ Anwendungsbeispiel
 
 * Nachweis einer Dosis-Wirkungs-Beziehung in der Depressionstherapie 
 * $k = 4$ vier Zentren (Hochschulambulanzen)
-* $n_i = 10$ Proband:innen pro Zentrum $i = 1,2,3,4$
+* $n_i = 5$ Proband:innen pro Zentrum $i = 1,2,3,4$
 * 24 Stunden Kognitive Verhaltenstherapie pro Patient:in in jedem Zentrum
-* 1 bis 10 ACT Therapiekomponenten pro Patient:in als unabhängige Variable (UV)
+* 1 bis 5 ACT Therapiekomponenten pro Patient:in als unabhängige Variable (UV)
 * BDI-II-Reduktion als Primary Outcome / abhängige Variable (AV)
 
 Bemerkungen 
@@ -981,9 +990,9 @@ library(MASS)                                                       # multivaria
 library(Matrix)                                                     # Blockdiagonalmatrizen
 set.seed(0)                                                         # Zufallszahlengeneratorzustand
 k       = 4                                                         # Anzahl Zentren 
-n_i     = 5                                                       # Patient:innen pro Zentrum 
+n_i     = 5                                                         # Patient:innen pro Zentrum 
 n       = k*n_i                                                     # Gesamtanzahl an Patient:innen    
-x       = 1:5                                                      # Anzahl ACT Komponenten
+x       = 1:5                                                       # Anzahl ACT Komponenten
 Xi      = matrix(c(rep(1,n_i), x), ncol = 2)                        # Zentrenspezifische Regressionsmatrizenarray
 X       = kronecker(rep(1,k), Xi)                                   # Fixed Effects Designmatrix              
 beta    = matrix(c(2,1), nrow = 2)                                  # Fixed-Effects-Parameter
@@ -1032,7 +1041,7 @@ xpd         = T,
 xlim        = c(0,6),
 ylim        = c(-2,18),
 xaxt        = "n")  
-axis(1, at = 1:10)     
+axis(1, at = 1:5)     
 legend(
 "topleft", 
 xpd         = TRUE, 
@@ -1552,7 +1561,7 @@ print(b_hat)
 
 Identisches Intercept $\hat{\beta}_0$ der Ausgleichsgerade über Zentren
 
-Variable Steigung $\hat{\beta}_1 + \hat{b}_{1i}$ der Ausgleichsgerade über Zentren -->
+Variable Steigung $\hat{\beta}_1 + \hat{b}_{1i}$ der Ausgleichsgerade über Zentren  
 
 # Multizentren-Regressionsdesigns
 \vspace{2mm}
@@ -1801,7 +1810,8 @@ Variables Intercept $\hat{\beta}_0 + \hat{b}_{0i}$ der Ausgleichsgerade über Ze
 
 Variable Steigung $\hat{\beta}_1 + \hat{b}_{1i}$ der Ausgleichsgerade über Zentren  
 
-Aber: Populationsparameterschätzung von $\beta_0$ und $\beta_1$
+Aber: Populationsparameterschätzung von $\beta_0$ und $\beta_1$  
+
 
 # 
 \setstretch{2.7}
@@ -2153,13 +2163,12 @@ cat("beta_hat   : ", round(beta_hat,2),
 ```
 \vspace{2mm}
 
-Keine Berücksichtigung der Gruppenstruktur (Hochschulambulanzvariation)
+Diskussion
 
-$\hat{\beta}_1$ legt eine Abnahme der BDI-II-Reduktion mit ACT Komponentenanzahl nahe
-
-Daten zeigen aber einen Anstieg der BDI-II-Reduktion mit ACT Komponentenanzahl für jede HSA
-
-Das Modell ist für den betrachteten Anwendungsfall sicherlich nicht ideal
+* Keine Berücksichtigung der Gruppenstruktur (Hochschulambulanzvariation)
+* $\hat{\beta}_1$ legt eine Abnahme der BDI-II-Reduktion mit ACT Komponentenanzahl nahe
+* Daten zeigen aber Anstieg der BDI-II-Reduktion mit ACT Komponentenanzahl für jede HSA
+* Das Modell ist für den betrachteten Anwendungsfall sicherlich nicht ideal
 
 
 # Ein Multizentren-Simpson's Paradox-Beispiel
@@ -2171,20 +2180,21 @@ Wir vernachlässigen den Effekt der Therapiedauer und betrachten lediglich den E
 
 Strukturelle Form
 
-Für Hochschulambulanzen $i = 1,...,k$ und Proband:innen $j = 1,...,n_i$
+Für Proband:innen $j = 1,...,n_i$
 \begin{equation}
-y_{1j} = \mu_0 + \eps_{1j} \mbox{ und  } y_{ij} = \mu_0 + \alpha_i + \eps_{ij} \mbox{ für } i = 2,3,4 
+y_{1j} = \beta_0 + \eps_{ij} \mbox{ für } i = 1 \mbox{ und } y_{ij} = \beta_0  + \beta_i x_{ij} + \eps_{ij} \mbox{ für } i = 2,3,4
 \end{equation}
 mit
 
+* $x_{ij} := 0$  für Proband:in $j$ nicht in HSA $i$ und $x_{ij} := 1$ für Proband:in $j$ in HSA $i$
 * $\eps_{ij} \sim N(0,\sigma^2)$  
 
 Parameterbedeutungen
 \begin{tabular}{ll}
-$\mu_0$       &  Erwartungswert für die BDI-II-Reduktion in der Referenzgruppe HSA 1             \\
-$\alpha_2$    &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 2 und HSA 1      \\
-$\alpha_3$    &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 3 und HSA 1      \\
-$\alpha_4$    &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 4 und HSA 1     \\
+$\mu_0$       &  Erwartungswert für die BDI-II-Reduktion in der Referenzgruppe HSA 1            \\
+$\beta_2$     &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 2 und HSA 1      \\
+$\beta_3$     &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 3 und HSA 1      \\
+$\beta_4$     &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 4 und HSA 1      \\
 $\sigma^2$    &  Varianz zwischen Proband:innen                                                 \\ 
 \end{tabular}
 
@@ -2243,10 +2253,10 @@ y_{45} \\
 1       & 0         &  0        & 1         \\
 \end{pmatrix} 
 \begin{pmatrix}
-\mu_0       \\
-\alpha_2    \\
-\alpha_3    \\
-\alpha_4 \\
+\beta_0     \\
+\beta_2     \\
+\beta_3     \\
+\beta_4     \\
 \end{pmatrix} +
 \begin{pmatrix}
 \eps_{11}    \\
@@ -2364,11 +2374,11 @@ cat("beta_hat   : ", round(beta_hat,2),
 
 \vspace{2mm}
 
-Keine Berücksichtigung der Anzahl an ACT Komponenten
+Diskussion
 
-Das Modell ist vor dem Hintergrund der Forschungsfrage nicht sinnvoll
-
-HSA 2, HSA 3 und HSA 4 haben einer geringere Symptomereduktionserwartung als HSA 1
+* Keine Berücksichtigung der Anzahl an ACT Komponenten
+* Das Modell ist vor dem Hintergrund der Forschungsfrage nicht sinnvoll
+* HSA 2, HSA 3 und HSA 4 haben eine geringere BDI-II-Reduktionserwartung als HSA 1
 
 
 # Ein Multizentren-Simpson's Paradox-Beispiel 
@@ -2647,13 +2657,12 @@ cat("\n HSA", i, "beta_hat    : ", round(beta_hat[[i]],2),
 
 \vspace{2mm}
 
-Die BDI-II-Reduktion in jeder HSA mit steigender ACT Komponentenanzahl wird deutlich
+Diskussion
 
-Dies entspricht der Intuition bei HSA-spezifischer Dateninspektion.
-
-Es wird kein HSA-übergreifender Therapiestundenanzahleffekt bestimmt.
-
-Es wird kein Maß für die Varianz der Effekt zwischen den Hochschulambulanzen bestimmt.
+* Die BDI-II-Reduktion in jeder HSA mit steigender ACT Komponentenanzahl wird deutlich
+* Dies entspricht der Intuition bei HSA-spezifischer Dateninspektion.
+* Es wird allerdings kein HSA-übergreifender Therapiestundenanzahleffekt bestimmt.
+* Es wird auch kein Maß für die Varianz der Effekt zwischen den Hochschulambulanzen bestimmt.
 
 # Ein Multizentren-Simpson's Paradox-Beispiel
 \vspace{2mm}
@@ -2927,9 +2936,10 @@ cat("b_hat:")
 print(b_hat)
 ```
 
-Die Zunahme der BDI-II Reduktion über HSAs mit steigender ACT Komponentenanzahl wird deutlich
+Diskussion
 
-Die Annahme, dass die BDI-II Reduktionsrate über HSAs gleich ist, mag etwas stark sein 
+* Die BDI-II-Reduktion über HSAs mit steigender ACT-Komponentenanzahl wird deutlich 
+* Die Annahme, dass die BDI-II-Reduktionsrate über HSAs gleich ist, mag etwas stark sein.
 
 # Ein Multizentren-Simpson's Paradox-Beispiel
 \vspace{2mm}
@@ -3181,9 +3191,13 @@ cat("b_hat")
 print(b_hat)
 ```
 
-Die BDI-II-Reduktion über HSAs mit steigender ACT Komponentenanzahl wird deutlich 
+\vspace{1mm}
 
-Die BDI-II-Reduktionsraten varriieren nicht unabhängig über HSAs 
+Diskussion
+
+* Die BDI-II-Reduktion über HSAs mit steigender ACT-Komponentenanzahl wird deutlich 
+* Die Fixed Effects Parameter können als Populationsparameter interpretiert werden
+* Die BDI-II-Reduktionsraten varriieren nicht unabhängig über HSAs 
 
 
 # 
@@ -3206,13 +3220,13 @@ Ein Multizentren-Simpson's Paradox-Beispiel
 \setstretch{3}
 
 1. Erläutern Sie die Definition, die Motivation und die Herausforderungen einer Multizentrenstudie.
-1. Erläutern Sie das Random-Center-Effect-Modell für Multizentren-Parallelgruppendesigns
+1. Erläutern Sie das Random-Center-Effect-Modell für Multizentren-Parallelgruppendesigns.
 1. Erläutern Sie das Random-Center-by-Treatment-Interaction-Modell für Multizentren-Parallelgruppendesigns.
-1. Geben Sie das Theorem zur Populationsparameterdarstellung eines LLMs wieder.
-1. Erläutern Sie die Bedeutung des Theorems zur Populationsparameterdarstellung eines LMMs wieder.
+1. Geben Sie das Theorem zur Populationsparameterdarstellung eines Linear Mixed Models wieder.
+1. Erläutern Sie die Bedeutung des Theorems zur Populationsparameterdarstellung eines Linear Mixed Models.
 1. Erläutern Sie das Random-Intercept-Only-Modell für Multizentren-Regressionsdesigns.
 1. Erläutern Sie das Random-Slope-Only-Modell für Multizentren-Regressionsdesigns.
 1. Erläutern Sie das Random-Intercept-and-Slope-Modell für Multizentren-Regressionsdesigns.
 
 # Referenzen {.allowframebreaks}
-\footnotesize   
+\footnotesize    
