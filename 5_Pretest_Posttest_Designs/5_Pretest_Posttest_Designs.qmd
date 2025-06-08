@@ -306,7 +306,7 @@ Vergleichsarbeiten zu den hier betrachteten Analyseverfahren
 * @yang2001, @senn2006,  @winkens2007, @oconnell2017 
 * @tango2017 für einen exzellenten Überblick insbesondere bezüglich Linear Mixed Models
 
-Arbeiten mit einem Fokus auf bivariater Modellerierung des Prettest-Posttest-Szenarios
+Arbeiten mit einem Fokus auf bivariater Modellelierung des Prettest-Posttest-Szenarios
 
 * @chen2006, @funatogawa2011 
 * @funatogawa2011a, @funatogawa2020

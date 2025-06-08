@@ -1834,11 +1834,11 @@ Selbstkontrollfragen
 Anwendungsbeispiel
 \small
 
-* Dosis-Wirkungs-Studie zum Effekt von ACT Komponentenanzahl auf Depressionssymptomatik
+* Dosis-Wirkungs-Studie zum Effekt von ACT-Komponentenanzahl auf Depressionssymptomatik
 * Multizentrendesign mit $k = 4$ Hochschulambulanzen mit jeweils $n_i = 5$ Patient:innen
-* Zufällige Zusammentstellung der ACT Komponentenanzahl in jeder Hochschulambulanz
+* Zufällige Zusammentstellung der ACT-Komponentenanzahl in jeder Hochschulambulanz
 * Pre-Post-BDI-II Differenz `BDI` als primäres Ergebnismaß  (Positive Werte = Reduktion)
-* `HSA`: Hochschulambulanz, `ACT`: ACT Komponentenanzahl, `BDI`: Pre-Post-BDI-II Differenz
+* `HSA`: Hochschulambulanz, `ACT`: ACT-Komponentenanzahl, `BDI`: Pre-Post-BDI-II Differenz
 
 
 # Ein Multizentren-Simpson's Paradox-Beispiel
@@ -1848,7 +1848,7 @@ Datengeneration
 \setstretch{1.2}
 ```{r, echo = T}
 # Datengeneration
-library(MASS)                                                       # mMltivariate Normalverteilung
+library(MASS)                                                       # multivariate Normalverteilung
 library(Matrix)                                                     # Blockdiagonalmatrizen
 set.seed(0)                                                         # Zufallszahlengeneratorzustand
 k           = 4                                                     # Anzahl Zentren 
@@ -2166,8 +2166,8 @@ cat("beta_hat   : ", round(beta_hat,2),
 Diskussion
 
 * Keine Berücksichtigung der Gruppenstruktur (Hochschulambulanzvariation)
-* $\hat{\beta}_1$ legt eine Abnahme der BDI-II-Reduktion mit ACT Komponentenanzahl nahe
-* Daten zeigen aber Anstieg der BDI-II-Reduktion mit ACT Komponentenanzahl für jede HSA
+* $\hat{\beta}_1$ legt eine Abnahme der BDI-II-Reduktion mit ACT-Komponentenanzahl nahe
+* Daten zeigen aber Anstieg der BDI-II-Reduktion mit ACT-Komponentenanzahl für jede HSA
 * Das Modell ist für den betrachteten Anwendungsfall sicherlich nicht ideal
 
 
@@ -2176,7 +2176,7 @@ Diskussion
 \noindent (2) Einfaktorielle Varianzanalyse für den HSA Effekt
 
 \footnotesize
-Wir vernachlässigen den Effekt der Therapiedauer und betrachten lediglich den Effekt der Hochschulambulanz
+Wir vernachlässigen den Effekt der ACT-Komponentenanzahl und betrachten lediglich den Effekt der Hochschulambulanz
 
 Strukturelle Form
 
@@ -2191,7 +2191,7 @@ mit
 
 Parameterbedeutungen
 \begin{tabular}{ll}
-$\mu_0$       &  Erwartungswert für die BDI-II-Reduktion in der Referenzgruppe HSA 1            \\
+$\beta_0$     &  Erwartungswert für die BDI-II-Reduktion in der Referenzgruppe HSA 1            \\
 $\beta_2$     &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 2 und HSA 1      \\
 $\beta_3$     &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 3 und HSA 1      \\
 $\beta_4$     &  Erwartungswertdifferenz für die BDI-II-Reduktion zwischen HSA 4 und HSA 1      \\
@@ -2563,7 +2563,7 @@ for(i in 1:length(M)){                                      # Gruppeniterationen
 \footnotesize
 `BDI ~ ACT | HSA` ist eine erweiterte R Formel, die `BDI` und `ACT` anhand der Level des Faktors `HSA` partitioniert!
 
-# Multizentren-Regressionsdesigns
+# Ein Multizentren-Simpson's Paradox-Beispiel
 \vspace{2mm}
 \noindent (3) Gruppenspezifische einfache lineare Regressionsmodelle für die ACT Effekte
 
@@ -2659,9 +2659,9 @@ cat("\n HSA", i, "beta_hat    : ", round(beta_hat[[i]],2),
 
 Diskussion
 
-* Die BDI-II-Reduktion in jeder HSA mit steigender ACT Komponentenanzahl wird deutlich
+* Die BDI-II-Reduktion in jeder HSA mit steigender ACT-Komponentenanzahl wird deutlich
 * Dies entspricht der Intuition bei HSA-spezifischer Dateninspektion.
-* Es wird allerdings kein HSA-übergreifender Therapiestundenanzahleffekt bestimmt.
+* Es wird allerdings kein HSA-übergreifender Effekt der ACT-Komponentenanzahl bestimmt.
 * Es wird auch kein Maß für die Varianz der Effekt zwischen den Hochschulambulanzen bestimmt.
 
 # Ein Multizentren-Simpson's Paradox-Beispiel
@@ -2773,10 +2773,10 @@ y_{45} \\
 0       & 0         &  0        & 1         \\
 \end{pmatrix} 
 \begin{pmatrix}
-\beta_{01}  \\
-\beta_{02}  \\
-\beta_{03}   \\
-\beta_{04   }\\
+b_{01}  \\
+b_{02}  \\
+b_{03}   \\
+b_{04   }\\
 \end{pmatrix} +
 \begin{pmatrix}
 \eps_{11}    \\
@@ -2950,12 +2950,12 @@ Strukturelle Form
 
 Für Hochschulambulanzen $i = 1,2,3,4$ und Proband:innen $i = 1,2,3,4,5$ 
 \begin{equation}
-y_{ij} = \beta_0 + \beta_{1}x_{ij} + \beta_{0i} + \beta_{1i}x_{ij} + \eps_{ij} 
+y_{ij} = \beta_0 + \beta_{1}x_{ij} + b_{0i} + b_{1i}x_{ij} + \eps_{ij} 
 \end{equation}
 mit
 
 * $x_{ij} :=$ Anzahl der ACT Komponenten in der Therapie von Proband:in $j$ in Hochschulambulanz $i$ 
-* $\beta_{0i} \sim N(0,\sigma_{b_0}^2)$ und $\beta_{1i} \sim N(0,\sigma_{b_1}^2)$  
+* $b_{0i} \sim N(0,\sigma_{b_0}^2)$ und $b_{1i} \sim N(0,\sigma_{b_1}^2)$  
 * $\eps_{ij} \sim N(0,\sigma_\eps^2)$
 
 Parameterbedeutungen
@@ -2965,7 +2965,7 @@ $\beta_1$           & Erwartungswert der BDI-II-Reduktion pro 1 ACT Komponente  
 $b_{0i}$            & Hochschulambulanz-spezifische Abweichung der BDI-II-Reduktion bei 0 ACT Komponenten   \\
 $b_{1i}$            & Hochschulambulanz-spezifische Abweichung der BDI-II-Reduktion pro 1 ACT Komponente    \\
 $\sigma^2_{b_0}$    & Varianz der $b_{0i}$ zwischen Hochschulambulanzen                                     \\ 
-$\sigma^2_{b_1}$    & Varianz der $b_{1i}$ wischen Hochschulambulanzen                                      \\ 
+$\sigma^2_{b_1}$    & Varianz der $b_{1i}$ zwischen Hochschulambulanzen                                      \\ 
 $\sigma^2_\eps$     & Varianz der Datenpunkte innerhalb der Hochschulambulanzen                             \\
 \end{tabular}   
 
@@ -3053,14 +3053,14 @@ y_{45} \\
 0       & 0         & 0         &  0        & 0         & 0         & 1         & x_{45}    \\
 \end{pmatrix} 
 \begin{pmatrix}
-\beta_{01}  \\
-\beta_{11}  \\
-\beta_{02}  \\
-\beta_{12}  \\
-\beta_{03}  \\
-\beta_{13}  \\
-\beta_{04}  \\
-\beta_{14}  \\
+b_{01}  \\
+b_{11}  \\
+b_{02}  \\
+b_{12}  \\
+b_{03}  \\
+b_{13}  \\
+b_{04}  \\
+b_{14}  \\
 \end{pmatrix} +
 \begin{pmatrix}
 \eps_{11}    \\
