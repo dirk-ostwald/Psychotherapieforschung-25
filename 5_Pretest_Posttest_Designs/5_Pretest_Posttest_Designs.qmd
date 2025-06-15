@@ -502,7 +502,7 @@ type        = "n",
 xlim        = c(28,40),
 ylim        = c(20,35),
 xlab         = "Pretest",
-ylab        = "Post",
+ylab        = "Posttest",
 main        = "")
 for(t in 1:2){
     points(
@@ -568,7 +568,7 @@ Strukturelle Modellform
 \footnotesize
 Für $i = 1,...,n$ Proband:innen seien $y_{i0}$ und $y_{i1}$ die Pretest- bzw. Posttest Daten.
 
-Dann hat das Kovarianzanalysemodell mit Pretest-Kovariaten die strukturelle Modellform
+Dann hat das Posttest-Kovarianzanalysemodell mit Pretest-Kovariaten die strukturelle Modellform
 \begin{equation}
 y_{i1} = \beta_0 + \beta_1x_i + \beta_2y_{i0}  + \eps_{i}
 \end{equation}
@@ -673,7 +673,7 @@ Modellevaluation für das Anwendungsbeispiel
 \vspace{2mm}
 ```{r, echo = T}
 D   = read.csv("./5_Daten/pre-post.csv", row.names = 1)     # Dateneinlesen
-M   = lm(Post ~ Group  + Pre, data = D)                     # Modellformulierung und -schätzung
+M   = lm(Post ~ Group + Pre, data = D)                      # Modellformulierung und -schätzung
 round(summary(M)$coefficients,2)                            # Parameterschätzer
 ```
 
@@ -711,8 +711,8 @@ NA,
 type        = "n", 
 xlim        = c(28,40),
 ylim        = c(20,35),
-xlab         = "Pretest",
-ylab        = "Post",
+xlab        = "Pretest",
+ylab        = "Posttest",
 main        = "")
 for(t in 1:2){
     points(
@@ -768,7 +768,7 @@ Modellschätzer-basierte Prädiktion der Posttest-Gruppenmittelwerte für margin
 * Bedingte Antwort auf die Frage nach den Gruppenmittelwerten bei angenommenen identischen Pretest-Daten
 * "Wenn die Pretestdaten beider Gruppen identisch wären, was wären dann die Posttest-Gruppenmittelwerte?"
 * $\Rightarrow$ Marginaler Pretestdatenmittelwert als Schätzer für Interventionsunabhängige Prestest-Erwartungswert
-* Aka  Expected / Conditional / Estimated / Population Marginal Means 
+* Auch als  Expected / Conditional / Estimated / Population Marginal Means bezeichnet
 
 \footnotesize
 \flushright
@@ -1133,7 +1133,7 @@ Adjustierte Posttest-Gruppenmittelwerte
 
 * Die Bestimmung adjustierter Post-Gruppenmittelwert im Rahmen einer Posttest-Kovarianzanalyse 
   mit Pretest-Kovariaten ist also insbesondere bei nicht-randomisierten Studien ("Quasiexperimentellen Designs")
-  mit erheblichen in den Pretest-Daten bestehenenden Gruppenunterschieden sinnvoll.
+  mit erheblichen in den Pretest-Daten bestehenden Gruppenunterschieden sinnvoll.
 
 \vspace{2mm}
 \flushright
@@ -1163,7 +1163,7 @@ Change-Score-Varianzanalyse
 
 \setstretch{3}
 \small
-* Change Scores aka Gain Scores aka Difference Scores
+* Change Scores werden auch als Gain Scores oder Difference Scores bezeichnet
 * Einfaktorielle Varianzanalyse/Zweistichproben-T-Test-Analyse der Post-Pre-Differenzen
 * Rückführung bivariater Proband:innendaten (Pre, Post) auf univariates Maß (Post-Pre)
 * Langanhaltende Debatte zur Validität und Äquivalenz bezüglich Posttest-Kovarianzanalyse
@@ -1424,7 +1424,7 @@ Lord Paradox
 Lord Paradox Beispiel Annahmen
 \vspace{-2mm}
 
-* Parallelgruppen-Pretest-Posttest-Design mit Treatment- und Kontrollgruppe
+* Parallelgruppen-Pretest-Posttest-Design 
 * Keine Effekt der Treatment- bzw. Kontrollintervention
 * Pretest-Gruppenerwartungswertunterschiede
 * Positive Pretest-Post-Korrelation
@@ -1732,7 +1732,7 @@ N\left(
 \end{pmatrix}
 \right)
 \end{equation}
-* Dann gilt nach dem Theorem zu den Normalverteilungen
+* Dann gilt nach dem Theorem zu den bedingten Normalverteilungen
 \begin{align}
 \begin{split}
 \mathbb{E}(y_{i1}|y_{i0}) 
@@ -1749,9 +1749,6 @@ N\left(
 * Gegeben den Pretest-Wert $y_{i0}$ ist die erwartete Abweichung des Posttest-Wertes 
    $y_{i1}$ vom Posttesterwartungswert also geringer als die Abweichung des Pretest-Wertes 
    $y_{i0}$ vom Prestesterwartungwert, sofern $|\rho(y_{i0}, y_{i1})| < 1$, also entsprechend $|\rho(\eps_{i0}, \eps_{i1})| < 1$.  
-
-
-
 
 # 
 \vfill
@@ -1770,8 +1767,8 @@ Change-Score-Varianzanalyse
 Selbstkontrollfragen
 \vfill 
 
-<!-- # Linear-Mixed-Model-Analyse
-\setstretch{2}
+# Linear-Mixed-Model-Analyse
+\setstretch{2.2}
 Linear-Mixed-Model Analyse
 \small
 
@@ -1880,10 +1877,10 @@ y_{111} \\
 0 & 0 & 0 & 0 & 0 & 1\\
 \end{pmatrix}
 \begin{pmatrix}
-b_1   \\
-b_2   \\
-b_3   \\
-b_9   \\
+b_1     \\
+b_2     \\
+b_3     \\
+b_9     \\
 b_{10}  \\
 b_{11}  \\
 \end{pmatrix}
@@ -1910,16 +1907,150 @@ mit
 \end{equation}
 
 # Linear-Mixed-Model-Analyse
+\vspace{2mm}
+Expressivität der Fixed-Effects des Modells - Erwartungswerte
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+X           = matrix(c(1,0,0,0,
+                       1,0,1,0,
+                       1,1,0,0,
+                       1,1,1,1), byrow = TRUE, nrow  = 4)
+beta        = matrix(c(  3,   3,  3,  3,
+                       -.1,   0, -1, -1,
+                        -1,  -1, -1, -1,
+                         0,  -1,  0, -1), byrow = TRUE, nrow = 4)
+beta_lab    = c(TeX("$\\beta = (3,0,-1,0)^T$"),
+                TeX("$\\beta = (3,0,-1,-1)^T$"),
+                TeX("$\\beta = (3,-1,-1,0)^T$"),
+                TeX("$\\beta = (3,-1,-1,-1)^T$"))
+pdf(
+file        = "./5_Abbildungen/ptf-5-pre-post-lmm-parameters.pdf",
+width       = 8,
+height      = 8)
+par(
+family      = "sans",
+mfcol       = c(2,2),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)  
+x           = 1:2
+cols        = c("grey80", "black")
+for(i in 1:ncol(beta)){
+    mu      = X %*% beta[,i] 
+    mus     = rbind(mu[1:2], mu[3:4])
+    matplot(
+    x, 
+    t(mus), 
+    type    = "b", 
+    pch     = 16, 
+    lty     = 1,
+    col     = cols, 
+    xaxt    = "n", 
+    xlab    = "", 
+    ylab    = "",
+    xlim    = c(.8,2.2),
+    ylim    = c(-1, 4),
+    main    = beta_lab[i])
+    axis(1, at = x, labels = c("Pre", "Post")) 
+    legend(
+    "topright", 
+    legend  = c("Control", "Treatment"), 
+    col     = cols, 
+    pch     = 16, 
+    lty     = 1,
+    bty     = "n",
+    cex     = .9)
+}
+dev.off()
+```
+\vspace{-1mm}
+```{r, echo = FALSE, out.width = "70%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-pre-post-lmm-parameters.pdf")
+```
+
+# Linear-Mixed-Model-Analyse
+\vspace{2mm}
+\small
+Modellevaluation für das Anwendungsbeispiel
+\vspace{1mm}
+
+\tiny
+```{r, echo = TRUE}
+library(tidyverse)
+D = read.csv("./5_Daten/pre-post.csv", row.names = 1)                             # Dateneinlesen
+D = D %>% pivot_longer(cols = c(Pre, Post), names_to = "Time", values_to = "Y")   # Long format
+```
+\setstretch{.8}
+```{r}
+knitr::kable(D, digits = 0)
+```
+
+# Linear-Mixed-Model-Analyse
+\small
+Modellevaluation für das Anwendungsbeispiel
+
+\tiny
+\vspace{2mm}
+```{r, echo = T}
+library(nlme)                                                                           # nlme
+D         = read.csv("./5_Daten/pre-post.csv", row.names = 1)                           # Dateneinlesen
+D         = D %>% pivot_longer(cols = c(Pre, Post), names_to = "Time", values_to = "Y") # Long format
+M         = lme(Y ~ Group*Time, data = D, random = ~ 1 | P)                             # LMM 
+X         = model.matrix(M,D)                                                           # Fixed-Effects-Designmatrix
+Z         = model.matrix(~ M$groups[[1]] - 1)                                           # Random-Effects-Designmatrix
+beta_hat  = M$coefficients$fixed                                                        # Fixed-Effects-Schätzer
+b_hat     = M$coefficients$random$P                                                     # Random-Effects-Schätzer
+s_eps_hat = M$sigma**2                                                                  # Varianzkomponentenschätzer
+s_b_hat   = diag(getVarCov(M))                                                          # Varianzkomponentenschätzer
+```
+\setstretch{1.1}
+```{r, echo = F}
+cat("beta_hat         :", round(beta_hat,2), 
+    "\nb_hat            :", round(b_hat,2),
+    "\nsigsqr_b_hat     :", round(s_b_hat,2),
+    "\nsigsqr_eps_hat   :", round(s_eps_hat,2)) 
+print(intervals(M, level = 0.95, which = "fixed"), digits = 3)                  # nlme Konfidenzintervalle
+```
+
+\small
+$\Rightarrow$ Signifikanter Group $\times$ Time Effekt
+
+# Linear-Mixed-Model-Analyse
+\small
+Visualisierung für das Anwendungsbeispiel  
+
+```{r, echo = FALSE, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-pre-post-means.pdf")
+```
+
+# Linear-Mixed-Model-Analyse
+\setstretch{1.8}
 \small 
 Bivariate Analyse
 
 \small
-Überblick
+Überblick und Hauptaussagen
 
-\footnotesize
-(1) Marginale Datenverteilung des LMMs für Proband:in $i$ 
-(2) Induktion des Change-Score-Varianzanalyse-Modells durch lineare Transformation von Pre- und Posttestdaten
-(3) Kovarianzanalyse-mit-Pretest-Kovariaten-Modell als bedingte Verteilung der Change-Scores
+\noindent (1) Marginale Datenverteilung des LMMs für Proband:in $i$ 
+
+$\Rightarrow$ Induktion von Fehlerkovarianz durch zufällige Proband:inneneffekte
+
+\noindent (2) Induktion des Change-Score-Varianzanalyse-Modells 
+
+$\Rightarrow$ Change-Score Varianzanalyse als Differenzvariante des LMMs
+
+\noindent (3) Kovarianzanalyse-mit-Pretest-Kovariaten-Modell als bedingte Verteilung der Change-Scores
+
+$\Rightarrow$ Kovarianzanalyse als spezialisierte Change-Score Analyse 
+
 
 
 # Linear-Mixed-Model-Analyse
@@ -2089,20 +2220,94 @@ bzw. eine Daten- und Fehlerkorrelation von
 \end{equation*}
 induziert.
 
+
+```{r}
+set.seed(2)                                                                      
+library(MASS)                                                                    
+n           = 20                                                                     
+mu          = matrix(c(3,1), nrow = 2)                                               
+sigsqr_b    = 1
+sigsqr_eps  = c(.01,100)
+for(s in 1:length(sigsqr_eps)){
+  sigsqr_01   = sigsqr_b/(sigsqr_b + sigsqr_eps[s])
+  Sigma       = matrix(c(1,sigsqr_01, sigsqr_01, 1), nrow = 2)                                         
+  Y           = mvrnorm(n, mu, Sigma)                                                  
+  pdf(
+  file        = sprintf("./5_Abbildungen/ptf-5-pre-post-bivariate-%d.pdf",s), 
+  width       = 8,
+  height      = 4)
+  par(
+  family      = "sans",
+  mfcol       = c(1,2),
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = 1,
+  cex.main    = 1)  
+  cols        = c("grey80", "black")
+  matplot(
+  rbind(
+  matrix(Y[,1], ncol = n), 
+  matrix(Y[,2], ncol = n)),
+  type        = "b", 
+  lty         = 1, 
+  pch         = 21,
+  bg          = "black",
+  col         = "grey",
+  xaxt        = "n", 
+  xlab        = "", 
+  ylab        = "", 
+  ylim        = c(-2,6),
+  xlim        = c(0.8,2.2))
+  axis(
+  1, 
+  at          = c(1, 2), 
+  labels      = c("Pre", "Post")) 
+  plot(
+  Y[,1],
+  Y[,2],
+  type        = "p", 
+  pch         = 21,
+  bg          = "black",
+  col         = "grey",
+  xlim        = c(0, 6),
+  ylim        = c(-2,4),
+  xlab        = "Pre ",
+  ylab        = "Post",
+  main        = "")
+  dev.off()
+}
+```
+
+
 # Linear-Mixed-Model-Analyse
 \small 
 Bivariate Analyse
 
 \footnotesize 
-\noindent (1) Marginale Datenverteilung des LMMs für Proband:in $i$ 
+\noindent (1) Marginale Datenverteilung des LMMs für Proband:in $i$ für $\sigma_b = 1$, $\sigma_\eps = 0.01$
+\vspace{1mm}
 
-\hl{VISUALISIERUNG VON PRETEST-POSTTEST DATEN BEI DURCH $\sigma_b^2$ INDUZIERTER KORRELATION}
+```{r, echo = FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-pre-post-bivariate-1.pdf")
+```
+# Linear-Mixed-Model-Analyse
+\small 
+Bivariate Analyse
 
-\hl{LINKS LINE PLOT VON PRE NACH POST}
+\footnotesize 
+\noindent (1) Marginale Datenverteilung des LMMs für Proband:in $i$ für $\sigma_b = 1$, $\sigma_\eps = 100$
+\vspace{1mm}
 
-\hl{RECHTS BIVARIATE NORMALVERTEILUNGSDICHT UND SAMPLES}
+```{r, echo = FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("5_Abbildungen/ptf-5-pre-post-bivariate-2.pdf")
+```
 
-\hl{2 x 2 PLOT MIT KORRELATION HOCH UND NIEDRIG}
 
 # Linear-Mixed-Model-Analyse
 \small 
@@ -2431,15 +2636,6 @@ Tatsache, dass der Koeffizient der Pretest-Werte im Posttest-Kovarianzanalysemod
 \end{equation}
 der Pretest-Posttestwerte bzw. Fehlervariablen entspricht (vgl. Theorem A.1 in @crager1987).
 
-# Linear-Mixed-Model-Analyse
-\small
-Modellevaluation für das Anwendungsbeispiel
-
-
-# Linear-Mixed-Model-Analyse
-\small
-Visualisierung für das Anwendungsbeispiel -->
-
 # 
 \vfill
 \setstretch{2.3}
@@ -2457,8 +2653,22 @@ Linear-Mixed-Model-Analyse
 **Selbstkontrollfragen**
 \vfill 
 
-<!-- # Selbstkontrollfragen -->
+# Selbstkontrollfragen
+\footnotesize
+\setstretch{2}
 
+1. Erläutern Sie die wesentlichen Charakteristika eines Parallelgruppen-Pretest-Posttest-Designs.
+1. Nennen Sie vier mögliche Datenanalysen für Parallelgruppen-Pretest-Posttest-Designs.
+1. Erläutern Sie das Modell der Posttest-Varianzanalyse.
+1. Erläutern Sie das Modell der Posttest-Kovarianzanalyse mit Pretest-Kovariaten.
+1. Erläutern Sie den Begriff der adjustierten Posttest-Gruppenmittelwerte.
+1. Erläutern Sie die Bedeutung adjustierter Posttest-Gruppenmittelwerte für randomisierte ("experimentelle") und nicht-randomisierte ("quasiexperimentelle") Studien.
+1. Erläutern Sie das Modell der Change-Score-Varianzanalyse.
+1. Geben Sie die speziellen Äquivalenzen zwischen den Modellen der Posttest-Varianzanalyse, der Posttestkovarianzanalyse mit Pretest-Kovariaten und der Change-Score-Varianzanalyse wieder.
+1. Erläutern Sie das Lord Paradox.
+1. Erläutern Sie den Regression-zur-Mitte-Effekt.
+1. Erläutern Sie das Gruppen $\times$ Zeitpunkt-LMM mit zufälligen Proband:inneneffekt 
 
 # Referenzen {.allowframebreaks}
 \footnotesize 
+
